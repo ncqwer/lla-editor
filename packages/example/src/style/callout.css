@@ -1,0 +1,25 @@
+.lla-callout {
+  @apply w-full mt-1 mb-1 flex p-4 pl-3 rounded border border-gray-200 text-gray-400 items-center;
+  /* max-width: 253px; */
+}
+
+.lla-callout__mark {
+  @apply flex select-none cursor-pointer items-center justify-center h-6 w-6 rounded flex-shrink-0;
+}
+
+.lla-callout_mark-wrapper {
+  height: 16.8px;
+  width: 16.8px;
+  font-size: 16.8px;
+  line-height: 1.1;
+  margin-left: 0px;
+  color: black;
+}
+
+.lla-callout > .lla-paragraph {
+  @apply ml-2 flex-grow;
+}
+
+.lla-callout .lla-placeholder {
+  @apply visible;
+}

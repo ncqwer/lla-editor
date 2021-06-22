@@ -11,6 +11,7 @@ import {
   elementPropsIs,
   elementRender,
   ExtendRenderElementProps,
+  PlaceholderContext,
 } from '@lla-editor/core';
 import { IndentContainerContext } from '@lla-editor/indent';
 import {
@@ -57,7 +58,9 @@ const Task = ({
         />
       </div>
       <IndentContainerContext.Provider value={IndentContainerWrapper}>
-        <div className="lla-list-item__content">{children}</div>
+        <PlaceholderContext.Provider value="待办事项">
+          <div className="lla-list-item__content">{children}</div>
+        </PlaceholderContext.Provider>
       </IndentContainerContext.Provider>
     </div>
   );
@@ -88,7 +91,9 @@ const Numbered = ({
         <MyComp></MyComp>
       </div>
       <IndentContainerContext.Provider value={IndentContainerWrapper}>
-        <div className="lla-list-item__content">{children}</div>
+        <PlaceholderContext.Provider value="有序列表">
+          <div className="lla-list-item__content">{children}</div>
+        </PlaceholderContext.Provider>
       </IndentContainerContext.Provider>
     </div>
   );
@@ -111,7 +116,9 @@ const Bulleted = ({
         </div>
       </div>
       <IndentContainerContext.Provider value={IndentContainerWrapper}>
-        <div className="lla-list-item__content">{children}</div>
+        <PlaceholderContext.Provider value="无序列表">
+          <div className="lla-list-item__content">{children}</div>
+        </PlaceholderContext.Provider>
       </IndentContainerContext.Provider>
     </div>
   );

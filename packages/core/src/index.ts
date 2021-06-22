@@ -21,3 +21,4 @@ export type { SharedApi } from './sharedApi';
 export { ParagraphImpl, PlaceholderContext };
 
 export * from './utils/runWithCancel';
+export * from './utils/LLAOverLayer';

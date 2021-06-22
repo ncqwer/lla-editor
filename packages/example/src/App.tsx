@@ -11,6 +11,7 @@ import {
   useThrottle,
   Func,
   LLAConfig,
+  LLAOverLayer,
 } from '@lla-editor/core';
 import { createPortal } from 'react-dom';
 import IndentImpl from '@lla-editor/indent';
@@ -20,6 +21,10 @@ import domAlign from 'dom-align';
 import ImageImpl from '@lla-editor/image';
 import HeadingImpl from '@lla-editor/heading';
 import DividerImpl from '@lla-editor/divider';
+import CalloutImpl from '@lla-editor/callout';
+
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 
 import { animated, useSpring } from 'react-spring';
 // import useThrottle from '@lla-editor/core/src/hooks/useThrottle';
@@ -31,6 +36,7 @@ const availablePlugins = [
   HeadingImpl,
   ImageImpl,
   DividerImpl,
+  CalloutImpl,
   ParagraphImpl,
 ];
 const activeNames = availablePlugins.map(({ pluginName }) => pluginName);
@@ -40,7 +46,12 @@ const { SharedProvider } = ConfigHelers;
 const Paragraph = () => {
   return (
     <div className="lla-paragraph">
-      <span>Lorem ipsum dolor sit, amet cons</span>
+      <span>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus,
+        nostrum. Beatae reiciendis, laboriosam, alias quas esse itaque
+        consectetur ad velit quisquam a non quidem rerum. Quam laboriosam iusto
+        saepe repellat.
+      </span>
     </div>
   );
 };
@@ -527,6 +538,88 @@ const Heading: React.FC<{
   );
 };
 
+// const LLAOverLayer: React.FC<{
+//   onClose: () => void;
+//   alignMethod: (source: HTMLElement) => void;
+// }> = ({ onClose, alignMethod, children }) => {
+//   const root = React.useMemo(() => document.getElementById('root'), []);
+//   const [visible, setVisible] = React.useState(false);
+//   const ref = React.useRef<HTMLDivElement>(null);
+//   React.useEffect(() => {
+//     if (ref.current) alignMethod(ref.current);
+//     setVisible(true);
+//   }, []);
+//   return createPortal(
+//     <div className="lla-overlayer" onClick={onClose}>
+//       <div
+//         className={`lla-overlayer__content relative w-max ${
+//           visible ? 'visible' : 'invisible'
+//         }`}
+//         ref={ref}
+//         onClick={(e) => e.stopPropagation()}
+//       >
+//         {children}
+//       </div>
+//     </div>,
+//     root as any,
+//   );
+// };
+
+const emojiI18 = {
+  search: '查询',
+  clear: '清除',
+  notfound: '暂无emoji',
+  categories: {
+    search: '查询结果',
+    recent: '最近使用',
+  },
+};
+
+const alignOpts = { points: ['tl', 'bl'] };
+
+const Callout: React.FC = () => {
+  const [emoji, setEmoji] = React.useState('🎇');
+  const [isOpen, setIsOpen] = React.useState(false);
+  const ref = React.useRef<HTMLSpanElement>(null);
+  return (
+    <>
+      <div className="lla-callout">
+        <div className="lla-callout__mark">
+          <div className="lla-callout__emoji-wrapper">
+            <span
+              role="img"
+              aria-label={emoji}
+              ref={ref}
+              onClick={() => setIsOpen(true)}
+            >
+              {emoji}
+            </span>
+          </div>
+        </div>
+        <Paragraph></Paragraph>
+      </div>
+      {isOpen && (
+        <LLAOverLayer
+          onClose={() => setIsOpen(false)}
+          targetGet={() => ref.current}
+          alignOpts={alignOpts}
+        >
+          <Picker
+            onSelect={(v: any) => {
+              setEmoji(v.native);
+              setIsOpen(false);
+            }}
+            showSkinTones={false}
+            showPreview={false}
+            emojiTooltip={true}
+            i18n={emojiI18}
+          ></Picker>
+        </LLAOverLayer>
+      )}
+    </>
+  );
+};
+
 const AEditor = () => {
   const [value, setValue] = useState<Descendant[]>(initialValue());
   const [v, setV] = useState(1080);
@@ -552,6 +645,8 @@ const AEditor = () => {
       <Heading level={2}></Heading>
       <Heading level={3}></Heading> */}
       {/* <div className="lla-divider"></div> */}
+
+      {/* <Callout emoji="🎇"></Callout> */}
       <Editor value={value} onChange={setValue}>
         <Editable></Editable>
       </Editor>

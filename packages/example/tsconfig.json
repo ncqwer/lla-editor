@@ -4,5 +4,14 @@
   "compilerOptions": {
     "outDir": "dist",
   },
-  "references": [{"path": "../core"},{"path":"../indent"},{"path": "../text-block"},{"path":"../list"},{"path":"../image"},{"path": "../heading"},{"path": "../divider"}]
+  "references": [
+    {"path": "../core"},
+    {"path":"../indent"},
+    {"path": "../text-block"},
+    {"path":"../list"},
+    {"path":"../image"},
+    {"path": "../heading"},
+    {"path": "../divider"},
+    {"path":"../callout"}
+  ]
 }

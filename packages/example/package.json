@@ -24,8 +24,9 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@lla-editor/callout": "^0.0.1",
     "@lla-editor/core": "^0.0.1",
-    "@lla-editor/divider": "^1.0.0",
+    "@lla-editor/divider": "^0.0.1",
     "@lla-editor/heading": "^0.0.1",
     "@lla-editor/image": "^0.0.1",
     "@lla-editor/indent": "^0.0.1",

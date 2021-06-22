@@ -1,5 +1,5 @@
 {
-  "name": "@lla-editor/divider",
+  "name": "@lla-editor/callout",
   "version": "0.0.1",
   "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
   "keywords": [],
@@ -32,6 +32,7 @@
     "slate-react": "^0.60.0"
   },
   "dependencies": {
-    "@lla-editor/core": "^0.0.1"
+    "@lla-editor/core": "^0.0.1",
+    "emoji-mart": "^3.0.1"
   }
 }

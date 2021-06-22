@@ -3,6 +3,7 @@ import {
   ElementJSX,
   elementPropsIs,
   ExtendRenderElementProps,
+  PlaceholderContext,
   // ConfigHelers,
   // SharedApi,
   // LLAConfig,
@@ -35,8 +36,11 @@ const Indent = (
   props: ExtendRenderElementProps<IndentContainer>,
 ): JSX.Element => {
   const Wrapper = React.useContext(IndentContainerContext);
-
-  return <Wrapper {...props}></Wrapper>;
+  return (
+    <PlaceholderContext.Provider value="键入'/'获得帮助">
+      <Wrapper {...props}></Wrapper>
+    </PlaceholderContext.Provider>
+  );
 };
 
 export default [
