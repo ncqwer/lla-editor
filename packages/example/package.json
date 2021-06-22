@@ -1,0 +1,40 @@
+{
+  "name": "@lla-editor/example",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
+  "keywords": [],
+  "author": "“ncqwer” <“18694039767@163.com”>",
+  "license": "MIT",
+  "main": "dist/example.js",
+  "module": "dist/example.module.js",
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@lla-editor/core": "^0.0.1",
+    "@lla-editor/divider": "^1.0.0",
+    "@lla-editor/heading": "^0.0.1",
+    "@lla-editor/image": "^0.0.1",
+    "@lla-editor/indent": "^0.0.1",
+    "@lla-editor/list": "^0.0.1",
+    "@lla-editor/text-block": "^0.0.1",
+    "@zhujianshi/use-lens": "^0.0.5",
+    "is-hotkey": "^0.2.0",
+    "slate": "^0.63.0",
+    "slate-history": "^0.62.0",
+    "slate-react": "^0.65.0"
+  }
+}

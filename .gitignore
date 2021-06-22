@@ -1,0 +1,15 @@
+*.log
+.next/
+.vscode/
+.idea/
+.docz/
+build/
+dist/
+lib/
+node_modules/
+packages/*/yarn.lock
+packages/*/dist
+site/out/
+tmp/
+
+.DS_Store

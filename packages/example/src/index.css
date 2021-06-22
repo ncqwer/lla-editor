@@ -1,0 +1,230 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './style/paragraph.css';
+@import './style/insert-pannel.css';
+@import './style/context-menu.css';
+@import './style/heading.css';
+@import './style/divider.css';
+
+@layer utilities {
+  @variants focus,hover {
+    .no-box-shadow {
+      box-shadow: unset;
+    }
+  }
+}
+
+.lla-text-block {
+  @apply leading-6 mt-px mb-px;
+}
+.lla-text-block__container {
+  @apply ml-6;
+}
+
+.lla-list-item {
+  @apply flex items-start;
+}
+
+.lla-list-item__leading {
+  @apply flex items-center justify-center flex-grow-0 flex-shrink-0 select-none;
+  width: 24px;
+  min-height: calc(1.5rem + 3px + 3px);
+}
+
+.lla-list-item__container {
+  @apply contents;
+}
+
+.lla-list-item--task .lla-list-item__leading__content {
+  @apply form-checkbox leading-6 focus:no-box-shadow cursor-pointer;
+}
+.lla-list-item__content {
+  @apply flex-grow;
+}
+
+.lla-list-item--done > .lla-list-item__content > .lla-paragraph:first-child {
+  @apply line-through text-gray-500;
+}
+
+.lla-list-item--bulleted .lla-list-item__leading__content {
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-bottom: 0.1rem;
+}
+
+.lla-image-wrapper {
+  @apply select-none mt-1 mb-1;
+}
+.lla-image {
+  @apply relative max-w-full;
+  min-width: 30%;
+  padding: 3px;
+  margin: 0 auto;
+  max-width: 80%;
+  max-height: 50vh;
+  /* transition: width 0.001s ease-in-out; */
+}
+
+.lla-image.lla-selected {
+  @apply border border-gray-600;
+}
+
+.lla-image.lla-selected.lla-image--empty {
+  @apply border-none bg-gray-300;
+}
+
+.lla-image__content {
+  @apply object-cover w-full;
+}
+
+.lla-image__resizer {
+  @apply hidden;
+}
+.lla-image.lla-selected .lla-image__resizer,
+.lla-image:hover .lla-image__resizer {
+  @apply absolute block;
+  top: 6px;
+  bottom: 6px;
+  width: 6px;
+}
+
+.lla-image__resizer--left {
+  left: 0;
+}
+
+.lla-image__resizer--right {
+  right: 0;
+}
+
+.lla-image.lla-selected .lla-image__resizer__handler,
+.lla-image:hover .lla-image__resizer__handler {
+  @apply absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: calc(100% - 12px);
+  max-height: 60px;
+  cursor: col-resize;
+}
+
+.lla-image__resizer--right .lla-image__resizer__handler {
+  right: 6px;
+}
+
+.lla-image__resizer--left .lla-image__resizer__handler {
+  left: 6px;
+}
+
+.lla-image__resizer__handler::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 0 0 1px #fff;
+  box-shadow: 0 0 0 1px #fff;
+  border-radius: 3px;
+}
+
+.lla-image--empty {
+  @apply p-3 pr-9 flex items-center text-left w-full overflow-hidden bg-gray-200 hover:bg-gray-300 transition-colors cursor-pointer text-gray-600;
+  border-radius: 3px;
+}
+
+.lla-image--empty .lla-image__icon {
+  width: 25px;
+  height: 25px;
+  display: block;
+  fill: rgba(55, 53, 47, 0.4);
+  flex-shrink: 0;
+  backface-visibility: hidden;
+  margin-right: 12px;
+}
+
+.lla-image__popmenu {
+  @apply flex flex-col h-full bg-white relative shadow-xl;
+  border-radius: 3px;
+  max-width: calc(100vw - 24px);
+  width: 540px;
+  min-height: 138px;
+  height: fit-content;
+  box-shadow: rgb(15 15 15 / 5%) 0px 0px 0px 1px,
+    rgb(15 15 15 / 10%) 0px 3px 6px, rgb(15 15 15 / 20%) 0px 9px 24px;
+}
+
+.lla-image__popmenu__item-group {
+  @apply flex justify-start pl-2 pr-2;
+  box-shadow: rgb(55 53 47 / 9%) 0px 1px 0px;
+}
+
+.lla-image__popmenu__item {
+  @apply pt-2 pb-2 flex-shrink-0 inline-flex flex-col relative cursor-pointer;
+}
+
+.lla-image__popmenu__item__label {
+  @apply pl-2 pr-2 font-sans text-sm hover:bg-gray-200 leading-7 rounded-sm;
+}
+
+.lla-image__popmenu__active-item-indicator {
+  border-bottom: 2px solid rgb(55, 53, 47);
+  position: absolute;
+  bottom: -1px;
+  left: 8px;
+  right: 8px;
+}
+
+.lla-image__popmenu__content {
+  @apply flex flex-col flex-grow items-center mt-6 mb-2;
+}
+
+.lla-image__popmenu__content.lla-image__popmenu__content--embed {
+  @apply mt-2;
+}
+
+.lla-image__open {
+  @apply flex items-center justify-center text-sm align-middle bg-blue-400 hover:bg-blue-500 active:bg-blue-600 rounded text-center text-white flex-grow mr-28 ml-28 cursor-pointer;
+  width: stretch;
+  line-height: 2;
+  font-weight: 500;
+}
+.lla-image__open-helper-message {
+  @apply flex-grow text-center mt-4  mr-28 ml-28 text-xs text-gray-600;
+}
+
+.lla-image__embed-input {
+  @apply text-sm form-input block p-1 leading-5 mr-4 ml-4 rounded-sm bg-gray-100 border-gray-300;
+  width: stretch;
+}
+
+.lla-image__embed-input:active,
+.lla-image__embed-input:focus {
+  box-shadow: rgb(46 170 220 / 70%) 0px 0px 0px 1px inset,
+    rgb(46 170 220 / 40%) 0px 0px 0px 2px !important;
+}
+
+.lla-image__embed-submit {
+  @apply flex items-center justify-center  text-sm bg-blue-400 hover:bg-blue-500 active:bg-blue-600 rounded text-center text-white flex-grow mr-28 ml-28 cursor-pointer mt-3;
+  width: stretch;
+  line-height: 2;
+  font-weight: 500;
+}
+.lla-image__embed-helper-message {
+  @apply flex-grow text-center mt-4  mr-28 ml-28 text-xs text-gray-600;
+}
+
+.lla-image__embed-input__clear {
+  @apply right-4 cursor-pointer absolute;
+  transform: translate(-50%, 50%);
+}
+
+.lla-image__embed-input__clear svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  fill: rgba(55, 53, 47, 0.3);
+  flex-shrink: 0;
+  backface-visibility: hidden;
+}
