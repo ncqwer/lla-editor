@@ -26,7 +26,7 @@
     "prepublish": "rm dist/src/tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@lla-editor/audio": "^1.0.0",
+    "@lla-editor/audio": "^0.0.1",
     "@lla-editor/callout": "^0.0.1",
     "@lla-editor/core": "^0.0.1",
     "@lla-editor/divider": "^0.0.1",
@@ -34,7 +34,7 @@
     "@lla-editor/image": "^0.0.1",
     "@lla-editor/indent": "^0.0.1",
     "@lla-editor/list": "^0.0.1",
-    "@lla-editor/quote": "^1.0.0",
+    "@lla-editor/quote": "^0.0.1",
     "@lla-editor/text-block": "^0.0.1",
     "@lla-editor/video": "^0.0.1",
     "@zhujianshi/use-lens": "^0.0.5",
