@@ -52,7 +52,7 @@ const handleBackspace_a: OnKeyDownAlternative = (next, event, editor) => {
   let path = previousPoint.path.slice(0, -1);
   let element = Node.get(editor, path);
   let flag = false;
-  while (Editor.isVoid(editor, element)) {
+  while (Editor.isVoid(editor, element) && path[path.length - 1] > 0) {
     flag = true;
     path = Path.previous(path);
     element = Node.get(editor, path);

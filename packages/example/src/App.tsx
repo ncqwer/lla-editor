@@ -22,8 +22,14 @@ import ImageImpl from '@lla-editor/image';
 import HeadingImpl from '@lla-editor/heading';
 import DividerImpl from '@lla-editor/divider';
 import CalloutImpl from '@lla-editor/callout';
+import AudioImpl from '@lla-editor/audio';
+import VideoImpl from '@lla-editor/video';
+import QuoteImpl from '@lla-editor/quote';
+import Slider from 'rc-slider';
+import { Example } from '@lla-editor/editor';
+// import 'rc-slider/assets/index.css';
 
-import 'emoji-mart/css/emoji-mart.css';
+// import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 
 import { animated, useSpring } from 'react-spring';
@@ -35,7 +41,10 @@ const availablePlugins = [
   ListImpl,
   HeadingImpl,
   ImageImpl,
+  VideoImpl,
+  AudioImpl,
   DividerImpl,
+  QuoteImpl,
   CalloutImpl,
   ParagraphImpl,
 ];
@@ -115,8 +124,23 @@ const Task = ({ type = 'task', complex = false }) => {
 //   return
 // }
 
+const Quote = () => {
+  return (
+    <div className="lla-quote">
+      <Paragraph></Paragraph>
+    </div>
+  );
+};
+
 const PlainTextExample = () => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  return (
+    <div className="max-w-3xl mr-auto ml-auto mt-32 lla-readonly">
+      <Example></Example>
+    </div>
+  );
+  const imageRef = React.useRef<HTMLInputElement>(null);
+  const audioRef = React.useRef<HTMLInputElement>(null);
+  const videoRef = React.useRef<HTMLInputElement>(null);
   const promiseRef = React.useRef<any>(null);
   return (
     <PluginProvider availablePlugins={availablePlugins}>
@@ -132,13 +156,39 @@ const PlainTextExample = () => {
                 errorCover: 'errorCover',
                 imgOpen: async () => {
                   if (promiseRef.current) promiseRef.current[1]();
-                  inputRef.current?.click();
+                  imageRef.current?.click();
                   return new Promise<string>((res, rej) => {
                     promiseRef.current = [res, rej];
                   });
                 },
                 imgSign: async (id: any) => id,
                 imgRemove: async (id) => console.log(id),
+              },
+              audio: {
+                loadingCover: 'loadingCover',
+                errorCover: 'errorCover',
+                audioOpen: async () => {
+                  if (promiseRef.current) promiseRef.current[1]();
+                  audioRef.current?.click();
+                  return new Promise<string>((res, rej) => {
+                    promiseRef.current = [res, rej];
+                  });
+                },
+                audioSign: async (id: any) => id,
+                audioRemove: async (id: any) => console.log(id),
+              },
+              video: {
+                loadingCover: 'loadingCover',
+                errorCover: 'errorCover',
+                videoOpen: async () => {
+                  if (promiseRef.current) promiseRef.current[1]();
+                  videoRef.current?.click();
+                  return new Promise<string>((res, rej) => {
+                    promiseRef.current = [res, rej];
+                  });
+                },
+                videoSign: async (id: any) => id,
+                videoRemove: async (id: any) => console.log(id),
               },
             }),
             [],
@@ -148,7 +198,7 @@ const PlainTextExample = () => {
           <input
             type="file"
             className="hidden"
-            ref={inputRef}
+            ref={imageRef}
             onChange={async (e) => {
               const file = e.target?.files?.[0];
               if (!file) return;
@@ -163,6 +213,44 @@ const PlainTextExample = () => {
               dataURL && promiseRef.current && promiseRef.current[0](dataURL);
             }}
             accept=".jpeg,.jpg,.png"
+          />
+          <input
+            type="file"
+            className="hidden"
+            ref={audioRef}
+            onChange={async (e) => {
+              const file = e.target?.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              const dataURL: string | null = await new Promise((res) => {
+                reader.onload = (event) => {
+                  if (event.target) return res(event.target.result as string);
+                  return res(null);
+                };
+                reader.readAsDataURL(file);
+              });
+              dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+            }}
+            accept=".mp3"
+          />
+          <input
+            type="file"
+            className="hidden"
+            ref={videoRef}
+            onChange={async (e) => {
+              const file = e.target?.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              const dataURL: string | null = await new Promise((res) => {
+                reader.onload = (event) => {
+                  if (event.target) return res(event.target.result as string);
+                  return res(null);
+                };
+                reader.readAsDataURL(file);
+              });
+              dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+            }}
+            accept=".mp4"
           />
         </SharedProvider>
       </Environment>
@@ -620,12 +708,143 @@ const Callout: React.FC = () => {
   );
 };
 
+const alignOpt = {
+  points: ['bc', 'tc'],
+};
+
+const Audio: React.FC<{
+  src: string;
+}> = ({ src }) => {
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const ref = React.useRef<HTMLAudioElement>(null);
+  const [progress, setProgress] = React.useState(0);
+  const [duration, setDuration] = React.useState(0);
+  const [title, setTitle] = React.useState('');
+  const [volumn, setVolumn] = React.useState(1);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const volumnRef = React.useRef<HTMLDivElement>(null);
+  return (
+    <>
+      <div className="lla-audio flex items-center">
+        <audio
+          className="lla-audio__instance"
+          src={src}
+          ref={ref}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onVolumeChange={() => {
+            setVolumn(
+              Math.floor(parseFloat((ref.current?.volume as any) || 0) * 100),
+            );
+          }}
+          onLoadedData={() => {
+            setDuration(parseInt((ref.current?.duration as any) || 0, 10));
+          }}
+          onTimeUpdate={() =>
+            setProgress(parseInt((ref.current?.currentTime as any) || 0, 10))
+          }
+        ></audio>
+        <div
+          className={`lla-audio__controller ${
+            isPlaying
+              ? 'lla-audio__controller--pause'
+              : 'lla-audio__controller--play'
+          }`}
+          onClick={() => {
+            if (ref.current) {
+              if (isPlaying) {
+                ref.current.pause();
+              } else {
+                ref.current.play();
+              }
+            }
+          }}
+        >
+          {isPlaying ? (
+            <svg viewBox="0 0 20 20">
+              <path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"></path>
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+              <path d="M0 0h24v24H0z" fill="none"></path>
+            </svg>
+          )}
+        </div>
+        <div className="flex-grow mr-6 ml-6">
+          <div className="lla-audio__info flex justify-between">
+            <input
+              // readOnly
+              type="text"
+              className={`lla-audio__title`}
+              contentEditable={true}
+              placeholder="请输入音频名称"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <div className="lla-audio__time">
+              {getHumanReadableText(progress, true)} /
+              {getHumanReadableText(duration, true)}
+            </div>
+          </div>
+          <Slider
+            min={0}
+            max={duration}
+            value={progress}
+            className="lla-audio__progress-bar"
+            onChange={(v) => {
+              setProgress(v);
+              if (ref.current) ref.current.currentTime = v;
+            }}
+          ></Slider>
+        </div>
+        <div
+          ref={volumnRef}
+          onMouseOver={() => setIsOpen(true)}
+          className={`lla-audio__controller `}
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M7 9v6h4l5 5V4l-5 5H7z"></path>
+            <path d="M0 0h24v24H0z" fill="none"></path>
+          </svg>
+        </div>
+      </div>
+      {isOpen && (
+        <LLAOverLayer
+          onClose={() => setIsOpen(false)}
+          targetGet={() => volumnRef.current}
+          alignOpts={alignOpt}
+        >
+          <div className="lla-audio__volumn-bar-wrapper p-4 shadow-md">
+            <Slider
+              vertical
+              min={0}
+              max={100}
+              value={volumn}
+              className="lla-audio__volumn-bar"
+              onChange={(v) => {
+                setVolumn(v);
+                if (ref.current) ref.current.volume = v / 100;
+              }}
+            ></Slider>
+          </div>
+        </LLAOverLayer>
+      )}
+    </>
+  );
+};
+
+function getHumanReadableText(seconds: number, isShort = false): string {
+  if (isShort) return new Date(seconds * 1000).toISOString().substr(14, 5);
+  return new Date(seconds * 1000).toISOString().substr(11, 8);
+}
+
 const AEditor = () => {
   const [value, setValue] = useState<Descendant[]>(initialValue());
   const [v, setV] = useState(1080);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   return (
-    <div className="m-4">
+    <div className="max-w-3xl mr-auto ml-auto mt-32 lla-readonly">
       {/* {imgSrc && (
         <ResizedImage
           src={imgSrc}
@@ -647,6 +866,8 @@ const AEditor = () => {
       {/* <div className="lla-divider"></div> */}
 
       {/* <Callout emoji="🎇"></Callout> */}
+      {/* <Audio src="http://music.163.com/song/media/outer/url?id=386837.mp3"></Audio> */}
+      {/* <Quote></Quote> */}
       <Editor value={value} onChange={setValue}>
         <Editable></Editable>
       </Editor>

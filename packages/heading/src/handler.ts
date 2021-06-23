@@ -45,7 +45,20 @@ const handleEnter: KeyDown = (next, event, editor, [node, path]) => {
   });
 };
 
+const handleBackspace: KeyDown = (next, event, editor, [node, path]) => {
+  const { selection } = editor;
+  if (!selection) return next();
+  if (Range.isExpanded(selection)) return next();
+  const start = selection.focus;
+  const nodeStart = Editor.start(editor, path);
+  if (!Point.equals(start, nodeStart)) return next();
+  event.preventDefault();
+  return Transforms.unwrapNodes(editor, { at: path });
+};
+
 const handleKeyDown = groupKeyDown<KeyDown>(
   [shotkey('enter'), handleEnter],
+  [shotkey('shift+enter'), handleEnter],
+  [shotkey('backspace'), handleBackspace],
   [(...args) => args, (next) => next()],
 );

@@ -21,17 +21,22 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "prepublish": "echo 'do nothing'"
   },
   "dependencies": {
+    "@lla-editor/audio": "^1.0.0",
     "@lla-editor/callout": "^0.0.1",
     "@lla-editor/core": "^0.0.1",
     "@lla-editor/divider": "^0.0.1",
+    "@lla-editor/editor": "^0.0.1",
     "@lla-editor/heading": "^0.0.1",
     "@lla-editor/image": "^0.0.1",
     "@lla-editor/indent": "^0.0.1",
     "@lla-editor/list": "^0.0.1",
+    "@lla-editor/quote": "^1.0.0",
     "@lla-editor/text-block": "^0.0.1",
+    "@lla-editor/video": "^0.0.1",
     "@zhujianshi/use-lens": "^0.0.5",
     "is-hotkey": "^0.2.0",
     "slate": "^0.63.0",

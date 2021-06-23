@@ -1,14 +1,16 @@
 import React from 'react';
-import { Editor } from 'slate';
-import { Editable as E, useSlateStatic } from 'slate-react';
+import { Editor, Transforms } from 'slate';
+import { Editable as E, ReactEditor, useSlateStatic } from 'slate-react';
 import { useEditorRuntime } from '.';
 import { nextifyFlow } from '../rules';
 import { Nextify } from '../type';
 
 export const Editable = ({
   onKeyDown,
+  className,
 }: {
   onKeyDown?: (event: React.KeyboardEvent, editor: Editor) => void;
+  className?: string;
 }) => {
   const {
     renderElement,
@@ -42,11 +44,24 @@ export const Editable = ({
   );
 
   return (
-    <E
-      autoFocus
-      renderElement={renderElement}
-      renderLeaf={renderLeaf}
-      onKeyDown={handleKeyDown}
-    ></E>
+    <div className={`lla-editor ${className || ''}`}>
+      <E
+        autoFocus
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+        onKeyDown={handleKeyDown}
+      ></E>
+      <div
+        className="lla-editor__tail"
+        onClick={() => {
+          const path = [editor.children.length];
+          Transforms.insertNodes(editor, editor.createParagraph(''), {
+            at: path,
+          });
+          Transforms.select(editor, Editor.start(editor, path));
+          ReactEditor.focus(editor);
+        }}
+      ></div>
+    </div>
   );
 };

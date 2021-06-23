@@ -14,6 +14,7 @@ const name = `LLAEditor${pkg.name
 
 export default defineConfig({
   build: {
+    sourcemap: true,
     lib: {
       entry: pkg.source,
       name,

@@ -1,0 +1,27 @@
+.lla-heading-1 {
+  @apply mt-8 mb-1;
+}
+
+.lla-heading-1 .lla-paragraph {
+  @apply font-semibold text-3xl font-serif;
+}
+
+.lla-heading-2 {
+  @apply mt-6 mb-px;
+}
+
+.lla-heading-2 .lla-paragraph {
+  @apply font-semibold text-2xl font-serif;
+}
+
+.lla-heading-3 {
+  @apply mt-4 mb-px;
+}
+
+.lla-heading-3 .lla-paragraph {
+  @apply font-semibold text-xl font-serif;
+}
+
+.lla-heading .lla-placeholder {
+  @apply visible;
+}

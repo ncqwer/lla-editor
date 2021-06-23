@@ -1,0 +1,12 @@
+.lla-paragraph {
+  @apply relative  font-sans;
+  padding: 3px 2px;
+}
+
+.lla-placeholder {
+  @apply invisible absolute absolute select-none pointer-events-none text-gray-300;
+}
+
+.lla-paragraph.lla-selected > .lla-placeholder {
+  @apply visible;
+}

@@ -12,6 +12,10 @@
     {"path":"../image"},
     {"path": "../heading"},
     {"path": "../divider"},
-    {"path":"../callout"}
+    {"path":"../callout"},
+    {"path":"../audio"},
+    {"path":"../video"},
+    {"path":"../quote"},
+    {"path":"../editor"}
   ]
 }

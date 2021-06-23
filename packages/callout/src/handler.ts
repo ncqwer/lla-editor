@@ -58,6 +58,7 @@ const handleBackspace: KeyDown = (next, event, editor, [node, path]) => {
 
 const handleKeyDown = groupKeyDown<KeyDown>(
   [shotkey('enter'), handleEnter],
+  [shotkey('shift+enter'), handleEnter],
   [shotkey('backspace'), handleBackspace],
   [(...args) => args, (next) => next()],
 );

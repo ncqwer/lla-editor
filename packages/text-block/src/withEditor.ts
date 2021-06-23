@@ -26,7 +26,6 @@ export const withEditor = (e: Editor): Editor => {
   e.normalizeNode = ([node, path]) => {
     if (LLAElement.is(node) && node.type === 'paragraph') {
       const parent = Node.parent(e, path);
-      console.log('h');
       if (!e.isParagraphable(parent))
         return Transforms.wrapNodes(e, TextBlock.create(e), { at: path });
     }

@@ -1,0 +1,4 @@
+.lla-quote {
+  @apply mt-1 mb-1 p-0.5 pl-4 pr-4;
+  border-left: 3px solid currentcolor;
+}

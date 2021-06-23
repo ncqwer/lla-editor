@@ -1,0 +1,14 @@
+.lla-divider {
+  @apply mt-0.5 mb-px w-full flex items-center justify-center hover:bg-blue-50  cursor-pointer select-none;
+  height: 13px;
+}
+
+.lla-divider.lla-selected {
+  @apply bg-blue-50;
+}
+
+.lla-divider:before {
+  @apply w-full h-px;
+  content: '';
+  border: 1px solid rgba(55, 53, 47, 0.09);
+}

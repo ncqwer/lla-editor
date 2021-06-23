@@ -11,6 +11,7 @@
     "devadd": "yarn add -D --ignore-workspace-root-check",
     "build": "lerna run build",
     "dev": "cd packages/example && yarn dev",
+    "publish":"yarn lerna publish",
     "test": "jest"
   },
   "devDependencies": {

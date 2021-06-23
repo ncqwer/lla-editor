@@ -1,0 +1,43 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'rc-slider/assets/index.css';
+@import 'emoji-mart/css/emoji-mart.css';
+@import './paragraph.css';
+@import './insert-pannel.css';
+@import './context-menu.css';
+@import './heading.css';
+@import './divider.css';
+@import './callout.css';
+@import './list.css';
+@import './image.css';
+@import './media.css';
+@import './audio.css';
+@import './video.css';
+@import './quote.css';
+
+@layer utilities {
+  @variants focus,hover {
+    .no-box-shadow {
+      box-shadow: unset;
+    }
+  }
+}
+
+.lla-editor__tail {
+  @apply w-full bg-transparent h-10 cursor-text;
+}
+
+.lla-overlayer {
+  @apply w-screen h-screen z-50 bg-transparent fixed top-0 left-0;
+}
+.lla-overlayer__content {
+  @apply relative w-max;
+}
+
+.lla-text-block {
+  @apply leading-6 mt-px mb-px;
+}
+.lla-text-block__container {
+  @apply ml-6;
+}
