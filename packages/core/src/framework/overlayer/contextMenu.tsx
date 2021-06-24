@@ -69,15 +69,24 @@ const ContextMenuImpl = () => {
   const [info, setInfo] = useLens(storeLens);
   const ref = React.useRef<HTMLDivElement>(null);
   const { element, targetGet, path } = info;
+  const [visiable, setVisiable] = React.useState(false);
   React.useEffect(() => {
     const target = targetGet();
     if (ref.current && target) {
-      domAlign(ref.current, target, { points: ['tc', 'bc'] });
+      domAlign(ref.current, target, {
+        points: ['tc', 'bc'],
+        overflow: {
+          alwaysByViewport: true,
+          adjustX: true,
+          adjustY: true,
+        },
+      });
     }
+    setVisiable(true);
   }, []);
   return (
     <div
-      className="lla-context-menu"
+      className={`lla-context-menu ${visiable ? 'visible' : 'invisible'}`}
       ref={ref}
       onClick={(e) => e.stopPropagation()}
     >

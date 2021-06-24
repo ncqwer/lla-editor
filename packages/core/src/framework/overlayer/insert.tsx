@@ -41,7 +41,14 @@ const InsertOverLayerImpl = React.forwardRef(
       if (ref.current) {
         const element = Node.get(editor, path);
         const dom = ReactEditor.toDOMNode(editor, element);
-        domAlign(ref.current, dom, { points: ['tl', 'bl'] });
+        domAlign(ref.current, dom, {
+          points: ['tl', 'bl'],
+          overflow: {
+            alwaysByViewport: true,
+            adjustX: true,
+            adjustY: true,
+          },
+        });
       }
     }, [path]);
 
