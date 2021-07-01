@@ -14,11 +14,12 @@ export const HeadingElement = {
   is(node: Node): node is HeadingElement {
     return LLAElement.is(node) && node.type === _TYPE_;
   },
-  create(editor: Editor, level: HeadingLevel = 1): HeadingElement {
+  create(editor?: Editor, level: HeadingLevel = 1): HeadingElement {
+    const children = editor ? [editor.createParagraph('')] : [];
     return {
       type: _TYPE_,
       level,
-      children: [editor.createParagraph('')],
+      children,
     };
   },
 };

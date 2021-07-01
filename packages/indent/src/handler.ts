@@ -137,7 +137,6 @@ export const handleTab: OnKeyDownAlternative = (next, event, editor) => {
       reverse: true,
       match: (n): n is Element => {
         const h = Element.isElement(n) && editor.isIndentable(n);
-        console.log(n, h);
         return h;
       },
     }) || [];
@@ -173,6 +172,15 @@ export const handleTab: OnKeyDownAlternative = (next, event, editor) => {
   return doNothing(event);
 };
 
+/**
+ * 处理缩进块，
+ *  - 如果当前包含缩进，则新行将位于缩进块的首部，其内容与缩进块首部一致
+ *  - 如果不包含缩进，则根据当前行创建内容
+ * @param next
+ * @param event
+ * @param editor
+ * @returns
+ */
 const handleEnter: OnKeyDownAlternative = (next, event, editor) => {
   const { selection } = editor;
   if (!selection) return next();

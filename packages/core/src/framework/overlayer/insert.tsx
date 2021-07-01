@@ -45,7 +45,7 @@ const InsertOverLayerImpl = React.forwardRef(
           points: ['tl', 'bl'],
           overflow: {
             alwaysByViewport: true,
-            adjustX: true,
+            // adjustX: true,
             adjustY: true,
           },
         });
@@ -59,8 +59,8 @@ const InsertOverLayerImpl = React.forwardRef(
       >
         <div
           ref={ref}
-          // className="contents"
           onClick={(e) => e.stopPropagation()}
+          className="lla-insert-wrapper"
         >
           {useThrottle(handleCotent, 0)[0]()}
         </div>
@@ -161,7 +161,7 @@ const InsertPannel = React.forwardRef(
       [items],
     );
 
-    console.log('search', items);
+    // console.log('search', items);
 
     return (
       <div className="lla-insert" {...others}>

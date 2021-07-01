@@ -15,6 +15,7 @@ export {
   Environment,
   PluginProvider,
   ConfigHelers, // SharedProvider,
+  composePluginsForTest,
 } from './framework';
 
 export type { SharedApi } from './sharedApi';

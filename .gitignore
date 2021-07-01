@@ -11,5 +11,6 @@ packages/*/yarn.lock
 packages/*/dist
 site/out/
 tmp/
+coverage
 
 .DS_Store

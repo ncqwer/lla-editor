@@ -1,0 +1,112 @@
+# LLA
+
+> 请注意 lla 项目目前处于 beta 版本。组件行为可能会在后续版本中更改。
+
+## Overview
+
+lla-editor 旨在提供网页上开箱即用的类 markdown 的**富文本输入组件**。lla-editor
+基于[slate 项目](https://docs.slatejs.org/)，抽象出 slate 开发过程中较为常见的模式，
+将其以统一到一组公用的接口上，并以插件的形式进行功能实现。
+
+## Quick Start
+
+`lla-editor`选择[tailwindcss 项目](https://tailwindcss.com/docs/installation)
+作为`css` 方案，故在安装时，请确保你的项目拥有`tailwindcss`环境。对于大多数情况：
+
+```
+npm install -D tailwindcss@latest postcss@latest autoprefixer@latest @tailwindcss/forms
+```
+
+### For Umi(that use postcss@v7)
+
+对于某些 umi 生成的项目，其 postcss 支持的版本为 v7,其安装过程略有不同：
+
+安装兼容版本
+
+```
+npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 postcss-import@^12
+```
+
+在`.umirc`或者`config.config.ts`中，添加如下配置：
+
+```js
+{
+  //other umi configs
+  extraPostCSSPlugins: [
+    // eslint-disable-next-line
+    require('postcss-import'),
+    // eslint-disable-next-line
+    require('tailwindcss'),
+  ],
+}
+```
+
+前置依赖安装完成后，在当前根级别目录下,创建`postcss.config.js`和`tailwind.config.js`文件并输入
+以下内容：
+
+```js
+//postcss.config.js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+//tailwind.config.js
+module.exports = {
+  darkMode: false, // or 'media' or 'class'
+  theme: {},
+  variants: {
+    extend: {
+      backgroundColor: ['active'],
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms')({
+      strategy: 'class',
+    }),
+  ],
+};
+```
+
+上述步骤完成后，使用`npm`或`yarn`安装`lla-editor/editor`（一个整合了所有`lla插件`的 npm 包）
+
+```bash
+npm install @lla-editor/editor
+```
+
+```bash
+yarn add @lla-editor/editor
+```
+
+如果要使用默认样式，请在你的根级样式引入处引入：
+
+```js
+//app.js
+import '@lla-editor/editor/dist/style/index.css';
+```
+
+```css
+@import '@lla-editor/editor/dist/style/index.css';
+```
+
+最后，封装属于你的`lla-editor`
+
+```tsx
+import React from 'react';
+import {
+  LLAEnvironment,
+  SharedProvider,
+  createInitialValue,
+} from '@lla-editor/editor';
+
+export const Example = () => {
+  const [value, setValue] = React.useState(createInitialValue());
+  return (
+    <LLAEnvironment>
+      <LLAEditor value={value} onChange={setValue}></LLAEditor>
+    </LLAEnvironment>
+  );
+};
+```

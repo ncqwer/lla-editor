@@ -1,3 +1,11 @@
+@layer utilities {
+  @variants focus,hover {
+    .no-box-shadow {
+      box-shadow: unset;
+    }
+  }
+}
+
 .lla-list-item {
   @apply flex items-start;
 }

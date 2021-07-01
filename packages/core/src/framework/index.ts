@@ -14,3 +14,5 @@ export * from './Config';
 export * from './Editable';
 
 export * from './Editor';
+
+export * from './test_only';

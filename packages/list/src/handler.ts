@@ -72,12 +72,12 @@ const handleBackspace: KeyDown = (next, event, editor, [node, path]) => {
   if (selection.anchor.offset != 0) return next();
   event.preventDefault();
   return Editor.withoutNormalizing(editor, () => {
-    Transforms.wrapNodes(
-      editor,
-      { type: 'text-block', children: [] },
-      { at: path },
-    );
-    Transforms.unwrapNodes(editor, { at: path.concat(0) });
+    // Transforms.wrapNodes(
+    //   editor,
+    //   { type: 'text-block', children: [] },
+    //   { at: path },
+    // );
+    Transforms.unwrapNodes(editor, { at: path });
   });
 };
 

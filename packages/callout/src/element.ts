@@ -12,10 +12,10 @@ export const CalloutElement = {
   is: (node: Node): node is CalloutElement =>
     LLAElement.is(node) && node.type === _TYPE_,
 
-  create: (editor: Editor): CalloutElement => ({
+  create: (editor?: Editor): CalloutElement => ({
     type: _TYPE_,
     emoji: '😀',
-    children: [editor.createParagraph('')],
+    children: editor ? [editor.createParagraph('')] : [],
   }),
 };
 

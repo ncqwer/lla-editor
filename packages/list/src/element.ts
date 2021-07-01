@@ -38,24 +38,27 @@ export const List = {
   isNumbered(node: Node): node is NumberedListItem {
     return LLAElement.is(node) && node.type === _NUMBEREED_ITEM_;
   },
-  createTask(editor: Editor) {
+  createTask(editor?: Editor) {
+    const children = editor ? [editor.createParagraph('')] : [];
     return {
       type: _TASK_ITEM_,
       checked: false,
-      children: [editor.createParagraph('')],
+      children,
     };
   },
-  createBulleted(editor: Editor) {
+  createBulleted(editor?: Editor) {
+    const children = editor ? [editor.createParagraph('')] : [];
     return {
       type: _BULLETED_ITEM_,
-      children: [editor.createParagraph('')],
+      children,
     };
   },
-  createNumbered(editor: Editor) {
+  createNumbered(editor?: Editor) {
+    const children = editor ? [editor.createParagraph('')] : [];
     return {
       type: _NUMBEREED_ITEM_,
       index: 1,
-      children: [editor.createParagraph('')],
+      children,
     };
   },
 };

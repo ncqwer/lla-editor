@@ -12,10 +12,11 @@ export const QuoteElement = {
   is(node: Node): node is QuoteElement {
     return LLAElement.is(node) && node.type === _TYPE_;
   },
-  create(editor: Editor): QuoteElement {
+  create(editor?: Editor): QuoteElement {
+    const children = editor ? [editor.createParagraph('')] : [];
     return {
       type: _TYPE_,
-      children: [editor.createParagraph('')],
+      children,
     };
   },
 };

@@ -35,7 +35,7 @@ const availablePlugins = [
 ];
 const activeNames = availablePlugins.map(({ pluginName }) => pluginName);
 
-const { SharedProvider } = ConfigHelers;
+export const { SharedProvider } = ConfigHelers;
 
 export const LLAEnvironment: React.FC = ({ children }) => {
   return (

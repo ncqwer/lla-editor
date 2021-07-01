@@ -26,11 +26,11 @@
     "prepublish": "rm dist/tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "slate": "^0.60.0",
-    "slate-history": "^0.60.0",
-    "slate-react": "^0.60.0"
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0",
+    "slate": ">=0.60.0",
+    "slate-history": ">=0.60.0",
+    "slate-react": ">=0.60.0"
   },
   "dependencies": {
     "@lla-editor/core": "^0.0.2",

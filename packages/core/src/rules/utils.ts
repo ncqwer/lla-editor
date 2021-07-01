@@ -89,11 +89,30 @@ export const caseMatch =
 const hotKeyMap = new Map<string, (event: KeyboardEvent) => boolean>();
 
 const getHotkey = (str: string) => {
+  if (_SHOTKEY_MOCK_ === true) return ({ raw }: any) => raw === str;
   let f = hotKeyMap.get(str);
   if (f) return f;
   f = isHotkey(str);
   hotKeyMap.set(str, f);
   return f;
+};
+
+let _SHOTKEY_MOCK_ = false;
+export const setShotKeyMock = (status = true) => (_SHOTKEY_MOCK_ = status);
+export const mockKey = (str: string) => {
+  const hasCtrl = /ctrl/.test(str);
+  const hasShift = /shift/.test(str);
+  const hasAlt = /alt/.test(str);
+  return {
+    status: false, // mock preventDefault
+    preventDefault: function () {
+      this.status = true;
+    },
+    altKey: hasAlt,
+    ctrlKey: hasCtrl,
+    shiftKey: hasShift,
+    raw: str,
+  } as any;
 };
 
 export const shotkey =

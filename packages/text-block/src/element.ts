@@ -32,7 +32,8 @@ export const TextBlock = {
   is(node: Node): node is TextBlock {
     return LLAElement.is(node) && node.type === _TYPE_;
   },
-  create(editor: Editor): TextBlock {
-    return { children: [editor.createParagraph('')], type: _TYPE_ };
+  create(editor?: Editor): TextBlock {
+    const children = editor ? [editor.createParagraph('')] : [];
+    return { children, type: _TYPE_ };
   },
 };

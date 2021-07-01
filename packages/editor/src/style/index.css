@@ -1,5 +1,5 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
+/* @import 'tailwindcss/base';
+@import 'tailwindcss/components'; */
 @import 'tailwindcss/utilities';
 @import 'rc-slider/assets/index.css';
 @import 'emoji-mart/css/emoji-mart.css';
@@ -16,14 +16,6 @@
 @import './video.css';
 @import './quote.css';
 
-@layer utilities {
-  @variants focus,hover {
-    .no-box-shadow {
-      box-shadow: unset;
-    }
-  }
-}
-
 .lla-editor__tail {
   @apply w-full bg-transparent h-10 cursor-text;
 }
@@ -33,6 +25,9 @@
 }
 .lla-overlayer__content {
   @apply relative w-max;
+}
+.lla-insert-wrapper {
+  width: fit-content;
 }
 
 .lla-text-block {

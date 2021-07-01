@@ -34,6 +34,9 @@
 .lla-overlayer__content {
   @apply relative w-max;
 }
+.lla-insert-wrapper {
+  width: fit-content;
+}
 
 .lla-text-block {
   @apply leading-6 mt-px mb-px;

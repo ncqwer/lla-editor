@@ -12,9 +12,9 @@ export const withEditor = <T extends Editor>(editor: T) => {
   //   return false;
   // };
 
-  e.isIndentable = function (this: T, node: Element) {
+  e.isIndentable = function (node: Element) {
     if (isIndentable) return isIndentable(node);
-    if (this.isVoid(node)) return true;
+    if (e.isVoid(node)) return true;
     return false;
   };
   e.normalizeNode = ([node, path]) => {
