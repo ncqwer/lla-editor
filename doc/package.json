@@ -1,11 +1,11 @@
 {
   "name": "doc",
   "private": "true",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@lla-editor/editor": "^0.0.2",
+    "@lla-editor/editor": "^0.0.3",
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^11.0.1",
     "next": "^11.0.1",
