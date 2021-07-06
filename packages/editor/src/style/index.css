@@ -1,5 +1,5 @@
-/* @import 'tailwindcss/base';
-@import 'tailwindcss/components'; */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 @import 'rc-slider/assets/index.css';
 @import 'emoji-mart/css/emoji-mart.css';
@@ -15,6 +15,15 @@
 @import './audio.css';
 @import './video.css';
 @import './quote.css';
+@import './text-action-menu.css';
+
+/* @layer utilities {
+  @variants focus,hover {
+    .no-box-shadow {
+      box-shadow: unset;
+    }
+  }
+} */
 
 .lla-editor__tail {
   @apply w-full bg-transparent h-10 cursor-text;

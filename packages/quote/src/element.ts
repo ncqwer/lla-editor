@@ -5,6 +5,8 @@ const _TYPE_ = 'quote';
 
 export interface QuoteElement {
   type: 'quote';
+  bgColor?: string;
+  txtColor?: string;
   children: Element[];
 }
 

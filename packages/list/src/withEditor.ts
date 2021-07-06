@@ -5,7 +5,25 @@ import { IndentContainer } from '@lla-editor/indent';
 export const withEditor = (editor: Editor) => {
   const e = editor;
 
-  const { isContainable, isIndentable, normalizeNode, isParagraphable } = e;
+  const {
+    isContainable,
+    isIndentable,
+    normalizeNode,
+    isParagraphable,
+    isBgColorable,
+    isTxtColorable,
+  } = e;
+
+  e.isBgColorable = (n) => {
+    if (List.isTask(n) || List.isBulleted(n) || List.isNumbered(n)) return true;
+    if (isBgColorable) return isBgColorable(n);
+    return false;
+  };
+  e.isTxtColorable = (n) => {
+    if (List.isTask(n) || List.isBulleted(n) || List.isNumbered(n)) return true;
+    if (isTxtColorable) return isTxtColorable(n);
+    return false;
+  };
 
   e.isContainable = (node) => {
     if (List.isTask(node) || List.isBulleted(node) || List.isNumbered(node))

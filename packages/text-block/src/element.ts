@@ -5,6 +5,8 @@ const _TYPE_ = 'text-block';
 
 export interface TextBlock extends BaseContainer {
   type: 'text-block';
+  bgColor?: string;
+  txtColor?: string;
   children: Element[];
 }
 

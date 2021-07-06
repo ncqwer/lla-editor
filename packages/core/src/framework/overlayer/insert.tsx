@@ -111,6 +111,143 @@ const InsertPannelItem: React.FC<
   );
 };
 
+const txtColorInfo = [
+  {
+    keywords: ['default', 'text', 'content'],
+    value: '',
+    title: '默认',
+  },
+  {
+    keywords: ['black', 'text', 'content'],
+    value: 'text-black',
+    title: '黑色',
+  },
+  {
+    keywords: ['gray', 'text', 'content'],
+    value: 'text-gray-300',
+    title: '灰色',
+  },
+  {
+    keywords: ['red', 'text', 'content'],
+    value: 'text-red-300',
+    title: '红色',
+  },
+  {
+    keywords: ['yellow', 'text', 'content'],
+    value: 'text-yellow-300',
+    title: '黄色',
+  },
+  {
+    keywords: ['green', 'text', 'content'],
+    value: 'text-green-300',
+    title: '绿色',
+  },
+  {
+    keywords: ['blue', 'text', 'content'],
+    value: 'text-blue-300',
+    title: '蓝色',
+  },
+  {
+    keywords: ['purple', 'text', 'content'],
+    value: 'text-purple-300',
+    title: '紫色',
+  },
+  {
+    keywords: ['pink', 'text', 'content'],
+    value: 'text-pink-300',
+    title: '粉色',
+  },
+  {
+    keywords: ['indigo', 'text', 'content'],
+    value: 'text-indigo-300',
+    title: '靛蓝',
+  },
+];
+
+const bgColorInfo = [
+  {
+    keywords: ['default', 'bg', 'background'],
+    value: '',
+    title: '默认',
+  },
+  {
+    keywords: ['default', 'bg', 'background'],
+    value: 'bg-white',
+    title: '白色',
+  },
+  {
+    keywords: ['gray', 'bg', 'background'],
+    value: 'bg-gray-50',
+    title: '灰色',
+  },
+  { keywords: ['red', 'bg', 'background'], value: 'bg-red-50', title: '红色' },
+  {
+    keywords: ['yellow', 'bg', 'background'],
+    value: 'bg-yellow-50',
+    title: '黄色',
+  },
+  {
+    keywords: ['green', 'bg', 'background'],
+    value: 'bg-green-50',
+    title: '绿色',
+  },
+  {
+    keywords: ['blue', 'bg', 'background'],
+    value: 'bg-blue-50',
+    title: '蓝色',
+  },
+  {
+    keywords: ['purple', 'bg', 'background'],
+    value: 'bg-purple-50',
+    title: '紫色',
+  },
+  {
+    keywords: ['pink', 'bg', 'background'],
+    value: 'bg-pink-50',
+    title: '粉色',
+  },
+  {
+    keywords: ['indigo', 'bg', 'background'],
+    value: 'bg-indigo-50',
+    title: '靛蓝',
+  },
+];
+
+const searchColor = (search: string, colorInfo: typeof bgColorInfo) => {
+  return colorInfo.filter(({ keywords }) =>
+    keywords.some((keyword) => keyword.startsWith(search)),
+  );
+};
+
+export const ColorItem: React.FC<
+  React.HtmlHTMLAttributes<HTMLDivElement> & {
+    color: string;
+    title: string;
+    active?: boolean;
+    description: string;
+  }
+> = ({ color, title, description, active = false, ...others }) => {
+  const ref = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (ref.current && active) {
+      (ref.current as any).scrollIntoViewIfNeeded(false);
+    }
+  }, [active]);
+  return (
+    <div
+      ref={ref}
+      className={`lla-insert__item ${active ? 'lla-insert__item--active' : ''}`}
+      {...others}
+    >
+      <div className={`lla-insert__item-color ${color || ''}`}>Bg</div>
+      <div className="lla-insert__item-content">
+        <div className="lla-insert__item-title">{title}</div>
+        <div className="lla-insert__item-descritption">{description}</div>
+      </div>
+    </div>
+  );
+};
+
 const InsertPannel = React.forwardRef(
   (
     {
@@ -130,46 +267,67 @@ const InsertPannel = React.forwardRef(
 
     const { insertInfo } = useEditorRuntime();
     const { searchItems } = insertInfo;
-    const items = React.useMemo(
+    const element = React.useMemo(
+      () => Node.parent(editor, path),
+      [editor, path],
+    );
+    const insertItems = React.useMemo(
       () => searchItems(search),
       [searchItems, search],
     );
+    const bgColorItems = React.useMemo(
+      () =>
+        editor.isBgColorable(element) ? searchColor(search, bgColorInfo) : [],
+      [search, element],
+    );
+    const txtColorItems = React.useMemo(
+      () =>
+        editor.isTxtColorable(element) ? searchColor(search, txtColorInfo) : [],
+      [search, element],
+    );
+    // const items = React.useMemo<any>(
+    //   () => insertItems.concat(bgColorItems, txtColorItems),
+    //   [insertItems, bgColorItems, txtColorItems],
+    // );
+    const bgColorStartIdx = insertItems.length;
+    const txtColorItemsStartIdx = bgColorStartIdx + bgColorItems.length;
+    const totalLength = txtColorItemsStartIdx + txtColorItems.length;
     React.useEffect(() => {
       setActiveIdx(0);
-    }, [items]);
+    }, [search]);
     const counterRef = React.useRef<number>(0);
     React.useEffect(() => {
-      if (items.length !== 0) {
+      if (totalLength !== 0) {
         counterRef.current = 0;
         return;
       } else {
         ++counterRef.current;
       }
       if (counterRef.current > 7) emptyPath();
-    }, [items]);
+    }, [search]);
     const enterRef = React.useRef<any>(null);
     enterRef.current = handleClick;
     React.useImperativeHandle(
       ref,
       () => ({
         up: () =>
-          setActiveIdx((prev) => (prev === 0 ? items.length - 1 : --prev)),
+          setActiveIdx((prev) => (prev === 0 ? totalLength - 1 : --prev)),
         down: () =>
-          setActiveIdx((prev) => (prev === items.length - 1 ? 0 : ++prev)),
+          setActiveIdx((prev) => (prev === totalLength - 1 ? 0 : ++prev)),
         enter: () => enterRef.current?.(),
       }),
-      [items],
+      [totalLength],
     );
 
     // console.log('search', items);
 
     return (
       <div className="lla-insert" {...others}>
-        {items.length === 0 && <div>没有对应结果</div>}
-        {items.length !== 0 && (
+        {totalLength === 0 && <div>没有对应结果</div>}
+        {insertItems.length !== 0 && (
           <div className="lla-insert__group">
             <div className="lla-insert__group-label">基础元素</div>
-            {items.map(({ title, description }, i) => (
+            {insertItems.map(({ title, description }, i) => (
               <InsertPannelItem
                 active={i === activeIdx}
                 imgSrc="https://www.notion.so/images/blocks/text.9fdb530b.png"
@@ -182,13 +340,52 @@ const InsertPannel = React.forwardRef(
             ))}
           </div>
         )}
+        {bgColorItems.length !== 0 && (
+          <div className="lla-insert__group">
+            <div className="lla-insert__group-label">背景颜色</div>
+            {bgColorItems.map(({ title, value }, i) => (
+              <ColorItem
+                color={value}
+                active={i + bgColorStartIdx === activeIdx}
+                title={title}
+                description={`将背景设为${title}`}
+                key={i}
+                onMouseOver={() => setActiveIdx(i + bgColorStartIdx)}
+                onClick={handleClick}
+              ></ColorItem>
+            ))}
+          </div>
+        )}
+        {txtColorItems.length !== 0 && (
+          <div className="lla-insert__group">
+            <div className="lla-insert__group-label">文字</div>
+            {txtColorItems.map(({ title, value }, i) => (
+              <ColorItem
+                color={value}
+                active={i + txtColorItemsStartIdx === activeIdx}
+                title={title}
+                description={`将文字设为${title}`}
+                key={i}
+                onMouseOver={() => setActiveIdx(i + txtColorItemsStartIdx)}
+                onClick={handleClick}
+              ></ColorItem>
+            ))}
+          </div>
+        )}
       </div>
     );
 
     function handleClick() {
-      if (items.length === 0) return;
+      if (totalLength === 0) return;
+      if (activeIdx < bgColorStartIdx) return handleClick_i();
+      if (activeIdx < txtColorItemsStartIdx) return handleClick_bg();
+      console.log('hhh');
+      return handleClick_txt();
+    }
+
+    function handleClick_i() {
       const [parent, parentPath] = Editor.parent(editor, path);
-      const { create } = items[activeIdx];
+      const { create } = insertItems[activeIdx];
       emptyPath();
       if (
         parent.children.length > 1 ||
@@ -212,6 +409,39 @@ const InsertPannel = React.forwardRef(
         Transforms.insertNodes(editor, create(editor), { at: parentPath });
         return Transforms.select(editor, Editor.start(editor, parentPath));
       });
+    }
+    function handleClick_bg() {
+      Editor.withoutNormalizing(editor, () => {
+        Transforms.removeNodes(editor, { at: path });
+        Transforms.insertNodes(editor, editor.createParagraph(''), {
+          at: path,
+        });
+        Transforms.setNodes(
+          editor,
+          { bgColor: bgColorItems[activeIdx - bgColorStartIdx].value } as any,
+          { at: Path.parent(path) },
+        );
+        return Transforms.select(editor, Editor.start(editor, path));
+      });
+
+      emptyPath();
+    }
+    function handleClick_txt() {
+      Editor.withoutNormalizing(editor, () => {
+        Transforms.removeNodes(editor, { at: path });
+        Transforms.insertNodes(editor, editor.createParagraph(''), {
+          at: path,
+        });
+        Transforms.setNodes(
+          editor,
+          {
+            txtColor: txtColorItems[activeIdx - txtColorItemsStartIdx].value,
+          } as any,
+          { at: Path.parent(path) },
+        );
+        return Transforms.select(editor, Editor.start(editor, path));
+      });
+      emptyPath();
     }
   },
 );

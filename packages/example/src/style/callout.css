@@ -1,5 +1,5 @@
 .lla-callout {
-  @apply w-full mt-1 mb-1 flex p-4 pl-3 rounded border border-gray-200 text-gray-400 items-center;
+  @apply w-full mt-1 mb-1 flex p-4 pl-3 rounded border border-gray-200  items-center;
   /* max-width: 253px; */
 }
 

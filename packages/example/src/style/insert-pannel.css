@@ -28,6 +28,13 @@
   box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px;
 }
 
+.lla-insert__item-color {
+  @apply mt-px ml-3.5 object-cover rounded flex items-center justify-center text-lg;
+  width: 46px;
+  height: 46px;
+  box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px;
+}
+
 .lla-insert__item-content {
   @apply ml-2 mr-3.5 flex-grow flex-shrink truncate;
 }

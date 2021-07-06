@@ -46,9 +46,14 @@ const TextBlockComponent = ({
   element,
   ...others
 }: ExtendRenderElementProps<TextBlock>): JSX.Element => {
+  const { bgColor, txtColor } = element;
   return (
     <IndentContainerContext.Provider value={TextIndentWrapper}>
-      <div {...others} {...attributes} className="lla-text-block">
+      <div
+        {...others}
+        {...attributes}
+        className={`lla-text-block ${bgColor || ''} ${txtColor || ''}`}
+      >
         {children}
       </div>
     </IndentContainerContext.Provider>

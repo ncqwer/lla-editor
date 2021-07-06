@@ -3,7 +3,24 @@ import { IndentContainer } from '@lla-editor/indent';
 import { QuoteElement } from './element';
 
 export const withEditor = (e: Editor): Editor => {
-  const { isContainable, isIndentable, isParagraphable } = e;
+  const {
+    isContainable,
+    isIndentable,
+    isParagraphable,
+    isBgColorable,
+    isTxtColorable,
+  } = e;
+
+  e.isBgColorable = (n) => {
+    if (QuoteElement.is(n)) return true;
+    if (isBgColorable) return isBgColorable(n);
+    return false;
+  };
+  e.isTxtColorable = (n) => {
+    if (QuoteElement.is(n)) return true;
+    if (isTxtColorable) return isTxtColorable(n);
+    return false;
+  };
 
   e.isContainable = (n) => {
     if (QuoteElement.is(n)) return false;

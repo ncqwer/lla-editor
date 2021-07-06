@@ -1,23 +1,34 @@
 import React from 'react';
 import { BaseElement, Text, Node, Editor, Range } from 'slate';
-import { useSelected, useSlateStatic } from 'slate-react';
+import { RenderLeafProps, useSelected, useSlateStatic } from 'slate-react';
 import {
   ElementJSX,
   elementPropsIs,
   elementRender,
   ExtendRenderElementProps,
+  ExtendRenderLeafProps,
   groupKeyDown,
+  LeafJSX,
   OnKeyDownResponseZone,
   OnKeyDownType,
   shotkey,
+  textPropsIs,
 } from '../rules';
-import { LLAElement, BaseParagraph } from '../type';
+import { LLAElement, BaseParagraph, StyledText } from '../type';
 
 const _TYPE_ = 'paragraph';
 
-const Paragraph = {
+export const Paragraph = {
   is: (node: Node): node is BaseParagraph =>
     LLAElement.is(node) && node.type === _TYPE_,
+  isStyleText: (text: Node): text is StyledText =>
+    Text.isText(text) &&
+    (!!text.italic ||
+      !!text.bold ||
+      !!text.lineThrough ||
+      !!text.bgColor ||
+      !!text.underline ||
+      !!text.txtColor),
 };
 
 export const PlaceholderContext =
@@ -55,6 +66,27 @@ const render = [
     }),
   ],
 ] as ElementJSX<BaseParagraph>;
+
+const renderLeaf = [
+  [
+    textPropsIs(Paragraph.isStyleText),
+    ({ leaf, attributes, children }: ExtendRenderLeafProps<StyledText>) => {
+      const array: string[] = [];
+      if (leaf.bgColor) array.push(leaf.bgColor);
+      if (leaf.txtColor) array.push(leaf.txtColor);
+      if (leaf.bold) array.push('font-bold');
+      if (leaf.italic) array.push('italic');
+      if (leaf.lineThrough) array.push('line-through');
+      if (leaf.underline) array.push('underline');
+      const cls = array.join(' ');
+      return (
+        <span {...attributes} className={cls}>
+          {children}
+        </span>
+      );
+    },
+  ],
+] as LeafJSX<StyledText>;
 
 const onKeyDownResponseZone: OnKeyDownResponseZone = (next, [node, path]) => {
   if (Paragraph.is(node)) return handleKeyDown([node, path]);
@@ -128,6 +160,14 @@ const handleTab: KeyDown = (next, event, editor) => {
   return next();
 };
 
+const handleEsc: KeyDown = (next, event, editor) => {
+  const insert = editor.getOvlerLayer('insert');
+  if (!insert) return next();
+  if (insert.isEmpty()) return next();
+  insert.close();
+  event.preventDefault();
+};
+
 const handleEnter: KeyDown = (next, event, editor) => {
   const insert = editor.getOvlerLayer('insert');
   if (!insert) return next();
@@ -146,6 +186,7 @@ const handleKeyDown = groupKeyDown<KeyDown>(
   [shotkey('ctrl+n'), handleDown],
   [shotkey('enter'), handleEnter],
   [shotkey('tab'), handleTab],
+  [shotkey('esc'), handleEsc],
   [isControlKey, handleConvert],
   [(...args) => args, (next) => next()],
 );
@@ -153,5 +194,6 @@ const handleKeyDown = groupKeyDown<KeyDown>(
 export default {
   pluginName: 'paragraph',
   renderElement: render,
+  renderLeaf,
   onKeyDownResponseZone,
 };

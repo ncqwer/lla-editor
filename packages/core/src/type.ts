@@ -8,6 +8,7 @@ import {
   Editor,
   NodeEntry,
   Path,
+  BaseText,
 } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';
@@ -75,6 +76,15 @@ export interface BaseParagraph extends BaseElement {
   type: string;
 }
 
+export interface StyledText extends BaseText {
+  italic?: boolean;
+  bold?: boolean;
+  lineThrough?: boolean;
+  underline?: boolean;
+  bgColor?: string;
+  txtColor?: string;
+}
+
 export interface CustomOverLayer {
   insert: {
     open: (path: Path) => void;
@@ -99,6 +109,8 @@ export interface LLABaseEditor {
     ) => void
   >;
   isParagraphable: (element: Element) => boolean;
+  isBgColorable: (element: Node) => boolean;
+  isTxtColorable: (element: Node) => boolean;
   getOvlerLayer: <T extends keyof CustomOverLayer>(
     layerName: T,
   ) => CustomOverLayer[T] | undefined;
@@ -144,5 +156,6 @@ declare module 'slate' {
   interface CustomTypes {
     Element: LLAElement | BaseElement;
     Editor: LLAEditor;
+    Text: StyledText;
   }
 }

@@ -8,6 +8,7 @@ import {
   Range,
   Transforms,
   Point,
+  PathRef,
 } from 'slate';
 import {
   OnKeyDownResponseZone,
@@ -191,39 +192,71 @@ const handleEnter: OnKeyDownAlternative = (next, event, editor) => {
   });
   if (!result) return next();
   const [node, path] = result;
-  const [start, end] = Range.edges(selection);
+  const [, end] = Range.edges(selection);
   const textEnd = Editor.end(editor, path.concat(0));
-  let remainStr = '';
-  let range: Range | null = null;
-  const text = (node.children[0] as any).children[0] as any as Text;
-  if (Point.isBefore(end, textEnd)) {
-    // 文本没有完全删除
-    remainStr = text.text.slice(end.offset);
-    range = { anchor: start, focus: textEnd };
-  } else {
-    // 没有剩余文本
-    range = selection;
-  }
-  let newPath: Path;
+
+  const moveRangeRef = Point.isBefore(end, textEnd)
+    ? Editor.rangeRef(editor, { anchor: end, focus: textEnd })
+    : null;
+  // if (Point.isBefore(end, textEnd)) {
+  //   // 文本没有完全删除
+  //   remainStr = text.text.slice(end.offset);
+  //   range = { anchor: start, focus: textEnd };
+  // } else {
+  //   // 没有剩余文本
+  //   range = selection;
+  // }
+  let newPathRef: PathRef;
   let newBlock: any;
   if (node.children[1]) {
     // 当前文本有缩进行
-    newPath = path.concat(1, 0);
+    newPathRef = Editor.pathRef(editor, path.concat(1, 0));
     newBlock = Object.assign({}, (node.children[1] as any).children[0], {
-      children: [editor.createParagraph(remainStr)],
+      children: [],
     });
   } else {
-    newPath = Path.next(path);
+    newPathRef = Editor.pathRef(editor, Path.next(path));
     newBlock = Object.assign({}, node, {
-      children: [editor.createParagraph(remainStr)],
+      children: [],
     });
   }
+  if (newBlock.bgColor) delete newBlock.bgColor;
+  if (newBlock.txtColor) delete newBlock.txtColor;
   event.preventDefault();
   return Editor.withoutNormalizing(editor, () => {
-    if (range && Range.isExpanded(range))
-      Transforms.delete(editor, { at: range });
-    Transforms.insertNodes(editor, newBlock, { at: newPath });
-    Transforms.select(editor, Editor.start(editor, newPath));
+    Transforms.splitNodes(editor, { at: selection });
+
+    const ran = moveRangeRef?.unref();
+    if (ran) {
+      let [start, end] = Editor.edges(editor, ran);
+      if ((Node.get(editor, start.path) as Text).text.length === start.offset) {
+        const ne = Editor.next(editor, { at: start.path, match: Text.isText });
+        if (!ne) return;
+        start = { path: ne[1], offset: 0 };
+      }
+
+      const newPath = newPathRef.unref();
+      const startRef = Editor.pointRef(editor, start);
+      if (!newPath) return;
+      Transforms.insertNodes(editor, newBlock, { at: newPath });
+
+      Transforms.moveNodes(editor, {
+        at: { anchor: start, focus: end },
+        to: newPath.concat(0),
+        // mode: 'highest',
+      });
+      Transforms.select(editor, startRef.unref()!);
+    } else {
+      const newPath = newPathRef.unref();
+      if (!newPath) return;
+      Transforms.insertNodes(
+        editor,
+        { ...newBlock, children: [editor.createParagraph('')] },
+        { at: newPath },
+      );
+      Transforms.select(editor, Editor.start(editor, newPath));
+    }
+    // console.log('hhh')
   });
 };
 

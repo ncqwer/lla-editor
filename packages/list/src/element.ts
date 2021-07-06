@@ -6,17 +6,23 @@ const _TASK_ITEM_ = 'task_list_item';
 export interface TaskListItem extends BaseContainer {
   type: 'task_list_item';
   checked: boolean;
+  bgColor?: string;
+  txtColor?: string;
   children: Element[];
 }
 
 const _BULLETED_ITEM_ = 'bulleted_list_item';
 export interface BulletedListItem extends BaseContainer {
   type: 'bulleted_list_item';
+  bgColor?: string;
+  txtColor?: string;
 }
 
 const _NUMBEREED_ITEM_ = 'numbered_list_item';
 export interface NumberedListItem extends BaseContainer {
   type: 'numbered_list_item';
+  bgColor?: string;
+  txtColor?: string;
   index: number;
 }
 

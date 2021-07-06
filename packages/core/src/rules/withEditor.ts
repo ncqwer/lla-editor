@@ -1,5 +1,5 @@
 import { PluginRuleObjType } from '@herbart-editor/pae';
-import { Editor, Element } from 'slate';
+import { Editor, Element, Node } from 'slate';
 import { extractValueFromPlugin } from './utils';
 
 export type WithEditor = (editor: Editor) => Editor;
@@ -7,7 +7,8 @@ export type WithEditor = (editor: Editor) => Editor;
 const overSymbol = Symbol('overlayer');
 
 const withDefault: WithEditor = (editor) => {
-  const { createParagraph, isParagraphable } = editor;
+  const { createParagraph, isParagraphable, isBgColorable, isTxtColorable } =
+    editor;
 
   editor.createParagraph = (str: string) => {
     if (createParagraph) return createParagraph(str);
@@ -30,6 +31,16 @@ const withDefault: WithEditor = (editor) => {
 
   editor.isParagraphable = (element: Element) => {
     if (isParagraphable) return isParagraphable(element);
+    return false;
+  };
+
+  editor.isBgColorable = (element: Node) => {
+    if (isBgColorable) return isBgColorable(element);
+    return false;
+  };
+
+  editor.isTxtColorable = (element: Node) => {
+    if (isTxtColorable) return isTxtColorable(element);
     return false;
   };
   return editor;

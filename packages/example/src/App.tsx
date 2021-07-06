@@ -839,6 +839,216 @@ function getHumanReadableText(seconds: number, isShort = false): string {
   return new Date(seconds * 1000).toISOString().substr(11, 8);
 }
 
+const ColorItem: React.FC<
+  React.HtmlHTMLAttributes<HTMLDivElement> & {
+    color: string;
+    title: string;
+    active?: boolean;
+    description: string;
+  }
+> = ({ color, title, description, active = false, ...others }) => {
+  const ref = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (ref.current && active) {
+      (ref.current as any).scrollIntoViewIfNeeded(false);
+    }
+  }, [active]);
+  return (
+    <div
+      ref={ref}
+      className={`lla-insert__item ${active ? 'lla-insert__item--active' : ''}`}
+      {...others}
+    >
+      <div className={`lla-insert__item-color ${color || ''}`}>Bg</div>
+      <div className="lla-insert__item-content">
+        <div className="lla-insert__item-title">{title}</div>
+        <div className="lla-insert__item-descritption">{description}</div>
+      </div>
+    </div>
+  );
+};
+
+const txtColorInfo = [
+  {
+    keywords: ['default', 'text', 'content'],
+    value: '',
+    title: '默认',
+  },
+  {
+    keywords: ['black', 'text', 'content'],
+    value: 'text-black',
+    title: '黑色',
+  },
+  {
+    keywords: ['gray', 'text', 'content'],
+    value: 'text-gray-300',
+    title: '灰色',
+  },
+  {
+    keywords: ['red', 'text', 'content'],
+    value: 'text-red-300',
+    title: '红色',
+  },
+  {
+    keywords: ['yellow', 'text', 'content'],
+    value: 'text-yellow-300',
+    title: '黄色',
+  },
+  {
+    keywords: ['green', 'text', 'content'],
+    value: 'text-green-300',
+    title: '绿色',
+  },
+  {
+    keywords: ['blue', 'text', 'content'],
+    value: 'text-blue-300',
+    title: '蓝色',
+  },
+  {
+    keywords: ['purple', 'text', 'content'],
+    value: 'text-purple-300',
+    title: '紫色',
+  },
+  {
+    keywords: ['pink', 'text', 'content'],
+    value: 'text-pink-300',
+    title: '粉色',
+  },
+  {
+    keywords: ['indigo', 'text', 'content'],
+    value: 'text-indigo-300',
+    title: '靛蓝',
+  },
+];
+
+const bgColorInfo = [
+  {
+    keywords: ['default', 'bg', 'background'],
+    value: '',
+    title: '默认',
+  },
+  {
+    keywords: ['default', 'bg', 'background'],
+    value: 'bg-white',
+    title: '白色',
+  },
+  {
+    keywords: ['gray', 'bg', 'background'],
+    value: 'bg-gray-50',
+    title: '灰色',
+  },
+  { keywords: ['red', 'bg', 'background'], value: 'bg-red-50', title: '红色' },
+  {
+    keywords: ['yellow', 'bg', 'background'],
+    value: 'bg-yellow-50',
+    title: '黄色',
+  },
+  {
+    keywords: ['green', 'bg', 'background'],
+    value: 'bg-green-50',
+    title: '绿色',
+  },
+  {
+    keywords: ['blue', 'bg', 'background'],
+    value: 'bg-blue-50',
+    title: '蓝色',
+  },
+  {
+    keywords: ['purple', 'bg', 'background'],
+    value: 'bg-purple-50',
+    title: '紫色',
+  },
+  {
+    keywords: ['pink', 'bg', 'background'],
+    value: 'bg-pink-50',
+    title: '粉色',
+  },
+  {
+    keywords: ['indigo', 'bg', 'background'],
+    value: 'bg-indigo-50',
+    title: '靛蓝',
+  },
+];
+
+export const useClickAway = (fn: (e: React.MouseEvent) => void, ref: any) => {
+  const fnRef = React.useRef(fn);
+  fnRef.current = fn;
+
+  React.useEffect(() => {
+    const trigger = (e: any) => {
+      if (ref.current) {
+        const dom = ref.current as HTMLElement;
+        if (dom.contains(e.target)) return;
+      }
+      fnRef.current && fnRef.current(e);
+    };
+    document.addEventListener('click', trigger);
+    return () => document.removeEventListener('click', trigger);
+  });
+};
+
+const TextActionMenu = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+  useClickAway(() => {
+    setIsOpen(false);
+  }, ref);
+  return (
+    <div className="lla-text-action-menu">
+      <div className="lla-text-style-group">
+        <div className="lla-text-style-item lla-text-style-item--bold">B</div>
+        <div className="lla-text-style-item lla-text-style-item--italic">i</div>
+        <div className="lla-text-style-item lla-text-style-item--underline">
+          U
+        </div>
+        <div className="lla-text-style-item lla-text-style-item--linethrough">
+          S
+        </div>
+      </div>
+      <div className="lla-text-color relative" ref={ref}>
+        <div className="contents" onClick={() => setIsOpen(true)}>
+          <div>A</div>
+          <svg viewBox="0 0 30 30" className="lla-text-color-drop-icon">
+            <polygon points="15,17.4 4.8,7 2,9.8 15,23 28,9.8 25.2,7 "></polygon>
+          </svg>
+        </div>
+        {isOpen && (
+          <div className="absolute lla-text-color-menu -top-10">
+            <div className="lla-insert__group">
+              <div className="lla-insert__group-label">背景颜色</div>
+              {bgColorInfo.map(({ title, value }, i) => (
+                <ColorItem
+                  color={value}
+                  // active={i + bgColorStartIdx === activeIdx}
+                  title={title}
+                  description={`将背景设为${title}`}
+                  key={i}
+                  // onMouseOver={() => setActiveIdx(i + bgColorStartIdx)}
+                  // onClick={handleClick}
+                ></ColorItem>
+              ))}
+            </div>
+            <div className="lla-insert__group">
+              <div className="lla-insert__group-label">文字</div>
+              {txtColorInfo.map(({ title, value }, i) => (
+                <ColorItem
+                  color={value}
+                  // active={i + txtColorItemsStartIdx === activeIdx}
+                  title={title}
+                  description={`将文字设为${title}`}
+                  key={i}
+                  // onMouseOver={() => setActiveIdx(i + txtColorItemsStartIdx)}
+                  // onClick={handleClick}
+                ></ColorItem>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const AEditor = () => {
   const [value, setValue] = useState<Descendant[]>(initialValue());
   const [v, setV] = useState(1080);
@@ -868,6 +1078,15 @@ const AEditor = () => {
       {/* <Callout emoji="🎇"></Callout> */}
       {/* <Audio src="http://music.163.com/song/media/outer/url?id=386837.mp3"></Audio> */}
       {/* <Quote></Quote> */}
+      {/* <ColorItem
+        // active={i === activeIdx}
+        color="bg-gray-200"
+        title={`Text`}
+        description="Just start writing with plain text"
+        // key={i}
+        // onMouseOver={() => setActiveIdx(i)}
+      ></ColorItem> */}
+      {/* <TextActionMenu></TextActionMenu> */}
       <Editor value={value} onChange={setValue}>
         <Editable></Editable>
       </Editor>
@@ -876,8 +1095,16 @@ const AEditor = () => {
 };
 const initialValue: () => Descendant[] = () => [
   {
-    type: 'text-block',
-    children: [{ type: 'paragraph', children: [{ text: '' }] }],
+    type: 'quote',
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          { text: '123', bold: true },
+          { text: 'abc', italic: true },
+        ],
+      },
+    ],
   },
 ];
 

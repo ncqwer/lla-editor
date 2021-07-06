@@ -29,13 +29,16 @@ const Callout: React.FC<ExtendRenderElementProps<CalloutElement>> = ({
   children,
   attributes,
 }) => {
-  const { emoji } = element;
+  const { emoji, txtColor, bgColor } = element;
   const [isOpen, setIsOpen] = React.useState(false);
   const ref = React.useRef<HTMLSpanElement>(null);
   const editor = useSlateStatic();
   return (
     <>
-      <div className="lla-callout" {...attributes}>
+      <div
+        className={`lla-callout ${bgColor || ''} ${txtColor || ''}`}
+        {...attributes}
+      >
         <div className="lla-callout__mark" contentEditable={false}>
           <div className="lla-callout__emoji-wrapper">
             <span

@@ -39,7 +39,7 @@ const Task = ({
   attributes,
   children,
 }: ExtendRenderElementProps<TaskListItem>) => {
-  const { checked = false } = element;
+  const { checked = false, bgColor, txtColor } = element;
   const editor = useSlateStatic();
   const selected = useSelected();
   return (
@@ -47,7 +47,7 @@ const Task = ({
       {...attributes}
       className={`lla-list-item lla-list-item--task ${
         checked ? 'lla-list-item--done' : ''
-      } ${selected ? 'lla-selected' : ''}`}
+      } ${selected ? 'lla-selected' : ''} ${bgColor || ''} ${txtColor || ''}`}
     >
       <div className="lla-list-item__leading" contentEditable={false}>
         <input
@@ -75,14 +75,14 @@ const Numbered = ({
   children,
   attributes,
 }: ExtendRenderElementProps<NumberedListItem>) => {
-  const { index } = element;
+  const { index, bgColor, txtColor } = element;
   const selected = useSelected();
   return (
     <div
       {...attributes}
       className={`lla-list-item lla-list-item--numbered ${
         selected ? 'lla-selected' : ''
-      }`}
+      } ${bgColor || ''} ${txtColor || ''}`}
     >
       <div className="lla-list-item__leading" contentEditable={false}>
         <div className="lla-list-item__leading__content">
@@ -101,14 +101,16 @@ const Numbered = ({
 const Bulleted = ({
   children,
   attributes,
+  element,
 }: ExtendRenderElementProps<BulletedListItem>) => {
+  const { bgColor, txtColor } = element;
   const selected = useSelected();
   return (
     <div
       {...attributes}
       className={`lla-list-item lla-list-item--bulleted ${
         selected ? 'lla-selected' : ''
-      }`}
+      } ${bgColor || ''} ${txtColor || ''}`}
     >
       <div className="lla-list-item__leading" contentEditable={false}>
         <div className="lla-list-item__leading__content">

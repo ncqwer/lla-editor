@@ -1,0 +1,60 @@
+.lla-text-action-menu {
+  @apply flex shadow-2xl border rounded  p-1 absolute bg-white select-none;
+  width: fit-content;
+
+  top: -99999px;
+  left: -99999px;
+}
+
+.lla-text-style-group {
+  @apply flex;
+}
+
+.lla-text-style-item {
+  @apply select-none cursor-pointer flex items-center pt-0 pb-0 pl-2 pr-2 hover:bg-gray-100 active:bg-gray-200;
+}
+
+.lla-text-style-item.active {
+  @apply text-blue-400;
+}
+
+.lla-text-style-item--bold {
+  @apply font-bold;
+}
+
+.lla-text-style-item--italic {
+  @apply italic;
+}
+
+.lla-text-style-item--underline {
+  @apply underline;
+}
+
+.lla-text-style-item--linethrough {
+  @apply line-through;
+}
+
+.lla-text-color {
+  @apply flex items-center cursor-pointer pl-2 pr-2 border-l mt-1 mb-1;
+}
+
+.lla-text-color-drop-icon {
+  width: 10px;
+  height: 100%;
+  display: block;
+  fill: rgba(55, 53, 47, 0.3);
+  flex-shrink: 0;
+  backface-visibility: hidden;
+  margin-left: 3px;
+}
+
+.lla-text-color-menu {
+  @apply shadow-lg border overflow-x-hidden overflow-y-auto  opacity-100 rounded bg-white select-none;
+  width: 270px;
+  min-width: 130px;
+  max-height: 40vh;
+}
+
+.lla-text-color-menu .lla-insert__item {
+  @apply hover:bg-gray-100 active:bg-gray-200;
+}

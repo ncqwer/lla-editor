@@ -531,8 +531,8 @@ const AudioComponent = ({
           localFileOpen={async () => {
             try {
               const src = await audioOpen();
-              console.log(src);
-              // handleMetaChange('src')(src);
+              // console.log(src);
+              handleMetaChange('src')(src);
             } catch (e) {}
           }}
           // onMouseOver={() =>

@@ -6,6 +6,7 @@ import { withReact, Slate } from 'slate-react';
 import { useEditorRuntime } from '.';
 import { InsertOverLayer } from './overlayer/insert';
 import { ContextMenu } from './overlayer/contextMenu';
+import { TextActionMenu } from './overlayer/textMenu';
 
 export const Editor: React.FC<{
   value: Descendant[];
@@ -35,6 +36,7 @@ export const Editor: React.FC<{
           <>
             <InsertOverLayer></InsertOverLayer>
             <ContextMenu></ContextMenu>
+            <TextActionMenu></TextActionMenu>
           </>,
           root as any,
         )}

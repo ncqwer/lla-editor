@@ -1,11 +1,3 @@
-@layer utilities {
-  @variants focus,hover {
-    .no-box-shadow {
-      box-shadow: unset;
-    }
-  }
-}
-
 .lla-list-item {
   @apply flex items-start;
 }
@@ -21,7 +13,10 @@
 }
 
 .lla-list-item--task .lla-list-item__leading__content {
-  @apply form-checkbox leading-6 focus:no-box-shadow cursor-pointer;
+  @apply form-checkbox leading-6 cursor-pointer;
+}
+.lla-list-item--task .lla-list-item__leading__content:focus {
+  box-shadow: none;
 }
 .lla-list-item__content {
   @apply flex-grow;

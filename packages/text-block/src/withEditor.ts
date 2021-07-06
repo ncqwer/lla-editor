@@ -3,11 +3,24 @@ import { Editor, Node, Transforms } from 'slate';
 import { TextBlock } from './element';
 
 export const withEditor = (e: Editor): Editor => {
-  const { isContainable, isIndentable, normalizeNode, isParagraphable } = e;
+  const {
+    isContainable,
+    isIndentable,
+    normalizeNode,
+    isParagraphable,
+    isBgColorable,
+    isTxtColorable,
+  } = e;
 
   e.isContainable = (n) => {
     if (TextBlock.is(n)) return true;
     if (isContainable) return isContainable(n);
+    return false;
+  };
+
+  e.isIndentable = (n) => {
+    if (TextBlock.is(n)) return true;
+    if (isIndentable) return isIndentable(n);
     return false;
   };
 
@@ -17,9 +30,20 @@ export const withEditor = (e: Editor): Editor => {
     return false;
   };
 
-  e.isIndentable = (n) => {
+  e.isBgColorable = (n) => {
     if (TextBlock.is(n)) return true;
-    if (isIndentable) return isIndentable(n);
+    if (isBgColorable) return isBgColorable(n);
+    return false;
+  };
+  e.isTxtColorable = (n) => {
+    if (TextBlock.is(n)) return true;
+    if (isTxtColorable) return isTxtColorable(n);
+    return false;
+  };
+
+  e.isParagraphable = (n) => {
+    if (TextBlock.is(n)) return true;
+    if (isParagraphable) return isParagraphable(n);
     return false;
   };
 

@@ -5,6 +5,8 @@ const _TYPE_ = 'callout';
 export interface CalloutElement {
   type: 'callout';
   emoji: string;
+  bgColor?: string;
+  txtColor?: string;
   children: Element[];
 }
 

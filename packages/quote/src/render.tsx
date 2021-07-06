@@ -16,10 +16,13 @@ const Quote: React.FC<ExtendRenderElementProps<QuoteElement>> = ({
   ...others
 }) => {
   const selected = useSelected();
+  const { bgColor, txtColor } = element;
   return (
     <PlaceholderContext.Provider value={`引言`}>
       <div
-        className={`${selected ? 'lla-selected' : ''} lla-quote`}
+        className={`${selected ? 'lla-selected' : ''} lla-quote ${
+          bgColor || ''
+        } ${txtColor || ''}`}
         {...attributes}
         {...others}
       >
