@@ -47,6 +47,9 @@ const Example = () => {
             indentContainer: {
               indent: 24,
             },
+            core:{
+              overlayerId:'root',
+            },
             image: {
               loadingCover: 'loadingCover',
               errorCover: 'errorCover',
@@ -98,16 +101,17 @@ const Example = () => {
           onChange={(e) => {
             const file = e.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            new Promise((res) => {
-              reader.onload = (event) => {
-                if (event.target) return res(event.target.result);
-                return res(null);
-              };
-              reader.readAsDataURL(file);
-            }).then(dataURL=>{
-              dataURL && promiseRef.current && promiseRef.current[0](dataURL);
-            });
+            promiseRef.current && promiseRef.current[0](dataURL);
+            // const reader = new FileReader();
+            // new Promise((res) => {
+            //   reader.onload = (event) => {
+            //     if (event.target) return res(event.target.result);
+            //     return res(null);
+            //   };
+            //   reader.readAsDataURL(file);
+            // }).then(dataURL=>{
+            //   dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+            // });
           }}
           accept=".jpeg,.jpg,.png"
         />
@@ -118,16 +122,17 @@ const Example = () => {
           onChange={(e) => {
             const file = e.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            new Promise((res) => {
-              reader.onload = (event) => {
-                if (event.target) return res(event.target.result);
-                return res(null);
-              };
-              reader.readAsDataURL(file);
-            }).then(dataURL=>{
-              dataURL && promiseRef.current && promiseRef.current[0](dataURL);
-            });
+            promiseRef.current && promiseRef.current[0](dataURL);
+            // const reader = new FileReader();
+            // new Promise((res) => {
+            //   reader.onload = (event) => {
+            //     if (event.target) return res(event.target.result);
+            //     return res(null);
+            //   };
+            //   reader.readAsDataURL(file);
+            // }).then(dataURL=>{
+            //   dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+            // });
           }}
           accept=".mp3"
         />
@@ -138,16 +143,17 @@ const Example = () => {
           onChange={(e) => {
             const file = e.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            new Promise((res) => {
-              reader.onload = (event) => {
-                if (event.target) return res(event.target.result);
-                return res(null);
-              };
-              reader.readAsDataURL(file);
-            }).then(dataURL=>{
-              dataURL && promiseRef.current && promiseRef.current[0](dataURL);
-            });
+            promiseRef.current && promiseRef.current[0](dataURL);
+            // const reader = new FileReader();
+            // new Promise((res) => {
+            //   reader.onload = (event) => {
+            //     if (event.target) return res(event.target.result);
+            //     return res(null);
+            //   };
+            //   reader.readAsDataURL(file);
+            // }).then(dataURL=>{
+            //   dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+            // });
           }}
           accept=".mp4"
         />
