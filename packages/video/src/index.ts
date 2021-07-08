@@ -2,7 +2,7 @@ import { withEditor } from './withEditor';
 import render from './render';
 import { onKeyDownResponseZone } from './handler';
 // import { onParagraphConvert } from './convert';
-import { VideoElement } from './element';
+import { VideoElement, createMediaBlock } from './element';
 
 export default {
   pluginName: 'video',
@@ -11,6 +11,7 @@ export default {
   withEditor,
   // onParagraphConvert,
   // onKeyDownAlternative,
+  createMediaBlock,
   insertInfo: [
     {
       keywords: ['video', 'mp4'],

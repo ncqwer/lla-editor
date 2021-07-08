@@ -13,7 +13,7 @@ const hh = () => {
   return (
     <div id="root" className="flex">
       <LiveProvider scope={scope} code={code} noInline={true} theme={theme}>
-        <div className="w-full max-w-4xl h-screen overflow-auto">
+        <div className="w-0 xl:w-1/2 2xl:w-1/3  h-screen overflow-auto">
           <LiveEditor></LiveEditor>
         </div>
         <div className="contents">

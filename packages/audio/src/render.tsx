@@ -27,7 +27,7 @@ const alignOpt = {
 };
 
 const Audio: React.FC<{
-  src: string;
+  src: string | File;
   selected?: boolean;
   openContextMenu: (f: () => HTMLElement | null) => void;
 }> = ({ src, selected = false, openContextMenu }) => {
@@ -39,12 +39,47 @@ const Audio: React.FC<{
   const [volumn, setVolumn] = React.useState(1);
   const [isOpen, setIsOpen] = React.useState(false);
   const volumnRef = React.useRef<HTMLDivElement>(null);
-
   const [audioRemove] = useLens(['audio', 'audioRemove']);
-
+  const [loadingCover] = useLens(['audio', 'loadingCover']);
+  const [errorCover] = useLens(['audio', 'errorCover']);
+  const [audioUpload] = useLens(['audio', 'audioUpload']);
+  const [audioSign] = useLens(['audio', 'audioSign']);
+  const [audioSrc, setAudioSrc] = React.useState<string | undefined>(
+    loadingCover,
+  );
+  React.useEffect(() => {
+    const task = runWithCancel(function* () {
+      try {
+        // setIsLoading(true);
+        if (typeof src !== 'string') {
+          const reader = new FileReader();
+          new Promise((res) => {
+            reader.onload = (event) => {
+              if (event.target) return res(event.target.result);
+              return res(null);
+            };
+          }).then((dataURL: any) => dataURL && setAudioSrc(dataURL));
+          reader.readAsDataURL(src);
+          if (audioUpload) {
+            yield new Promise((res) => setTimeout(res, 1000));
+            const uploadSrc = yield audioUpload(src);
+            setAudioSrc(uploadSrc);
+          }
+        } else {
+          const tmp = yield audioSign(src);
+          setAudioSrc(tmp);
+        }
+      } catch (e) {
+        setAudioSrc(errorCover);
+      } finally {
+        // setIsLoading(false);
+      }
+    });
+    return task.cancel;
+  }, [audioSign, audioUpload, src, errorCover, loadingCover]);
   React.useEffect(() => {
     return () => {
-      audioRemove(src);
+      if (typeof src === 'string') audioRemove(src);
     };
   }, []);
   const triggerRef = React.useRef<HTMLDivElement>(null);
@@ -66,24 +101,26 @@ const Audio: React.FC<{
         >
           ...
         </div>
-        <audio
-          className="lla-audio__instance"
-          src={src}
-          ref={ref}
-          onPlay={() => setIsPlaying(true)}
-          onPause={() => setIsPlaying(false)}
-          onVolumeChange={() => {
-            setVolumn(
-              Math.floor(parseFloat((ref.current?.volume as any) || 0) * 100),
-            );
-          }}
-          onLoadedData={() => {
-            setDuration(parseInt((ref.current?.duration as any) || 0, 10));
-          }}
-          onTimeUpdate={() =>
-            setProgress(parseInt((ref.current?.currentTime as any) || 0, 10))
-          }
-        ></audio>
+        {audioSrc && (
+          <audio
+            className="lla-audio__instance"
+            src={audioSrc}
+            ref={ref}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onVolumeChange={() => {
+              setVolumn(
+                Math.floor(parseFloat((ref.current?.volume as any) || 0) * 100),
+              );
+            }}
+            onLoadedData={() => {
+              setDuration(parseInt((ref.current?.duration as any) || 0, 10));
+            }}
+            onTimeUpdate={() =>
+              setProgress(parseInt((ref.current?.currentTime as any) || 0, 10))
+            }
+          ></audio>
+        )}
         <div
           className={`lla-audio__controller ${
             isPlaying

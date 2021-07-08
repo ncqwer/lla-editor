@@ -2,13 +2,14 @@ import { withEditor } from './withEditor';
 import render from './render';
 import { onKeyDownResponseZone } from './handler';
 // import { onParagraphConvert } from './convert';
-import { AudioElement } from './element';
+import { AudioElement, createMediaBlock } from './element';
 
 export default {
   pluginName: 'image',
   renderElement: render,
   onKeyDownResponseZone,
   withEditor,
+  createMediaBlock,
   // onParagraphConvert,
   // onKeyDownAlternative,
   insertInfo: [

@@ -1,7 +1,7 @@
 import ElementJSX from './render';
 import { onKeyDownResponseZone } from './handler';
 import { withEditor } from './withEditor';
-import { onParagraphConvert } from './convert';
+import { onParagraphConvert, deserialize, serialize } from './convert';
 import { List } from './element';
 
 export default {
@@ -9,6 +9,8 @@ export default {
   renderElement: ElementJSX,
   onKeyDownResponseZone,
   withEditor,
+  deserialize,
+  serialize,
   onParagraphConvert,
   insertInfo: [
     {

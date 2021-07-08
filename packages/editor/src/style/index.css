@@ -45,3 +45,7 @@
 .lla-text-block__container {
   @apply ml-6;
 }
+
+.lla-custom-void-content {
+  @apply select-none;
+}

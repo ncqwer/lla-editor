@@ -26,7 +26,12 @@ import AudioImpl from '@lla-editor/audio';
 import VideoImpl from '@lla-editor/video';
 import QuoteImpl from '@lla-editor/quote';
 import Slider from 'rc-slider';
+import copy from 'copy-to-clipboard';
 import { Example } from '@lla-editor/editor';
+import createCustomVoid from '@lla-editor/custom-void';
+import TurndownService from 'turndown';
+
+const turndownServices = new TurndownService();
 // import 'rc-slider/assets/index.css';
 
 // import 'emoji-mart/css/emoji-mart.css';
@@ -43,6 +48,26 @@ const availablePlugins = [
   ImageImpl,
   VideoImpl,
   AudioImpl,
+  createCustomVoid({
+    mode: 'input',
+    initialValue: 'initialValue',
+    keywords: ['input'],
+    title: '输入框',
+    description: '示例输入框',
+    Comp: ({
+      value,
+      onChange,
+    }: {
+      value: string;
+      onChange: (v: string) => void;
+    }) => (
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    ),
+  }),
   DividerImpl,
   QuoteImpl,
   CalloutImpl,
@@ -133,11 +158,11 @@ const Quote = () => {
 };
 
 const PlainTextExample = () => {
-  return (
-    <div className="max-w-3xl mr-auto ml-auto mt-32 lla-readonly">
-      <Example></Example>
-    </div>
-  );
+  // return (
+  //   <div className="max-w-3xl mr-auto ml-auto mt-32 lla-readonly">
+  //     <Example></Example>
+  //   </div>
+  // );
   const imageRef = React.useRef<HTMLInputElement>(null);
   const audioRef = React.useRef<HTMLInputElement>(null);
   const videoRef = React.useRef<HTMLInputElement>(null);
@@ -148,6 +173,10 @@ const PlainTextExample = () => {
         <SharedProvider
           initialValue={React.useMemo<Partial<LLAConfig>>(
             () => ({
+              core: {
+                html2md: (v: string) => turndownServices.turndown(v),
+                overlayerId: 'root',
+              },
               indentContainer: {
                 indent: 24,
               },
@@ -202,15 +231,16 @@ const PlainTextExample = () => {
             onChange={async (e) => {
               const file = e.target?.files?.[0];
               if (!file) return;
-              const reader = new FileReader();
-              const dataURL: string | null = await new Promise((res) => {
-                reader.onload = (event) => {
-                  if (event.target) return res(event.target.result as string);
-                  return res(null);
-                };
-                reader.readAsDataURL(file);
-              });
-              dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+              promiseRef.current && promiseRef.current[0](file);
+              // const reader = new FileReader();
+              // const dataURL: string | null = await new Promise((res) => {
+              //   reader.onload = (event) => {
+              //     if (event.target) return res(event.target.result as string);
+              //     return res(null);
+              //   };
+              //   reader.readAsDataURL(file);
+              // });
+              // dataURL && promiseRef.current && promiseRef.current[0](dataURL);
             }}
             accept=".jpeg,.jpg,.png"
           />
@@ -221,15 +251,16 @@ const PlainTextExample = () => {
             onChange={async (e) => {
               const file = e.target?.files?.[0];
               if (!file) return;
-              const reader = new FileReader();
-              const dataURL: string | null = await new Promise((res) => {
-                reader.onload = (event) => {
-                  if (event.target) return res(event.target.result as string);
-                  return res(null);
-                };
-                reader.readAsDataURL(file);
-              });
-              dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+              promiseRef.current && promiseRef.current[0](file);
+              // const reader = new FileReader();
+              // const dataURL: string | null = await new Promise((res) => {
+              //   reader.onload = (event) => {
+              //     if (event.target) return res(event.target.result as string);
+              //     return res(null);
+              //   };
+              //   reader.readAsDataURL(file);
+              // });
+              // dataURL && promiseRef.current && promiseRef.current[0](dataURL);
             }}
             accept=".mp3"
           />
@@ -240,15 +271,16 @@ const PlainTextExample = () => {
             onChange={async (e) => {
               const file = e.target?.files?.[0];
               if (!file) return;
-              const reader = new FileReader();
-              const dataURL: string | null = await new Promise((res) => {
-                reader.onload = (event) => {
-                  if (event.target) return res(event.target.result as string);
-                  return res(null);
-                };
-                reader.readAsDataURL(file);
-              });
-              dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+              promiseRef.current && promiseRef.current[0](file);
+              // const reader = new FileReader();
+              // const dataURL: string | null = await new Promise((res) => {
+              //   reader.onload = (event) => {
+              //     if (event.target) return res(event.target.result as string);
+              //     return res(null);
+              //   };
+              //   reader.readAsDataURL(file);
+              // });
+              // dataURL && promiseRef.current && promiseRef.current[0](dataURL);
             }}
             accept=".mp4"
           />
@@ -1090,6 +1122,16 @@ const AEditor = () => {
       <Editor value={value} onChange={setValue}>
         <Editable></Editable>
       </Editor>
+      <div className="lla-divider"></div>
+      <button
+        className="p-4 rounded border active:bg-gray-200 hover:bg-gray-100"
+        onClick={() => {
+          console.log(value);
+          copy(JSON.stringify(value));
+        }}
+      >
+        GET
+      </button>
     </div>
   );
 };

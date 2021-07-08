@@ -1,10 +1,10 @@
-import { BaseAtom, LLAElement } from '@lla-editor/core';
+import { BaseAtom, CreateMediaBlock, LLAElement } from '@lla-editor/core';
 import { Node } from 'slate';
 
 const _TYPE_ = 'audio';
 export interface AudioElement extends BaseAtom {
   type: 'audio';
-  src?: string;
+  src?: string | File;
   caption?: string;
   width: number;
 }
@@ -23,12 +23,19 @@ export const AudioElement = {
   },
 };
 
+export const createMediaBlock: CreateMediaBlock = (next, file, editor) => {
+  if (/(?:\.mp3|\.flac)/.test(file.name))
+    return { ...AudioElement.create(), src: file };
+  return next();
+};
+
 interface AudioConfig {
-  audioOpen: () => Promise<string>;
+  audioOpen: () => Promise<string | File>;
   audioRemove: (src: string) => Promise<void>;
+  audioUpload?: (file: File) => Promise<string>;
   audioSign: (src: string) => Promise<string>;
-  loadingCover: string;
-  errorCover: string;
+  loadingCover?: string;
+  errorCover?: string;
 }
 
 declare module '@lla-editor/core' {

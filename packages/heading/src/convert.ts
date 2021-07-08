@@ -1,5 +1,11 @@
 import { Range, Node, Editor, Point, Transforms, Path } from 'slate';
-import { caseMatch, OnParagraphConvert, shotkey } from '@lla-editor/core';
+import {
+  caseMatch,
+  Deserialize,
+  OnParagraphConvert,
+  Serialize,
+  shotkey,
+} from '@lla-editor/core';
 import { HeadingElement } from './element';
 
 const headingReg = /^(#+)/;
@@ -54,4 +60,26 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
     // [shotkey('】'), handleSquareBrackets_chinese],
     [(...args) => args, (next) => next()],
   )(...args);
+};
+
+export const deserialize: Deserialize = (next, str, editor) => {
+  const result = headingReg.exec(str);
+  if (result) {
+    const headingLevel = result[1].length;
+    if (headingLevel > 3) return next();
+    return {
+      ...HeadingElement.create(editor),
+      level: headingLevel,
+      children: [editor.createParagraph(str.slice(headingLevel))],
+    };
+  }
+
+  return next();
+};
+
+export const serialize: Serialize = (next, ele, editor) => {
+  if (HeadingElement.is(ele)) {
+    return `${'#'.repeat(ele.level)}${Node.string(ele)}`;
+  }
+  return next();
 };

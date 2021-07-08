@@ -1,8 +1,10 @@
 import { Range, Node, Editor, Point, Transforms } from 'slate';
 import {
   caseMatch,
+  Deserialize,
   groupKeyDown,
   OnParagraphConvert,
+  Serialize,
   shotkey,
 } from '@lla-editor/core';
 import { DividerElement } from './element';
@@ -38,4 +40,18 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
     [shotkey('-'), handleShotBar],
     [(...args) => args, (next) => next()],
   )(...args);
+};
+
+const dividerDeReg = /^-+$/;
+export const deserialize: Deserialize = (next, str, editor) => {
+  if (dividerDeReg.test(str)) {
+    return DividerElement.create();
+  }
+
+  return next();
+};
+
+export const serialize: Serialize = (next, ele, editor) => {
+  if (DividerElement.is(ele)) return '------------------------';
+  return next();
 };

@@ -21,7 +21,7 @@ const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
 
 const Resizedvideo: React.FC<
   React.HtmlHTMLAttributes<HTMLDivElement> & {
-    src: string;
+    src: string | File;
     alt?: string;
     selected?: boolean;
     width: number;
@@ -41,6 +41,43 @@ const Resizedvideo: React.FC<
   const [videoRemove] = useLens(['video', 'videoRemove']);
   const [styles, api] = useSpring(() => ({ width }));
   const triggerRef = React.useRef<HTMLDivElement>(null);
+  const [loadingCover] = useLens(['video', 'loadingCover']);
+  const [errorCover] = useLens(['video', 'errorCover']);
+  const [videoUpload] = useLens(['video', 'videoUpload']);
+  const [videoSign] = useLens(['video', 'videoSign']);
+  const [videoSrc, setVideoSrc] = React.useState<string | undefined>(
+    loadingCover,
+  );
+  React.useEffect(() => {
+    const task = runWithCancel(function* () {
+      try {
+        // setIsLoading(true);
+        if (typeof src !== 'string') {
+          const reader = new FileReader();
+          new Promise((res) => {
+            reader.onload = (event) => {
+              if (event.target) return res(event.target.result);
+              return res(null);
+            };
+          }).then((dataURL: any) => dataURL && setVideoSrc(dataURL));
+          reader.readAsDataURL(src);
+          if (videoUpload) {
+            yield new Promise((res) => setTimeout(res, 1000));
+            const uploadSrc = yield videoUpload(src);
+            setVideoSrc(uploadSrc);
+          }
+        } else {
+          const tmp = yield videoSign(src);
+          setVideoSrc(tmp);
+        }
+      } catch (e) {
+        setVideoSrc(errorCover);
+      } finally {
+        // setIsLoading(false);
+      }
+    });
+    return task.cancel;
+  }, [videoSign, videoUpload, src, errorCover, loadingCover]);
   React.useEffect((): any => {
     if (ref.current) {
       ref.current.style.cssText = `
@@ -48,7 +85,7 @@ const Resizedvideo: React.FC<
       user-select:none;
     `;
     }
-    return () => videoRemove(src);
+    return () => typeof src === 'string' && videoRemove(src);
   }, []);
   const [handleWidthChangeDebounce] = useThrottle((f: Func, v: number) => {
     onWidthChange(v);
@@ -64,7 +101,9 @@ const Resizedvideo: React.FC<
       contentEditable={false}
       {...others}
     >
-      <video src={src} className="lla-video__content" controls />
+      {videoSrc && (
+        <video src={videoSrc} className="lla-video__content" controls />
+      )}
       <div
         className="lla-video__resizer lla-video__resizer--left"
         onMouseDown={handleMouseDown(true)}

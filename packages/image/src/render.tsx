@@ -22,12 +22,13 @@ const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
 
 const ResizedImage: React.FC<
   React.HtmlHTMLAttributes<HTMLDivElement> & {
-    src: string;
+    src: string | File;
     alt?: string;
     selected?: boolean;
     width: number;
     openContextMenu: (f: () => HTMLElement | null) => void;
     onWidthChange: (v: number) => void;
+    onSrcChange: (v: string) => void;
   }
 > = ({
   src,
@@ -36,6 +37,7 @@ const ResizedImage: React.FC<
   width,
   onWidthChange,
   openContextMenu,
+  onSrcChange,
   ...others
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -49,7 +51,7 @@ const ResizedImage: React.FC<
       user-select:none;
     `;
     }
-    return () => imgRemove(src);
+    return () => typeof src === 'string' && imgRemove(src);
   }, []);
   const [handleWidthChangeDebounce] = useThrottle((f: Func, v: number) => {
     onWidthChange(v);
@@ -65,7 +67,12 @@ const ResizedImage: React.FC<
       contentEditable={false}
       {...others}
     >
-      <LoadingImage src={src} alt={alt} className="lla-image__content" />
+      <LoadingImage
+        src={src}
+        alt={alt}
+        className="lla-image__content"
+        onSrcChange={onSrcChange}
+      />
       <div
         className="lla-image__resizer lla-image__resizer--left"
         onMouseDown={handleMouseDown(true)}
@@ -150,27 +157,44 @@ const ResizedImage: React.FC<
 };
 
 const LoadingImage: React.FC<{
-  src: string;
+  src: string | File;
   alt?: string;
   className?: string;
-}> = ({ src, alt, className }) => {
+  onSrcChange: (v: string) => void;
+}> = ({ src, alt, className, onSrcChange }) => {
   const [loadingCover] = useLens(['image', 'loadingCover']);
   const [errorCover] = useLens(['image', 'errorCover']);
   const [imgSign] = useLens(['image', 'imgSign']);
+  const [imgUpload] = useLens(['image', 'imgUpload']);
   const [imgSrc, setImgSrc] = React.useState(loadingCover);
   // const [loading, setIsLoading] = React.useState(false);
-
   React.useEffect(() => {
     const task = runWithCancel(function* () {
       try {
         // setIsLoading(true);
-        const image = new Image();
-        const tmp = yield imgSign(src);
-        image.src = tmp;
-        yield new Promise((res) => {
-          image.onload = res;
-        });
-        setImgSrc(tmp);
+        if (typeof src !== 'string') {
+          const reader = new FileReader();
+          new Promise((res) => {
+            reader.onload = (event) => {
+              if (event.target) return res(event.target.result);
+              return res(null);
+            };
+          }).then((dataURL: any) => dataURL && setImgSrc(dataURL));
+          reader.readAsDataURL(src);
+          if (imgUpload) {
+            yield new Promise((res) => setTimeout(res, 1000));
+            const uploadSrc = yield imgUpload(src);
+            onSrcChange(uploadSrc);
+          }
+        } else {
+          const image = new Image();
+          const tmp = yield imgSign(src);
+          image.src = tmp;
+          yield new Promise((res) => {
+            image.onload = res;
+          });
+          setImgSrc(tmp);
+        }
       } catch (e) {
         setImgSrc(errorCover);
       } finally {
@@ -178,7 +202,7 @@ const LoadingImage: React.FC<{
       }
     });
     return task.cancel;
-  }, [imgSign, src, errorCover]);
+  }, [imgSign, imgUpload, src, errorCover, loadingCover]);
 
   return <img src={imgSrc} alt={alt} className={className} />;
 };
@@ -200,7 +224,7 @@ const MenuItem: React.FC<{
 };
 
 const EmptyImageMenu: React.FC<{
-  onChange: (v: string) => void;
+  onChange: (v: string | File) => void;
   onClose: () => void;
   alignMethod: (el: HTMLDivElement) => void;
 }> = ({ alignMethod, onClose, onChange }) => {
@@ -326,7 +350,7 @@ const EmptyImageMenu: React.FC<{
 
 const EmptyImage: React.FC<
   React.HtmlHTMLAttributes<HTMLDivElement> & {
-    onSrcChange: (v: string) => void;
+    onSrcChange: (v: string | File) => void;
     selected?: boolean;
     openContextMenu: (f: () => HTMLElement | null) => void;
   }
@@ -392,6 +416,7 @@ const ImageComponent = ({
           src={src}
           alt={alt}
           selected={selected}
+          onSrcChange={handleMetaChange('src')}
           width={width}
           onWidthChange={handleMetaChange('width')}
           openContextMenu={openContenxtMenu}

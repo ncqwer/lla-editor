@@ -116,7 +116,7 @@ export default function MyApp({ Component, pageProps }) {
             )}
           >
             <a href="/example">Example</a>
-            <a href="https://www.github.com">GitHub</a>
+            <a href="https://github.com/ncqwer/lla-editor">GitHub</a>
           </nav>
         </div>
       </header>

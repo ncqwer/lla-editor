@@ -1,5 +1,11 @@
 import { Range, Node, Editor, Point, Transforms, Path } from 'slate';
-import { caseMatch, OnParagraphConvert, shotkey } from '@lla-editor/core';
+import {
+  caseMatch,
+  OnParagraphConvert,
+  shotkey,
+  Deserialize,
+  Serialize,
+} from '@lla-editor/core';
 import { IndentContainer } from '@lla-editor/indent';
 import { QuoteElement } from './element';
 
@@ -46,4 +52,19 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
     // [shotkey('】'), handleSquareBrackets_chinese],
     [(...args) => args, (next) => next()],
   )(...args);
+};
+
+const quoteDeReg = /^>/;
+export const deserialize: Deserialize = (next, str, editor) => {
+  if (quoteDeReg.exec(str))
+    return {
+      ...QuoteElement.create(editor),
+      children: [editor.createParagraph(str.slice(1))],
+    };
+  return next();
+};
+
+export const serialize: Serialize = (next, ele, editor) => {
+  if (QuoteElement.is(ele)) return `>${Node.string(ele)}`;
+  return next();
 };

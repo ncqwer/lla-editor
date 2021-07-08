@@ -4,6 +4,8 @@ import {
   groupKeyDown,
   OnParagraphConvert,
   shotkey,
+  Deserialize,
+  Serialize,
 } from '@lla-editor/core';
 import { List } from './element';
 
@@ -96,4 +98,39 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
     // [shotkey('】'), handleSquareBrackets_chinese],
     [(...args) => args, (next) => next()],
   )(...args);
+};
+
+const taskDeReg = /^-\[(x)?\]/;
+const bulletDeReg = /^[-\*]\s/;
+const numberDeReg = /^[0-9a-zA-Z]+\./;
+export const deserialize: Deserialize = (next, str, editor) => {
+  let ans = null;
+  if ((ans = taskDeReg.exec(str))) {
+    return {
+      ...List.createTask(editor),
+      checked: !!ans[1],
+      children: [editor.createParagraph(str.slice(ans[0].length))],
+    };
+  }
+  if ((ans = bulletDeReg.exec(str))) {
+    return {
+      ...List.createBulleted(editor),
+      children: [editor.createParagraph(str.slice(ans[0].length))],
+    };
+  }
+  if ((ans = numberDeReg.exec(str))) {
+    return {
+      ...List.createNumbered(editor),
+      children: [editor.createParagraph(str.slice(ans[0].length))],
+    };
+  }
+  return next();
+};
+
+export const serialize: Serialize = (next, ele, editor) => {
+  if (List.isBulleted(ele)) return `*${Node.string(ele)}`;
+  if (List.isTask(ele))
+    return `-[${ele.checked ? 'x' : ''}]${Node.string(ele)}`;
+  if (List.isNumbered(ele)) return `${ele.index}.${Node.string(ele)}`;
+  return next();
 };

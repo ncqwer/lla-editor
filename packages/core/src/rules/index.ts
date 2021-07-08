@@ -18,6 +18,8 @@ import onKeyDownAlternative, {
 } from './onKeyDownAlternative';
 import onParagraphConvert, { OnParagraphConvert } from './onParagraphConvert';
 import insertInfo, { InsertInfo } from './insertInfo';
+import { serialize, deserialize, Serialize, Deserialize } from './serialize';
+import { createMediaBlock, CreateMediaBlock } from './createMediaBlock';
 
 const rules = {
   onKeyDownResponseZone,
@@ -29,6 +31,9 @@ const rules = {
   onKeyDownAlternative,
   onParagraphConvert,
   insertInfo,
+  serialize,
+  deserialize,
+  createMediaBlock,
 };
 
 // readme: 这里需要手动维护导出类型
@@ -42,6 +47,9 @@ export interface Plugin {
   onKeyDownAlternative: OnKeyDownAlternative;
   onParagraphConvert: OnParagraphConvert;
   insertInfo: InsertInfo[];
+  serialize: Serialize;
+  deserialize: Deserialize;
+  createMeidaBlock: CreateMediaBlock;
 }
 
 export { elementRender };
@@ -58,6 +66,9 @@ export type {
   OnKeyDownAlternative,
   OnParagraphConvert,
   InsertInfo,
+  Serialize,
+  Deserialize,
+  CreateMediaBlock,
 };
 
 export type PluginImpl = Partial<Plugin> & {

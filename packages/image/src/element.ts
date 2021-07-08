@@ -1,10 +1,10 @@
-import { BaseAtom, LLAElement } from '@lla-editor/core';
+import { BaseAtom, CreateMediaBlock, LLAElement } from '@lla-editor/core';
 import { Node } from 'slate';
 
 const _TYPE_ = 'image';
 export interface ImageElement extends BaseAtom {
   type: 'image';
-  src?: string;
+  src?: string | File;
   alt?: string;
   caption?: string;
   width: number;
@@ -24,10 +24,17 @@ export const ImageElement = {
   },
 };
 
+export const createMediaBlock: CreateMediaBlock = (next, file, editor) => {
+  if (/(?:\.png|\.jpeg|\.jpg)/.test(file.name))
+    return { ...ImageElement.create(), src: file };
+  return next();
+};
+
 interface ImageConfig {
-  imgOpen: () => Promise<string>;
+  imgOpen: () => Promise<string | File>;
   imgRemove: (src: string) => Promise<void>;
   imgSign: (src: string) => Promise<string>;
+  imgUpload?: (file: File) => Promise<string>;
   loadingCover: string;
   errorCover: string;
 }

@@ -20,7 +20,7 @@ import AudioImpl from '@lla-editor/audio';
 import VideoImpl from '@lla-editor/video';
 import QuoteImpl from '@lla-editor/quote';
 
-const availablePlugins = [
+export const availablePlugins = [
   TextBlockImpl,
   IndentImpl,
   ListImpl,
@@ -33,17 +33,24 @@ const availablePlugins = [
   CalloutImpl,
   ParagraphImpl,
 ];
-const activeNames = availablePlugins.map(({ pluginName }) => pluginName);
 
 export const { SharedProvider } = ConfigHelers;
 
-export const LLAEnvironment: React.FC = ({ children }) => {
-  return (
-    <PluginProvider availablePlugins={availablePlugins}>
-      <Environment activePluginNames={activeNames}>{children}</Environment>
-    </PluginProvider>
-  );
-};
+export const LLAEnvironment: React.FC<{ plugins?: { pluginName: string }[] }> =
+  ({ children, plugins = availablePlugins }) => {
+    return (
+      <PluginProvider availablePlugins={plugins}>
+        <Environment
+          activePluginNames={React.useMemo(
+            () => plugins.map(({ pluginName }) => pluginName),
+            [plugins],
+          )}
+        >
+          {children}
+        </Environment>
+      </PluginProvider>
+    );
+  };
 
 export const Example = () => {
   const imageRef = React.useRef<HTMLInputElement>(null);
@@ -56,6 +63,9 @@ export const Example = () => {
       <SharedProvider
         initialValue={React.useMemo<Partial<LLAConfig>>(
           () => ({
+            core: {
+              overlayerId: 'root',
+            },
             indentContainer: {
               indent: 24,
             },
@@ -110,15 +120,7 @@ export const Example = () => {
           onChange={async (e) => {
             const file = e.target?.files?.[0];
             if (!file) return;
-            const reader = new FileReader();
-            const dataURL: string | null = await new Promise((res) => {
-              reader.onload = (event) => {
-                if (event.target) return res(event.target.result as string);
-                return res(null);
-              };
-              reader.readAsDataURL(file);
-            });
-            dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+            promiseRef.current && promiseRef.current[0](file);
           }}
           accept=".jpeg,.jpg,.png"
         />
@@ -129,15 +131,7 @@ export const Example = () => {
           onChange={async (e) => {
             const file = e.target?.files?.[0];
             if (!file) return;
-            const reader = new FileReader();
-            const dataURL: string | null = await new Promise((res) => {
-              reader.onload = (event) => {
-                if (event.target) return res(event.target.result as string);
-                return res(null);
-              };
-              reader.readAsDataURL(file);
-            });
-            dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+            promiseRef.current && promiseRef.current[0](file);
           }}
           accept=".mp3"
         />
@@ -148,15 +142,7 @@ export const Example = () => {
           onChange={async (e) => {
             const file = e.target?.files?.[0];
             if (!file) return;
-            const reader = new FileReader();
-            const dataURL: string | null = await new Promise((res) => {
-              reader.onload = (event) => {
-                if (event.target) return res(event.target.result as string);
-                return res(null);
-              };
-              reader.readAsDataURL(file);
-            });
-            dataURL && promiseRef.current && promiseRef.current[0](dataURL);
+            promiseRef.current && promiseRef.current[0](file);
           }}
           accept=".mp4"
         />
@@ -176,9 +162,11 @@ export const LLAEditor: React.FC<{
     </Editor>
   );
 };
-export const createInitialValue: () => Descendant[] = () => [
+export const createInitialValue: (intialValue?: string) => Descendant[] = (
+  initialValue = '',
+) => [
   {
     type: 'text-block',
-    children: [{ type: 'paragraph', children: [{ text: '' }] }],
+    children: [{ type: 'paragraph', children: [{ text: initialValue }] }],
   },
 ];

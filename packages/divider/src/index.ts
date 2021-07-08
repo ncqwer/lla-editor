@@ -1,7 +1,7 @@
 import { withEditor } from './withEditor';
 import render from './render';
 import { onKeyDownResponseZone } from './handler';
-import { onParagraphConvert } from './convert';
+import { onParagraphConvert, deserialize, serialize } from './convert';
 import { DividerElement } from './element';
 
 export default {
@@ -10,6 +10,8 @@ export default {
   onKeyDownResponseZone,
   withEditor,
   onParagraphConvert,
+  deserialize,
+  serialize,
   // onKeyDownAlternative,
   insertInfo: [
     {

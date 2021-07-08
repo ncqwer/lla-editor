@@ -2,12 +2,15 @@ import { TextBlock } from './element';
 import { onKeyDownResponseZone } from './handler';
 import Render from './render';
 import { withEditor } from './withEditor';
+import { deserialize, serialize } from './convert';
 
 export default {
   pluginName: 'indent-container',
   onKeyDownResponseZone,
   renderElement: Render,
   withEditor,
+  deserialize,
+  serialize,
   insertInfo: [
     {
       keywords: ['text', 'paragraph'],

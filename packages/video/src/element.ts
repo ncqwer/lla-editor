@@ -1,10 +1,10 @@
-import { BaseAtom, LLAElement } from '@lla-editor/core';
+import { BaseAtom, CreateMediaBlock, LLAElement } from '@lla-editor/core';
 import { Node } from 'slate';
 
 const _TYPE_ = 'video';
 export interface VideoElement extends BaseAtom {
   type: 'video';
-  src?: string;
+  src?: string | File;
   caption?: string;
   width: number;
 }
@@ -24,11 +24,12 @@ export const VideoElement = {
 };
 
 interface VideoConfig {
-  videoOpen: () => Promise<string>;
+  videoOpen: () => Promise<string | File>;
   videoRemove: (src: string) => Promise<void>;
+  videoUpload?: (src: File) => Promise<void>;
   videoSign: (src: string) => Promise<string>;
-  loadingCover: string;
-  errorCover: string;
+  loadingCover?: string;
+  errorCover?: string;
 }
 
 declare module '@lla-editor/core' {
@@ -39,3 +40,9 @@ declare module '@lla-editor/core' {
     video: VideoConfig;
   }
 }
+
+export const createMediaBlock: CreateMediaBlock = (next, file, editor) => {
+  if (/(?:\.mp4)/.test(file.name))
+    return { ...VideoElement.create(), src: file };
+  return next();
+};

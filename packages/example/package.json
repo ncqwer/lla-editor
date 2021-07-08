@@ -28,6 +28,7 @@
     "@lla-editor/audio": "^0.0.4",
     "@lla-editor/callout": "^0.0.4",
     "@lla-editor/core": "^0.0.4",
+    "@lla-editor/custom-void": "^1.0.0",
     "@lla-editor/divider": "^0.0.4",
     "@lla-editor/editor": "^0.0.4",
     "@lla-editor/heading": "^0.0.4",

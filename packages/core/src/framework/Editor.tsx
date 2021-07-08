@@ -7,25 +7,42 @@ import { useEditorRuntime } from '.';
 import { InsertOverLayer } from './overlayer/insert';
 import { ContextMenu } from './overlayer/contextMenu';
 import { TextActionMenu } from './overlayer/textMenu';
+import { ConfigHelers } from './index';
+
+const { useLens } = ConfigHelers;
 
 export const Editor: React.FC<{
   value: Descendant[];
   onChange: (v: Descendant[]) => void;
 }> = ({ value, onChange, children }) => {
-  const { withEditor, onParagraphConvert } = useEditorRuntime();
+  const [html2md] = useLens(['core', 'html2md']);
+  const {
+    withEditor,
+    onParagraphConvert,
+    deserialize,
+    serialize,
+    createMediaBlock,
+  } = useEditorRuntime();
   const editor = React.useMemo(() => {
     const baseEditor = createEditor();
     baseEditor.convertFromParagraph = onParagraphConvert;
-    const editor = withReact(withHistory(withEditor(baseEditor)));
+    baseEditor.deserialize = (ele, editor) =>
+      deserialize(() => null, ele, editor);
+    baseEditor.serialize = (str, editor) => serialize(() => '', str, editor);
+    baseEditor.createMediaBlock = (file, edtior) =>
+      createMediaBlock(() => null, file, editor);
+    const editor = withEditor(withReact(withHistory(baseEditor)));
     return editor;
-  }, [withEditor]);
+  }, [withEditor, deserialize, serialize, createMediaBlock]);
+  editor.html2md = html2md;
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
+  const [overLayerId] = useLens(['core', 'overlayerId']);
   const root = React.useMemo(
-    () => mounted && document.getElementById('root'),
+    () => mounted && document.getElementById(overLayerId),
     [mounted],
   );
   return (

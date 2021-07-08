@@ -108,6 +108,10 @@ export interface LLABaseEditor {
       entry: NodeEntry<BaseParagraph>,
     ) => void
   >;
+  serialize: (element: Element, editor: Editor) => string;
+  deserialize: (str: string, editor: Editor) => Element | null;
+  createMediaBlock: (file: File, editor: Editor) => Element | null;
+  html2md?: (str: string) => string;
   isParagraphable: (element: Element) => boolean;
   isBgColorable: (element: Node) => boolean;
   isTxtColorable: (element: Node) => boolean;
@@ -150,7 +154,12 @@ export const LLAElement = {
   },
 };
 
-export interface LLAConfig {}
+export interface LLAConfig {
+  core: {
+    html2md?: (v: string) => string;
+    overlayerId: string;
+  };
+}
 
 declare module 'slate' {
   interface CustomTypes {

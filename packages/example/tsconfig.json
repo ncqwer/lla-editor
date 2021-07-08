@@ -16,6 +16,7 @@
     {"path":"../audio"},
     {"path":"../video"},
     {"path":"../quote"},
-    {"path":"../editor"}
+    {"path":"../editor"},
+    {"path":"../custom-void"}
   ]
 }

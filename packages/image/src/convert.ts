@@ -1,8 +1,10 @@
 import { Range, Node, Editor, Point, Transforms } from 'slate';
 import {
   caseMatch,
+  Deserialize,
   groupKeyDown,
   OnParagraphConvert,
+  Serialize,
   shotkey,
 } from '@lla-editor/core';
 import { ImageElement } from './element';
@@ -35,4 +37,19 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
     [shotkey(']'), handleSquareBrackets],
     [(...args) => args, (next) => next()],
   )(...args);
+};
+
+const imgDeReg = /^\!\[(.*)\]\((\S+)\)$/;
+export const deserialize: Deserialize = (next, str, editor) => {
+  const result = imgDeReg.exec(str);
+  if (result) {
+    return { ...ImageElement.create(), src: result[2], alt: result[1] };
+  }
+  return next();
+};
+
+export const serialize: Serialize = (next, ele, editor) => {
+  if (ImageElement.is(ele) && ele.src && typeof ele.src === 'string')
+    return `![${ele.alt || ''}](${ele.src})`;
+  return next();
 };

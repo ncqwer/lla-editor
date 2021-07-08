@@ -1,8 +1,8 @@
 import { withEditor } from './withEditor';
 import render from './render';
 import { onKeyDownResponseZone, onKeyDownAlternative } from './handler';
-import { onParagraphConvert } from './convert';
-import { ImageElement } from './element';
+import { onParagraphConvert, deserialize, serialize } from './convert';
+import { ImageElement, createMediaBlock } from './element';
 
 export default {
   pluginName: 'image',
@@ -11,6 +11,9 @@ export default {
   withEditor,
   onParagraphConvert,
   onKeyDownAlternative,
+  deserialize,
+  serialize,
+  createMediaBlock,
   insertInfo: [
     {
       keywords: ['image', 'picture'],

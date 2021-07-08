@@ -3,7 +3,7 @@ import { HeadingElement } from './element';
 import Render from './render';
 import { withEditor } from './withEditor';
 import { onKeyDownResponseZone } from './handler';
-import { onParagraphConvert } from './convert';
+import { onParagraphConvert, deserialize, serialize } from './convert';
 
 export default {
   pluginName: 'heading',
@@ -11,6 +11,8 @@ export default {
   withEditor,
   onKeyDownResponseZone,
   onParagraphConvert,
+  deserialize,
+  serialize,
   insertInfo: [
     {
       keywords: ['heading', 'heading1'],
