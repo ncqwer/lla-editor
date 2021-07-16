@@ -17,6 +17,7 @@
     {"path":"../video"},
     {"path":"../quote"},
     {"path":"../editor"},
-    {"path":"../custom-void"}
+    {"path":"../custom-void"},
+    {"path":"../link"}
   ]
 }

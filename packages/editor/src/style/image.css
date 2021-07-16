@@ -2,7 +2,7 @@
   @apply select-none mt-1 mb-1;
 }
 .lla-image {
-  @apply relative max-w-full;
+  @apply relative max-w-full overflow-auto;
   min-width: 30%;
   padding: 3px;
   margin: 0 auto;

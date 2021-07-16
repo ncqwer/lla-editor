@@ -15,7 +15,12 @@ import {
 } from '@lla-editor/core';
 import { useSpring, animated } from 'react-spring';
 import { VideoElement } from './element';
-import { ReactEditor, useSelected, useSlateStatic } from 'slate-react';
+import {
+  ReactEditor,
+  useReadOnly,
+  useSelected,
+  useSlateStatic,
+} from 'slate-react';
 
 const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
 
@@ -67,6 +72,7 @@ const Resizedvideo: React.FC<
             setVideoSrc(uploadSrc);
           }
         } else {
+          if (src === '') return setVideoSrc(errorCover);
           const tmp = yield videoSign(src);
           setVideoSrc(tmp);
         }
@@ -91,6 +97,7 @@ const Resizedvideo: React.FC<
     onWidthChange(v);
     f();
   }, 1000 / 30);
+  const readOnly = useReadOnly();
   return (
     <animated.div
       style={styles}
@@ -101,35 +108,57 @@ const Resizedvideo: React.FC<
       contentEditable={false}
       {...others}
     >
-      {videoSrc && (
-        <video src={videoSrc} className="lla-video__content" controls />
+      {videoSrc && renderVideo()}
+      {!readOnly && (
+        <>
+          <div
+            className="lla-video__resizer lla-video__resizer--left"
+            onMouseDown={handleMouseDown(true)}
+            onTouchStart={handleTouchStart(true)}
+          >
+            <div className="lla-video__resizer__handler"></div>
+          </div>
+          <div
+            className="lla-video__resizer lla-video__resizer--right"
+            onMouseDown={handleMouseDown(false)}
+            onTouchStart={handleTouchStart(false)}
+          >
+            <div className="lla-video__resizer__handler"></div>
+          </div>
+          <div
+            ref={triggerRef}
+            className="lla-context-menu-trigger "
+            onClick={(e) => {
+              e.stopPropagation();
+              openContextMenu(() => triggerRef.current);
+            }}
+          >
+            ...
+          </div>{' '}
+        </>
       )}
-      <div
-        className="lla-video__resizer lla-video__resizer--left"
-        onMouseDown={handleMouseDown(true)}
-        onTouchStart={handleTouchStart(true)}
-      >
-        <div className="lla-video__resizer__handler"></div>
-      </div>
-      <div
-        className="lla-video__resizer lla-video__resizer--right"
-        onMouseDown={handleMouseDown(false)}
-        onTouchStart={handleTouchStart(false)}
-      >
-        <div className="lla-video__resizer__handler"></div>
-      </div>
-      <div
-        ref={triggerRef}
-        className="lla-context-menu-trigger "
-        onClick={(e) => {
-          e.stopPropagation();
-          openContextMenu(() => triggerRef.current);
-        }}
-      >
-        ...
-      </div>
     </animated.div>
   );
+
+  function renderVideo() {
+    if (videoSrc === loadingCover)
+      return (
+        <img
+          src={loadingCover}
+          className="lla-video__content"
+          alt="loading video..."
+        />
+      );
+    if (videoSrc === errorCover)
+      return (
+        <img
+          src={errorCover}
+          className="lla-video__content"
+          alt=" video loading error"
+        />
+      );
+    return <video src={videoSrc} className="lla-video__content" controls />;
+  }
 
   function handleMouseDown(isLeftHandler: boolean) {
     return (event: React.MouseEvent<HTMLDivElement>) => {
@@ -230,11 +259,12 @@ const VideoComponent = ({
   const selected = useSelected();
   const editor = useSlateStatic();
   const [videoOpen] = useLens(['video', 'videoOpen']);
+  const readOnly = useReadOnly();
   return (
     <div className="lla-video-wrapper" {...attributes}>
-      {src && (
+      {(readOnly || src) && (
         <Resizedvideo
-          src={src}
+          src={src || ''}
           selected={selected}
           width={width}
           onWidthChange={handleMetaChange('width')}
@@ -244,7 +274,7 @@ const VideoComponent = ({
           // }
         ></Resizedvideo>
       )}
-      {!src && (
+      {!src && !readOnly && (
         <EmptyMedia
           onSrcChange={handleMetaChange('src')}
           selected={selected}

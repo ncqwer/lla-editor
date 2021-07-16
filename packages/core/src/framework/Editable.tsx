@@ -8,9 +8,11 @@ import { Nextify } from '../type';
 export const Editable = ({
   onKeyDown,
   className,
+  readOnly = false,
 }: {
   onKeyDown?: (event: React.KeyboardEvent, editor: Editor) => void;
   className?: string;
+  readOnly?: boolean;
 }) => {
   const {
     renderElement,
@@ -50,18 +52,21 @@ export const Editable = ({
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         onKeyDown={handleKeyDown}
+        readOnly={readOnly}
       ></E>
-      <div
-        className="lla-editor__tail"
-        onClick={() => {
-          const path = [editor.children.length];
-          Transforms.insertNodes(editor, editor.createParagraph(''), {
-            at: path,
-          });
-          Transforms.select(editor, Editor.start(editor, path));
-          ReactEditor.focus(editor);
-        }}
-      ></div>
+      {!readOnly && (
+        <div
+          className="lla-editor__tail"
+          onClick={() => {
+            const path = [editor.children.length];
+            Transforms.insertNodes(editor, editor.createParagraph(''), {
+              at: path,
+            });
+            Transforms.select(editor, Editor.start(editor, path));
+            ReactEditor.focus(editor);
+          }}
+        ></div>
+      )}
     </div>
   );
 };

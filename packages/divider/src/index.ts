@@ -19,6 +19,8 @@ export default {
       title: '分割线',
       description: '用来分割不同区域的内容',
       create: DividerElement.create,
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/divider.png',
     },
   ],
 };

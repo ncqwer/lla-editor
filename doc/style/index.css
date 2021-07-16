@@ -2,7 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@import '@lla-editor/editor/dist/style/index.css';
+@import '@lla-editor/editor/src/style/index.css';
 /* @import 'prismjs/themes/prism.css'; */
 @import 'prismjs/themes/prism-tomorrow.css';
 

@@ -8,7 +8,9 @@ import { LLAElement } from '../../type';
 
 export const InsertOverLayer = () => {
   const editor = useSlateStatic();
-  const [targetPath, setTargetPath] = React.useState<Path | null>(null);
+  const [targetPath, setTargetPath] = React.useState<[Path, number] | null>(
+    null,
+  );
   const targetPathRef = React.useRef(targetPath);
   targetPathRef.current = targetPath;
 
@@ -34,12 +36,15 @@ export const InsertOverLayer = () => {
 };
 
 const InsertOverLayerImpl = React.forwardRef(
-  ({ path, emptyPath }: { path: Path; emptyPath: () => void }, _outerRef) => {
+  (
+    { path, emptyPath }: { path: [Path, number]; emptyPath: () => void },
+    _outerRef,
+  ) => {
     const editor = useSlate(); //这里需要时刻更新值
     const ref = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
       if (ref.current) {
-        const element = Node.get(editor, path);
+        const element = Node.get(editor, path[0]);
         const dom = ReactEditor.toDOMNode(editor, element);
         domAlign(ref.current, dom, {
           points: ['tl', 'bl'],
@@ -68,13 +73,15 @@ const InsertOverLayerImpl = React.forwardRef(
     );
 
     function handleCotent() {
-      const element = Node.get(editor, path);
-      const str = Node.string(element).slice(1);
+      const element = Node.get(editor, path[0]);
+      const str = Node.string(element)
+        .slice(1)
+        .slice(0, -path[1] || undefined);
       return (
         <InsertPannel
           ref={_outerRef}
           search={str}
-          path={path}
+          path={path[0]}
           emptyPath={emptyPath}
         ></InsertPannel>
       );
@@ -327,10 +334,13 @@ const InsertPannel = React.forwardRef(
         {insertItems.length !== 0 && (
           <div className="lla-insert__group">
             <div className="lla-insert__group-label">基础元素</div>
-            {insertItems.map(({ title, description }, i) => (
+            {insertItems.map(({ title, description, cover }, i) => (
               <InsertPannelItem
                 active={i === activeIdx}
-                imgSrc="https://www.notion.so/images/blocks/text.9fdb530b.png"
+                imgSrc={
+                  cover ||
+                  'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/textblock.png'
+                }
                 title={title}
                 description={description}
                 key={i}
@@ -387,13 +397,22 @@ const InsertPannel = React.forwardRef(
       const [parent, parentPath] = Editor.parent(editor, path);
       const { create } = insertItems[activeIdx];
       emptyPath();
+      // if ((editor as any).isContainable(parent) && parent.children.length > 1) {
+      //   return Editor.withoutNormalizing(editor, () => {
+      //     Transforms.delete(editor, { reverse: true, distance: search.length });
+      //     Transforms.wrapNodes(editor, create(editor), {
+      //       at: parentPath,
+      //     });
+      //     Transforms.unwrapNodes(editor, { at: parentPath.concat(0) });
+      //   });
+      // }
       if (
-        parent.children.length > 1 ||
-        (LLAElement.is(parent) && parent.type !== 'text-block')
+        parent.children.length > 1 &&
+        !(editor as any).isContainable(parent)
       ) {
-        //存在缩进
+        //存在包含多端paragraph的情况
         return Editor.withoutNormalizing(editor, () => {
-          Transforms.delete(editor, { reverse: true });
+          Transforms.removeNodes(editor, { at: path });
           Transforms.insertNodes(editor, create(editor), {
             at: Path.next(parentPath),
           });
@@ -403,18 +422,40 @@ const InsertPannel = React.forwardRef(
           );
         });
       }
-      //将当前text-block删除
+      //将当前转换
       return Editor.withoutNormalizing(editor, () => {
-        Transforms.removeNodes(editor, { at: parentPath });
-        Transforms.insertNodes(editor, create(editor), { at: parentPath });
-        return Transforms.select(editor, Editor.start(editor, parentPath));
+        Transforms.delete(editor, {
+          reverse: true,
+          distance: search.length + 1,
+        });
+        Transforms.wrapNodes(
+          editor,
+          Object.assign(
+            create(editor),
+            (parent as any).bgColor && { bgColor: (parent as any).bgColor },
+            (parent as any).txtColor && { txtColor: (parent as any).txtColor },
+          ),
+          {
+            at: parentPath,
+          },
+        );
+        Transforms.unwrapNodes(editor, { at: parentPath.concat(0) });
       });
+      // return Editor.withoutNormalizing(editor, () => {
+      //   Transforms.removeNodes(editor, { at: parentPath });
+      //   Transforms.insertNodes(editor, create(editor), { at: parentPath });
+      //   return Transforms.select(editor, Editor.start(editor, parentPath));
+      // });
     }
     function handleClick_bg() {
       Editor.withoutNormalizing(editor, () => {
-        Transforms.removeNodes(editor, { at: path });
-        Transforms.insertNodes(editor, editor.createParagraph(''), {
-          at: path,
+        // Transforms.removeNodes(editor, { at: path });
+        // Transforms.insertNodes(editor, editor.createParagraph(''), {
+        //   at: path,
+        // });
+        Transforms.delete(editor, {
+          reverse: true,
+          distance: search.length + 1,
         });
         Transforms.setNodes(
           editor,
@@ -428,9 +469,13 @@ const InsertPannel = React.forwardRef(
     }
     function handleClick_txt() {
       Editor.withoutNormalizing(editor, () => {
-        Transforms.removeNodes(editor, { at: path });
-        Transforms.insertNodes(editor, editor.createParagraph(''), {
-          at: path,
+        //   Transforms.removeNodes(editor, { at: path });
+        //   Transforms.insertNodes(editor, editor.createParagraph(''), {
+        //     at: path,
+        //   });
+        Transforms.delete(editor, {
+          reverse: true,
+          distance: search.length + 1,
         });
         Transforms.setNodes(
           editor,

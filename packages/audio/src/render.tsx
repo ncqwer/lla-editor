@@ -17,7 +17,12 @@ import {
 } from '@lla-editor/core';
 import { useSpring, animated } from 'react-spring';
 import { AudioElement } from './element';
-import { ReactEditor, useSelected, useSlateStatic } from 'slate-react';
+import {
+  ReactEditor,
+  useReadOnly,
+  useSelected,
+  useSlateStatic,
+} from 'slate-react';
 import Slider from 'rc-slider';
 
 const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
@@ -44,6 +49,7 @@ const Audio: React.FC<{
   const [errorCover] = useLens(['audio', 'errorCover']);
   const [audioUpload] = useLens(['audio', 'audioUpload']);
   const [audioSign] = useLens(['audio', 'audioSign']);
+  const readOnly = useReadOnly();
   const [audioSrc, setAudioSrc] = React.useState<string | undefined>(
     loadingCover,
   );
@@ -91,16 +97,18 @@ const Audio: React.FC<{
         }`}
         contentEditable={false}
       >
-        <div
-          ref={triggerRef}
-          className="lla-context-menu-trigger "
-          onClick={(e) => {
-            e.stopPropagation();
-            openContextMenu(() => triggerRef.current);
-          }}
-        >
-          ...
-        </div>
+        {!readOnly && (
+          <div
+            ref={triggerRef}
+            className="lla-context-menu-trigger "
+            onClick={(e) => {
+              e.stopPropagation();
+              openContextMenu(() => triggerRef.current);
+            }}
+          >
+            ...
+          </div>
+        )}
         {audioSrc && (
           <audio
             className="lla-audio__instance"
@@ -151,11 +159,11 @@ const Audio: React.FC<{
         <div className="flex-grow mr-6 ml-6">
           <div className="lla-audio__info flex justify-between">
             <input
-              // readOnly
+              readOnly={readOnly}
               type="text"
               className={`lla-audio__title`}
               contentEditable={true}
-              placeholder="请输入音频名称"
+              placeholder={readOnly ? '音乐载入出错' : '请输入音频名称'}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -186,7 +194,7 @@ const Audio: React.FC<{
           </svg>
         </div>
       </div>
-      {isOpen && (
+      {isOpen && !readOnly && (
         <LLAOverLayer
           onClose={() => setIsOpen(false)}
           targetGet={() => volumnRef.current}
@@ -543,16 +551,16 @@ const AudioComponent = ({
   children,
   element,
 }: ExtendRenderElementProps<AudioElement>) => {
-  const { src, width } = element;
+  const { src } = element;
   const selected = useSelected();
   const editor = useSlateStatic();
   const [audioOpen] = useLens(['audio', 'audioOpen']);
-
+  const readOnly = useReadOnly();
   return (
     <div className="lla-audio-wrapper" {...attributes}>
-      {src && (
+      {(src || readOnly) && (
         <Audio
-          src={src}
+          src={src || ''}
           selected={selected}
           openContextMenu={openContenxtMenu}
           // onMouseOver={() =>
@@ -560,7 +568,7 @@ const AudioComponent = ({
           // }
         ></Audio>
       )}
-      {!src && (
+      {!src && !readOnly && (
         <EmptyAudio
           onSrcChange={handleMetaChange('src')}
           selected={selected}

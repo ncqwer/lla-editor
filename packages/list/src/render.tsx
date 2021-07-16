@@ -3,6 +3,7 @@ import { Transforms } from 'slate';
 import {
   ReactEditor,
   RenderElementProps,
+  useReadOnly,
   useSelected,
   useSlateStatic,
 } from 'slate-react';
@@ -42,6 +43,7 @@ const Task = ({
   const { checked = false, bgColor, txtColor } = element;
   const editor = useSlateStatic();
   const selected = useSelected();
+  const readOnly = useReadOnly();
   return (
     <div
       {...attributes}
@@ -54,7 +56,7 @@ const Task = ({
           type="checkbox"
           className="lla-list-item__leading__content"
           checked={checked}
-          onChange={(e) => handleChange(e.target.checked)}
+          onChange={(e) => !readOnly && handleChange(e.target.checked)}
         />
       </div>
       <IndentContainerContext.Provider value={IndentContainerWrapper}>

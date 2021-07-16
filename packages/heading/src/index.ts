@@ -19,18 +19,24 @@ export default {
       title: '标题1',
       description: '大的段落标题',
       create: (e: Editor) => HeadingElement.create(e, 1),
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/heading1.png',
     },
     {
       keywords: ['heading', 'heading2'],
       title: '标题2',
       description: '中等段落标题',
       create: (e: Editor) => HeadingElement.create(e, 2),
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/heading2.png',
     },
     {
       keywords: ['heading', 'heading3'],
       title: '标题3',
       description: '小的段落标题',
       create: (e: Editor) => HeadingElement.create(e, 3),
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/heading3.png',
     },
   ],
 };

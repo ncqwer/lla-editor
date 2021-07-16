@@ -7,7 +7,23 @@ import {
 import { LiveProvider, LiveEditor, LivePreview, LiveError } from 'react-live';
 import theme from 'prism-react-renderer/themes/oceanicNext';
 
-const scope = { LLAEnvironment, LLAEditor, SharedProvider, createInitialValue };
+import unified from 'unified';
+import parse from 'rehype-parse';
+import rehype2remark from 'rehype-remark';
+import remarkParse from 'remark-parse';
+import stringify from 'remark-stringify';
+
+const scope = {
+  LLAEnvironment,
+  LLAEditor,
+  SharedProvider,
+  createInitialValue,
+  unified,
+  parse,
+  rehype2remark,
+  remarkParse,
+  stringify,
+};
 
 const hh = () => {
   return (
@@ -33,6 +49,21 @@ const code = `// import {
 //   SharedProvider,
 //   createInitialValue,
 // } from '@lla-editor/editor';
+// import unified from 'unified';
+// import parse from 'rehype-parse';
+// import rehype2remark from 'rehype-remark';
+// import remarkParse from 'remark-parse';
+// import stringify from 'remark-stringify';
+
+const processor = unified().use(parse).use(rehype2remark);
+const txtprocessor = unified().use(remarkParse);
+const mdprocessor = unified().use(stringify, {
+  bullet: '*',
+  fence: '~',
+  fences: true,
+  incrementListMarker: false,
+});
+
 const Example = () => {
   const imageRef = React.useRef(null);
   const audioRef = React.useRef(null);
@@ -44,6 +75,20 @@ const Example = () => {
       <SharedProvider
         initialValue={React.useMemo(
           () => ({
+            core: {
+              html2md: (v) => {
+                const node = processor.parse(v);
+                const ast = processor.runSync(node);
+                return ast;
+              },
+              txt2md: (v) => {
+                return txtprocessor.parse(v);
+              },
+              md2txt: (ast) => {
+                return mdprocessor.stringify(ast);
+              },
+              overlayerId: 'root',
+            },
             indentContainer: {
               indent: 24,
             },
@@ -101,17 +146,7 @@ const Example = () => {
           onChange={(e) => {
             const file = e.target.files[0];
             if (!file) return;
-            promiseRef.current && promiseRef.current[0](dataURL);
-            // const reader = new FileReader();
-            // new Promise((res) => {
-            //   reader.onload = (event) => {
-            //     if (event.target) return res(event.target.result);
-            //     return res(null);
-            //   };
-            //   reader.readAsDataURL(file);
-            // }).then(dataURL=>{
-            //   dataURL && promiseRef.current && promiseRef.current[0](dataURL);
-            // });
+            promiseRef.current && promiseRef.current[0](file);
           }}
           accept=".jpeg,.jpg,.png"
         />
@@ -122,17 +157,7 @@ const Example = () => {
           onChange={(e) => {
             const file = e.target.files[0];
             if (!file) return;
-            promiseRef.current && promiseRef.current[0](dataURL);
-            // const reader = new FileReader();
-            // new Promise((res) => {
-            //   reader.onload = (event) => {
-            //     if (event.target) return res(event.target.result);
-            //     return res(null);
-            //   };
-            //   reader.readAsDataURL(file);
-            // }).then(dataURL=>{
-            //   dataURL && promiseRef.current && promiseRef.current[0](dataURL);
-            // });
+            promiseRef.current && promiseRef.current[0](file);
           }}
           accept=".mp3"
         />
@@ -143,17 +168,7 @@ const Example = () => {
           onChange={(e) => {
             const file = e.target.files[0];
             if (!file) return;
-            promiseRef.current && promiseRef.current[0](dataURL);
-            // const reader = new FileReader();
-            // new Promise((res) => {
-            //   reader.onload = (event) => {
-            //     if (event.target) return res(event.target.result);
-            //     return res(null);
-            //   };
-            //   reader.readAsDataURL(file);
-            // }).then(dataURL=>{
-            //   dataURL && promiseRef.current && promiseRef.current[0](dataURL);
-            // });
+            promiseRef.current && promiseRef.current[0](file);
           }}
           accept=".mp4"
         />

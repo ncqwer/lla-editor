@@ -54,17 +54,34 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
   )(...args);
 };
 
-const quoteDeReg = /^>/;
-export const deserialize: Deserialize = (next, str, editor) => {
-  if (quoteDeReg.exec(str))
-    return {
+export const deserialize: Deserialize = (next, ast, editor, acc) => {
+  if (ast.type === 'blockquote') {
+    return acc.concat({
       ...QuoteElement.create(editor),
-      children: [editor.createParagraph(str.slice(1))],
-    };
+      children: [
+        ast.children.reduce((prev: any, pa: any) => {
+          if (pa.type !== 'paragraph') return prev;
+          return {
+            ...prev,
+            children: prev.children.concat(
+              { type: 'text', value: '\n\n' },
+              pa.children,
+            ),
+          };
+        }),
+      ].reduce((ac: any, v: any) => editor.deserialize(v, editor, ac), []),
+    });
+  }
   return next();
 };
 
 export const serialize: Serialize = (next, ele, editor) => {
-  if (QuoteElement.is(ele)) return `>${Node.string(ele)}`;
+  if (QuoteElement.is(ele))
+    return {
+      type: 'blockquote',
+      children: ele.children
+        .map((v) => editor.serialize(v, editor))
+        .filter(Boolean),
+    };
   return next();
 };

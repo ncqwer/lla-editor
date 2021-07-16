@@ -2,14 +2,14 @@ import { TextBlock } from './element';
 import { onKeyDownResponseZone } from './handler';
 import Render from './render';
 import { withEditor } from './withEditor';
-import { deserialize, serialize } from './convert';
+import { serialize } from './convert';
 
 export default {
   pluginName: 'indent-container',
   onKeyDownResponseZone,
   renderElement: Render,
   withEditor,
-  deserialize,
+  // deserialize,
   serialize,
   insertInfo: [
     {
@@ -17,6 +17,8 @@ export default {
       title: '文本块',
       description: '简单的文本块，可缩进，可容纳缩进',
       create: TextBlock.create,
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/textblock.png',
     },
   ],
 };

@@ -33,6 +33,7 @@
     "@lla-editor/heading": "^0.0.5",
     "@lla-editor/image": "^0.0.5",
     "@lla-editor/indent": "^0.0.5",
+    "@lla-editor/link": "^0.0.1",
     "@lla-editor/list": "^0.0.5",
     "@lla-editor/quote": "^0.0.5",
     "@lla-editor/text-block": "^0.0.5",

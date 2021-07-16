@@ -16,14 +16,15 @@
 @import './video.css';
 @import './quote.css';
 @import './text-action-menu.css';
+@import './link.css';
 
-/* @layer utilities {
+@layer utilities {
   @variants focus,hover {
     .no-box-shadow {
       box-shadow: unset;
     }
   }
-} */
+}
 
 .lla-editor__tail {
   @apply w-full bg-transparent h-10 cursor-text;

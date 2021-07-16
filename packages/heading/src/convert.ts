@@ -62,24 +62,42 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
   )(...args);
 };
 
-export const deserialize: Deserialize = (next, str, editor) => {
-  const result = headingReg.exec(str);
-  if (result) {
-    const headingLevel = result[1].length;
-    if (headingLevel > 3) return next();
-    return {
-      ...HeadingElement.create(editor),
-      level: headingLevel,
-      children: [editor.createParagraph(str.slice(headingLevel))],
-    };
+export const deserialize: Deserialize = (next, ast, editor, acc) => {
+  if (ast.type === 'heading') {
+    if (ast.depth < 4)
+      return acc.concat({
+        ...HeadingElement.create(editor, ast.depth),
+        children: [
+          {
+            ...editor.createParagraph(''),
+            children: ast.children.reduce(
+              (ac: any, v: any) => editor.deserialize(v, editor, ac),
+              [],
+            ),
+          },
+        ],
+      });
+    return ast.children.reduce(
+      (ac: any, v: any) =>
+        ac.concat({
+          ...editor.createParagraph(''),
+          children: editor.deserialize(v, editor, []),
+        }),
+      acc,
+    );
   }
-
   return next();
 };
 
 export const serialize: Serialize = (next, ele, editor) => {
   if (HeadingElement.is(ele)) {
-    return `${'#'.repeat(ele.level)}${Node.string(ele)}`;
+    return {
+      type: 'heading',
+      depth: ele.level,
+      children: ele.children[0].children
+        .map((v) => editor.serialize(v, editor))
+        .filter(Boolean),
+    };
   }
   return next();
 };

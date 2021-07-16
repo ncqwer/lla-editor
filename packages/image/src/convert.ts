@@ -39,17 +39,15 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
   )(...args);
 };
 
-const imgDeReg = /^\!\[(.*)\]\((\S+)\)$/;
-export const deserialize: Deserialize = (next, str, editor) => {
-  const result = imgDeReg.exec(str);
-  if (result) {
-    return { ...ImageElement.create(), src: result[2], alt: result[1] };
+export const deserialize: Deserialize = (next, ast, editor, acc) => {
+  if (ast.type === 'image') {
+    return acc.concat({ ...ImageElement.create(), src: ast.url, alt: ast.alt });
   }
   return next();
 };
 
 export const serialize: Serialize = (next, ele, editor) => {
   if (ImageElement.is(ele) && ele.src && typeof ele.src === 'string')
-    return `![${ele.alt || ''}](${ele.src})`;
+    return { type: 'image', url: ele.src, alt: ele.alt };
   return next();
 };

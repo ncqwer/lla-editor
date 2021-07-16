@@ -18,6 +18,8 @@ export default {
       title: '视频',
       description: '视频容器，用来呈现本地、在线视频',
       create: VideoElement.create,
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/video.png',
     },
   ],
 };

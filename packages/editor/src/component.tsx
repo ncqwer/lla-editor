@@ -19,6 +19,7 @@ import CalloutImpl from '@lla-editor/callout';
 import AudioImpl from '@lla-editor/audio';
 import VideoImpl from '@lla-editor/video';
 import QuoteImpl from '@lla-editor/quote';
+import LinkImpl from '@lla-editor/link';
 
 export const availablePlugins = [
   TextBlockImpl,
@@ -31,6 +32,7 @@ export const availablePlugins = [
   DividerImpl,
   QuoteImpl,
   CalloutImpl,
+  LinkImpl,
   ParagraphImpl,
 ];
 
@@ -154,11 +156,12 @@ export const Example = () => {
 export const LLAEditor: React.FC<{
   value: Descendant[];
   onChange: (v: Descendant[]) => void;
+  readOnly?: boolean;
   className?: string;
-}> = ({ value, onChange, className }) => {
+}> = ({ value, onChange, className, readOnly }) => {
   return (
     <Editor value={value} onChange={onChange}>
-      <Editable className={className}></Editable>
+      <Editable className={className} readOnly={readOnly}></Editable>
     </Editor>
   );
 };

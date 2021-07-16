@@ -19,7 +19,7 @@ export const ImageElement = {
     return {
       children: [{ text: '' }],
       type: _TYPE_,
-      width: 1200,
+      width: 700,
     };
   },
 };

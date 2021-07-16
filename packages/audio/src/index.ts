@@ -18,6 +18,8 @@ export default {
       title: '音频',
       description: '音频容器，用来呈现本地、在线音频',
       create: AudioElement.create,
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/audio.png',
     },
   ],
 };

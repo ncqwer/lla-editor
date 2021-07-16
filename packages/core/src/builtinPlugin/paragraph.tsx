@@ -1,7 +1,8 @@
 import React from 'react';
-import { BaseElement, Text, Node, Editor, Range } from 'slate';
+import { BaseElement, Text, Node, Editor, Range, Transforms } from 'slate';
 import { RenderLeafProps, useSelected, useSlateStatic } from 'slate-react';
 import {
+  Deserialize,
   ElementJSX,
   elementPropsIs,
   elementRender,
@@ -11,6 +12,7 @@ import {
   LeafJSX,
   OnKeyDownResponseZone,
   OnKeyDownType,
+  Serialize,
   shotkey,
   textPropsIs,
 } from '../rules';
@@ -45,7 +47,7 @@ const render = [
       const Tag = editor.isInline(element) ? 'span' : 'p';
       const text = element.children[0] as Text;
       const placeholder = React.useContext(PlaceholderContext);
-      if (text.text.length === 0) {
+      if (text.text.length === 0 && element.children.length === 1) {
         children = (
           <>
             <span className="lla-placeholder " contentEditable={false}>
@@ -79,6 +81,12 @@ const renderLeaf = [
       if (leaf.lineThrough) array.push('line-through');
       if (leaf.underline) array.push('underline');
       const cls = array.join(' ');
+      if (leaf.inlineCode)
+        return (
+          <code {...attributes} className={`lla-inline-code ${cls}`}>
+            {children}
+          </code>
+        );
       return (
         <span {...attributes} className={cls}>
           {children}
@@ -118,10 +126,10 @@ const handleSlash: KeyDown = (next, event, editor, [node, path]) => {
   const start = selection.anchor;
   if (start.offset !== 0) return next();
   const text = Node.string(node);
-  if (text.length !== 0) return next();
+  // if (text.length !== 0) return next();
   //现在 我们在空白的paragraph上了
   const insert = editor.getOvlerLayer('insert');
-  insert?.open?.(path);
+  insert?.open?.([path, text.length]);
 };
 
 const handleBackspace: KeyDown = (next, event, editor, [node, path]) => {
@@ -176,6 +184,18 @@ const handleEnter: KeyDown = (next, event, editor) => {
   insert.enter();
 };
 
+const handleShiftEnter: KeyDown = (next, event, editor) => {
+  const insert = editor.getOvlerLayer('insert');
+  if (insert && !insert.isEmpty()) {
+    event.preventDefault();
+    insert.enter();
+    return;
+  }
+  // soft换行
+  event.preventDefault();
+  Transforms.insertText(editor, '\n');
+};
+
 const handleKeyDown = groupKeyDown<KeyDown>(
   [shotkey('/'), handleSlash],
   // [shotkey('/'), handleSlash],
@@ -184,6 +204,7 @@ const handleKeyDown = groupKeyDown<KeyDown>(
   [shotkey('ctrl+p'), handleUp],
   [shotkey('down'), handleDown],
   [shotkey('ctrl+n'), handleDown],
+  [shotkey('shift+enter'), handleShiftEnter],
   [shotkey('enter'), handleEnter],
   [shotkey('tab'), handleTab],
   [shotkey('esc'), handleEsc],
@@ -191,9 +212,96 @@ const handleKeyDown = groupKeyDown<KeyDown>(
   [(...args) => args, (next) => next()],
 );
 
+const deserialize: Deserialize = (next, ast, editor, acc) => {
+  if (ast.type === 'paragraph') {
+    const children = ast.children.reduce(
+      (ac: Node[], v: any) => editor.deserialize(v, editor, ac),
+      [],
+    );
+    return acc.concat(
+      Object.assign({}, editor.createParagraph(''), { children }),
+    );
+  }
+  if (ast.type === 'strong') {
+    if (!ast.children) return acc.concat({ text: ast.value, bold: true });
+    return acc.concat(
+      ast.children
+        .reduce((ac: Node[], v: any) => editor.deserialize(v, editor, ac), [])
+        .map((v: any) => ({ ...v, bold: true })),
+    );
+  }
+  if (ast.type === 'text') {
+    if (!ast.children) return acc.concat({ text: ast.value });
+    return acc.concat(
+      ast.children.reduce(
+        (ac: Node[], v: any) => editor.deserialize(v, editor, ac),
+        [],
+      ),
+    );
+  }
+  if (ast.type === 'emphasis') {
+    if (!ast.children) return acc.concat({ text: ast.value, italic: true });
+    return acc.concat(
+      ast.children
+        .reduce((ac: Node[], v: any) => editor.deserialize(v, editor, ac), [])
+        .map((v: any) => ({ ...v, italic: true })),
+    );
+  }
+  if (ast.type === 'delete') {
+    if (!ast.children)
+      return acc.concat({ text: ast.value, lineThrough: true });
+    return acc.concat(
+      ast.children
+        .reduce((ac: Node[], v: any) => editor.deserialize(v, editor, ac), [])
+        .map((v: any) => ({ ...v, lineThrough: true })),
+    );
+  }
+  if (ast.type === 'inlineCode') {
+    if (!ast.children) return acc.concat({ text: ast.value, inlineCode: true });
+    return acc.concat(
+      ast.children
+        .reduce((ac: Node[], v: any) => editor.deserialize(v, editor, ac), [])
+        .map((v: any) => ({ ...v, inlineCode: true })),
+    );
+  }
+  return next();
+};
+
+const serialize: Serialize = (next, node, editor) => {
+  if (Paragraph.is(node)) {
+    return {
+      type: 'paragraph',
+      children: node.children
+        .map((v) => editor.serialize(v, editor))
+        .filter(Boolean),
+    };
+  }
+  if (Text.isText(node)) {
+    if (node.inlineCode)
+      return {
+        children: [{ value: node.text, type: 'text' }],
+        type: 'inlineCode',
+      };
+    if (node.bold)
+      return {
+        children: [{ value: node.text, type: 'text' }],
+        type: 'strong',
+      };
+    if (node.italic)
+      return {
+        children: [{ value: node.text, type: 'text' }],
+        type: 'emphasis',
+      };
+    return { value: node.text, type: 'text' };
+  }
+  return next();
+};
+
 export default {
   pluginName: 'paragraph',
   renderElement: render,
   renderLeaf,
+  deserialize,
+  serialize,
   onKeyDownResponseZone,
 };

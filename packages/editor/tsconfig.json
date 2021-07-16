@@ -15,6 +15,7 @@
     {"path":"../callout"},
     {"path":"../audio"},
     {"path":"../video"},
-    {"path":"../quote"}
+    {"path":"../quote"},
+    {"path":"../link"}
   ]
 }

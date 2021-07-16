@@ -20,6 +20,8 @@ export default {
       title: '图片',
       description: '图片容器，用来呈现本地、在线图片',
       create: ImageElement.create,
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/image.png',
     },
   ],
 };

@@ -10,7 +10,7 @@ import {
 } from '@lla-editor/core';
 import { CalloutElement } from './element';
 import { Transforms } from 'slate';
-import { ReactEditor, useSlateStatic } from 'slate-react';
+import { ReactEditor, useReadOnly, useSlateStatic } from 'slate-react';
 
 const emojiI18 = {
   search: '查询',
@@ -33,6 +33,7 @@ const Callout: React.FC<ExtendRenderElementProps<CalloutElement>> = ({
   const [isOpen, setIsOpen] = React.useState(false);
   const ref = React.useRef<HTMLSpanElement>(null);
   const editor = useSlateStatic();
+  const readOnly = useReadOnly();
   return (
     <>
       <div
@@ -45,14 +46,14 @@ const Callout: React.FC<ExtendRenderElementProps<CalloutElement>> = ({
               role="img"
               aria-label={emoji}
               ref={ref}
-              onClick={() => setIsOpen(true)}
+              onClick={() => !readOnly && setIsOpen(true)}
             >
               {emoji}
             </span>
           </div>
         </div>
         <PlaceholderContext.Provider value={'记录一些重要的事！'}>
-          {children}
+          <div className="lla-callout-content">{children}</div>
         </PlaceholderContext.Provider>
       </div>
       {isOpen && (

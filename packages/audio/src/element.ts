@@ -6,7 +6,6 @@ export interface AudioElement extends BaseAtom {
   type: 'audio';
   src?: string | File;
   caption?: string;
-  width: number;
 }
 
 export const AudioElement = {

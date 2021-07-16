@@ -17,6 +17,8 @@ export default {
       title: '标记文本',
       description: '用来强调某一特定文本',
       create: CalloutElement.create,
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/callout.png',
     },
   ],
 };

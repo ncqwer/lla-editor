@@ -14,6 +14,7 @@ const initStatus = {
   underline: false,
   txtColor: '',
   bgColor: '',
+  hasLink: false,
 };
 const { useLens, useSetLens } = createShared<typeof initStatus>(initStatus);
 
@@ -275,6 +276,48 @@ const TextColor = () => {
   }
 };
 
+const TextLink = () => {
+  const [hasLink] = useLens(['hasLink']);
+  const editor = useSlateStatic();
+  if (hasLink) return <div className="hidden"></div>;
+  return (
+    <div className="lla-text-style-item " onClick={handleClick}>
+      <div className="text-blue-400">L</div>
+    </div>
+  );
+
+  function handleClick() {
+    const { selection } = editor;
+    if (!selection) return;
+
+    const rangeRef = Editor.rangeRef(editor, selection, {
+      affinity: 'inward',
+    });
+    Editor.withoutNormalizing(editor, () => {
+      const [start, end] = Range.edges(selection);
+      Transforms.splitNodes(editor, {
+        at: end,
+        mode: 'lowest',
+        match: Text.isText,
+      });
+      Transforms.splitNodes(editor, {
+        at: start,
+        mode: 'lowest',
+        match: Text.isText,
+      });
+      const hh = rangeRef.current;
+      Transforms.wrapNodes(
+        editor,
+        { url: 'https://www.baidu.com', type: 'link' } as any,
+        {
+          at: rangeRef.unref()!,
+          match: (n) => Text.isText(n) || editor.isInline(n),
+        },
+      );
+    });
+  }
+};
+
 export const TextActionMenu = () => {
   const positionRef = React.useRef<HTMLDivElement>(null);
   const setActiveStyleMap = useSetLens(storeLens);
@@ -284,6 +327,7 @@ export const TextActionMenu = () => {
 
   return (
     <div className="lla-text-action-menu" ref={positionRef}>
+      <TextLink></TextLink>
       <TextStyleGroup></TextStyleGroup>
       <TextColor></TextColor>
     </div>
@@ -306,8 +350,11 @@ export const TextActionMenu = () => {
       el.removeAttribute('style');
       return;
     }
-    const [paragraphEntry] = Editor.nodes(editor, { match: Paragraph.is });
+    const [paragraphEntry] = Editor.levels(editor, { match: Paragraph.is });
     if (!paragraphEntry) return el.removeAttribute('style');
+    const [link] = Editor.nodes(editor, {
+      match: (n: any) => n?.type === 'link',
+    });
     const texts = Array.from(
       Editor.nodes(editor, { at: selection, match: Text.isText }),
     ).map(([t]) => t);
@@ -319,6 +366,7 @@ export const TextActionMenu = () => {
       underline: isStyleActive(texts, 'underline'),
       bgColor: getColor(texts, 'bgColor'),
       txtColor: getColor(texts, 'txtColor'),
+      hasLink: !!link,
     });
     const domSelection = window.getSelection();
     if (!domSelection) return el.removeAttribute('style');

@@ -16,6 +16,8 @@ export const Editor: React.FC<{
   onChange: (v: Descendant[]) => void;
 }> = ({ value, onChange, children }) => {
   const [html2md] = useLens(['core', 'html2md']);
+  const [txt2md] = useLens(['core', 'txt2md']);
+  const [md2txt] = useLens(['core', 'md2txt']);
   const {
     withEditor,
     onParagraphConvert,
@@ -26,8 +28,8 @@ export const Editor: React.FC<{
   const editor = React.useMemo(() => {
     const baseEditor = createEditor();
     baseEditor.convertFromParagraph = onParagraphConvert;
-    baseEditor.deserialize = (ele, editor) =>
-      deserialize(() => null, ele, editor);
+    baseEditor.deserialize = (ele, editor, acc) =>
+      deserialize(() => acc, ele, editor, acc);
     baseEditor.serialize = (str, editor) => serialize(() => '', str, editor);
     baseEditor.createMediaBlock = (file, edtior) =>
       createMediaBlock(() => null, file, editor);
@@ -35,6 +37,8 @@ export const Editor: React.FC<{
     return editor;
   }, [withEditor, deserialize, serialize, createMediaBlock]);
   editor.html2md = html2md;
+  editor.txt2md = txt2md;
+  editor.md2txt = md2txt;
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
     setMounted(true);

@@ -4,7 +4,7 @@
 }
 
 .lla-callout__mark {
-  @apply flex select-none cursor-pointer items-center justify-center h-6 w-6 rounded flex-shrink-0;
+  @apply flex select-none cursor-pointer items-center justify-center h-6 w-6 rounded flex-shrink-0 self-start;
 }
 
 .lla-callout_mark-wrapper {
@@ -15,9 +15,8 @@
   margin-left: 0px;
   color: black;
 }
-
-.lla-callout > .lla-paragraph {
-  @apply ml-2 flex-grow;
+.lla-callout-content {
+  @apply flex-grow ml-2;
 }
 
 .lla-callout .lla-placeholder {

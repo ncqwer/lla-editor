@@ -38,6 +38,10 @@
   @apply flex items-center cursor-pointer pl-2 pr-2 border-l mt-1 mb-1;
 }
 
+.lla-text-link {
+  @apply flex items-center cursor-pointer pl-2 pr-2  mt-1 mb-1;
+}
+
 .lla-text-color-drop-icon {
   width: 10px;
   height: 100%;

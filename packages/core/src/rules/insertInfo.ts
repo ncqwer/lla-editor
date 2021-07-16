@@ -5,6 +5,7 @@ export type InsertInfo = {
   title: string;
   keywords: Array<string | ((v: string) => boolean)>;
   description: string;
+  cover?: string;
   category: Array<'basic'>;
   create: (e: Editor) => Element;
 };

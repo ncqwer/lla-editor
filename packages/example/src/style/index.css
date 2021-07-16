@@ -16,6 +16,7 @@
 @import './video.css';
 @import './quote.css';
 @import './text-action-menu.css';
+@import './link.css';
 
 @layer utilities {
   @variants focus,hover {

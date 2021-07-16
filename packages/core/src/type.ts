@@ -47,6 +47,11 @@ export type NextifParams<T extends Func> = (
   ...args: Parameters<T>
 ) => ReturnType<T>;
 
+// export type NextifyWithInstance<T extends Func> = (
+//   next: () => ReturnType<T>,
+//   instance: (...args: Parameters<T>) => ReturnType<T>,
+//   ...args: Parameters<T>
+// ) => ReturnType<T>;
 // lla node type
 
 // type ExtendableTypes = 'Container' | 'Paragraph';
@@ -81,13 +86,14 @@ export interface StyledText extends BaseText {
   bold?: boolean;
   lineThrough?: boolean;
   underline?: boolean;
+  inlineCode?: boolean;
   bgColor?: string;
   txtColor?: string;
 }
 
 export interface CustomOverLayer {
   insert: {
-    open: (path: Path) => void;
+    open: (path: [Path, number]) => void;
     close: () => void;
     up: () => void;
     down: () => void;
@@ -108,10 +114,12 @@ export interface LLABaseEditor {
       entry: NodeEntry<BaseParagraph>,
     ) => void
   >;
-  serialize: (element: Element, editor: Editor) => string;
-  deserialize: (str: string, editor: Editor) => Element | null;
+  serialize: (element: Node, editor: Editor) => any;
+  deserialize: (ast: any, editor: Editor, acc: Node[]) => Node[];
   createMediaBlock: (file: File, editor: Editor) => Element | null;
-  html2md?: (str: string) => string;
+  html2md?: (str: string) => any;
+  txt2md?: (str: string) => any;
+  md2txt?: (obj: any) => string;
   isParagraphable: (element: Element) => boolean;
   isBgColorable: (element: Node) => boolean;
   isTxtColorable: (element: Node) => boolean;
@@ -157,6 +165,8 @@ export const LLAElement = {
 export interface LLAConfig {
   core: {
     html2md?: (v: string) => string;
+    txt2md?: (v: string) => any;
+    md2txt?: (ast: any) => string;
     overlayerId: string;
   };
 }

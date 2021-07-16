@@ -19,6 +19,8 @@ export default {
       title: '引言',
       description: '引言区',
       create: QuoteElement.create,
+      cover:
+        'https://zhaji-public.oss-cn-shanghai.aliyuncs.com/mock/lla/quote.png',
     },
   ],
 };

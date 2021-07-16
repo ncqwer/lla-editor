@@ -42,16 +42,16 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
   )(...args);
 };
 
-const dividerDeReg = /^-+$/;
-export const deserialize: Deserialize = (next, str, editor) => {
-  if (dividerDeReg.test(str)) {
-    return DividerElement.create();
+export const deserialize: Deserialize = (next, ast, editor, acc) => {
+  if (ast.type === 'thematicBreak') {
+    return acc.concat(DividerElement.create());
   }
-
   return next();
 };
 
 export const serialize: Serialize = (next, ele, editor) => {
-  if (DividerElement.is(ele)) return '------------------------';
+  if (DividerElement.is(ele)) {
+    return { type: 'thematicBreak' };
+  }
   return next();
 };

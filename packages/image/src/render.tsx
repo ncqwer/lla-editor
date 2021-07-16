@@ -16,7 +16,12 @@ import {
 } from '@lla-editor/core';
 import { useSpring, animated } from 'react-spring';
 import { ImageElement } from './element';
-import { ReactEditor, useSelected, useSlateStatic } from 'slate-react';
+import {
+  ReactEditor,
+  useReadOnly,
+  useSelected,
+  useSlateStatic,
+} from 'slate-react';
 
 const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
 
@@ -44,6 +49,7 @@ const ResizedImage: React.FC<
   const [imgRemove] = useLens(['image', 'imgRemove']);
   const [styles, api] = useSpring(() => ({ width }));
   const triggerRef = React.useRef<HTMLDivElement>(null);
+  const readonly = useReadOnly();
   React.useEffect((): any => {
     if (ref.current) {
       ref.current.style.cssText = `
@@ -73,30 +79,34 @@ const ResizedImage: React.FC<
         className="lla-image__content"
         onSrcChange={onSrcChange}
       />
-      <div
-        className="lla-image__resizer lla-image__resizer--left"
-        onMouseDown={handleMouseDown(true)}
-        onTouchStart={handleTouchStart(true)}
-      >
-        <div className="lla-image__resizer__handler"></div>
-      </div>
-      <div
-        className="lla-image__resizer lla-image__resizer--right"
-        onMouseDown={handleMouseDown(false)}
-        onTouchStart={handleTouchStart(false)}
-      >
-        <div className="lla-image__resizer__handler"></div>
-      </div>
-      <div
-        ref={triggerRef}
-        className="lla-context-menu-trigger "
-        onClick={(e) => {
-          e.stopPropagation();
-          openContextMenu(() => triggerRef.current);
-        }}
-      >
-        ...
-      </div>
+      {!readonly && (
+        <>
+          <div
+            className="lla-image__resizer lla-image__resizer--left"
+            onMouseDown={handleMouseDown(true)}
+            onTouchStart={handleTouchStart(true)}
+          >
+            <div className="lla-image__resizer__handler"></div>
+          </div>
+          <div
+            className="lla-image__resizer lla-image__resizer--right"
+            onMouseDown={handleMouseDown(false)}
+            onTouchStart={handleTouchStart(false)}
+          >
+            <div className="lla-image__resizer__handler"></div>
+          </div>
+          <div
+            ref={triggerRef}
+            className="lla-context-menu-trigger "
+            onClick={(e) => {
+              e.stopPropagation();
+              openContextMenu(() => triggerRef.current);
+            }}
+          >
+            ...
+          </div>
+        </>
+      )}
     </animated.div>
   );
 
@@ -187,12 +197,13 @@ const LoadingImage: React.FC<{
             onSrcChange(uploadSrc);
           }
         } else {
+          if (src === '') return setImgSrc(errorCover);
           const image = new Image();
           const tmp = yield imgSign(src);
           image.src = tmp;
           yield new Promise((res) => {
             image.onload = res;
-          });
+          }).catch(() => setImgSrc(errorCover));
           setImgSrc(tmp);
         }
       } catch (e) {
@@ -408,12 +419,12 @@ const ImageComponent = ({
   const { src, alt, width } = element;
   const selected = useSelected();
   const editor = useSlateStatic();
-  const ref = React.useRef<HTMLDivElement>(null);
+  const readonly = useReadOnly();
   return (
     <div className="lla-image-wrapper" {...attributes}>
-      {src && (
+      {(src || readonly) && (
         <ResizedImage
-          src={src}
+          src={src || ''}
           alt={alt}
           selected={selected}
           onSrcChange={handleMetaChange('src')}
@@ -425,7 +436,7 @@ const ImageComponent = ({
           // }
         ></ResizedImage>
       )}
-      {!src && (
+      {!src && !readonly && (
         <EmptyImage
           onSrcChange={handleMetaChange('src')}
           selected={selected}
@@ -441,6 +452,7 @@ const ImageComponent = ({
 
   function handleMetaChange<K extends keyof ImageElement>(meta: K) {
     return (v: ImageElement[K]) => {
+      if (readonly) return;
       const path = ReactEditor.findPath(editor, element);
       return Transforms.setNodes(editor, { [meta]: v }, { at: path });
     };

@@ -79,10 +79,16 @@ const withDefault: WithEditor = (editor) => {
       }
     });
     dataTransfer.setData('text/json', JSON.stringify(fragment));
-    dataTransfer.setData(
-      'text/plain',
-      added.map((v) => editor.serialize(v as any, editor)).join('\n'),
-    );
+    if (editor.md2txt) {
+      const tmp = {
+        type: 'root',
+        children: added
+          .map((v) => editor.serialize(v as any, editor))
+          .filter(Boolean),
+      };
+      console.log('tmp=====>', tmp);
+      dataTransfer.setData('text/plain', editor.md2txt(tmp));
+    }
   };
 
   /**
@@ -109,12 +115,16 @@ const withDefault: WithEditor = (editor) => {
           (editor.isParagraphable(n) || editor.isVoid(n)),
       });
       if (!target) return;
-      const mockEditor = {
-        ...editor,
-        children: slateNodes,
-        onChange: () => {},
-        selection: null,
-      };
+      const _onChange = editor.onChange;
+      const _children = editor.children;
+      const _selection = editor.selection;
+      const _op = editor.operations;
+      editor.onChange = () => {};
+      editor.selection = null;
+      editor.children = slateNodes;
+      editor.operations = [];
+      const mockEditor = editor;
+      Editor.normalize(mockEditor, { force: true });
       const added: Element[] = [];
       Array.from(
         Editor.nodes(mockEditor, {
@@ -133,6 +143,10 @@ const withDefault: WithEditor = (editor) => {
           added.push(node);
         }
       });
+      editor.onChange = _onChange;
+      editor.selection = _selection;
+      editor.children = _children;
+      editor.operations = _op;
       // if (Range.isExpanded(selection)) Transforms.delete(editor);
       // if (!editor.selection) return;
       const [e, path] = target;
@@ -214,14 +228,14 @@ const getSlateNodes = (
   if (!result && data['text/html']) {
     (() => {
       try {
-        if (editor.html2md)
-          result = editor
-            .html2md(data['text/html'])
-            .split('\n')
-            // .map((str: string) => str.replace(/ /g, '&nsp,')).replace(/\s/)
-            // .filter(Boolean)
-            .map((str: string) => editor.deserialize(str, editor))
-            .filter(Boolean);
+        if (editor.html2md) {
+          const ast = editor.html2md(data['text/html']);
+          console.log('ast===>', ast);
+          result = ast.children.reduce(
+            (acc: Node[], v: any) => editor.deserialize(v, editor, acc),
+            [],
+          );
+        }
       } catch {
         result = null;
       }
@@ -230,12 +244,14 @@ const getSlateNodes = (
   if (!result && data['text/plain']) {
     (() => {
       try {
-        result = data['text/plain']
-          .split('\n')
-          // .map((str: string) => str.replace(/ /g, '&nsp,')).replace(/\s/)
-          // .filter(Boolean)
-          .map((str: string) => editor.deserialize(str, editor))
-          .filter(Boolean);
+        if (editor.txt2md) {
+          const ast = editor.txt2md(data['text/plain']);
+          console.log('ast===>', ast);
+          result = ast.children.reduce(
+            (acc: Node[], v: any) => editor.deserialize(v, editor, acc),
+            [],
+          );
+        }
       } catch {
         result = null;
       }

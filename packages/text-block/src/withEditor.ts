@@ -47,14 +47,14 @@ export const withEditor = (e: Editor): Editor => {
     return false;
   };
 
-  e.normalizeNode = ([node, path]) => {
+  e.normalizeNode = function ([node, path]) {
     if (LLAElement.is(node) && node.type === 'paragraph') {
-      const parent = Node.parent(e, path);
-      if (!e.isParagraphable(parent))
-        return Transforms.wrapNodes(e, TextBlock.create(e), { at: path });
+      const parent = Node.parent(this, path);
+      if (!this.isParagraphable(parent))
+        return Transforms.wrapNodes(this, TextBlock.create(this), { at: path });
     }
     if (Editor.isEditor(node) && node.children.length === 0) {
-      return Transforms.insertNodes(e, TextBlock.create(e), { at: [0] });
+      return Transforms.insertNodes(this, TextBlock.create(this), { at: [0] });
     }
     return normalizeNode([node, path]);
   };

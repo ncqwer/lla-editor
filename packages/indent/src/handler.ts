@@ -183,6 +183,7 @@ export const handleTab: OnKeyDownAlternative = (next, event, editor) => {
  * @returns
  */
 const handleEnter: OnKeyDownAlternative = (next, event, editor) => {
+  // console.log('indent handleEnter');
   const { selection } = editor;
   if (!selection) return next();
   const result = Editor.above(editor, {
@@ -192,8 +193,12 @@ const handleEnter: OnKeyDownAlternative = (next, event, editor) => {
   });
   if (!result) return next();
   const [node, path] = result;
-  const [, end] = Range.edges(selection);
+  const [start, end] = Range.edges(selection);
   const textEnd = Editor.end(editor, path.concat(0));
+
+  if (Path.relative(start.path, path)[0] !== 0) {
+    return;
+  }
 
   const moveRangeRef = Point.isBefore(end, textEnd)
     ? Editor.rangeRef(editor, { anchor: end, focus: textEnd })
