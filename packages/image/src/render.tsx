@@ -47,9 +47,13 @@ const ResizedImage: React.FC<
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const [imgRemove] = useLens(['image', 'imgRemove']);
+  const [loadingCover] = useLens(['image', 'loadingCover']);
+  const [errorCover] = useLens(['image', 'errorCover']);
   const [styles, api] = useSpring(() => ({ width }));
   const triggerRef = React.useRef<HTMLDivElement>(null);
   const readonly = useReadOnly();
+  const srcRef = React.useRef<string | File>(src);
+  srcRef.current = src;
   React.useEffect((): any => {
     if (ref.current) {
       ref.current.style.cssText = `
@@ -57,7 +61,12 @@ const ResizedImage: React.FC<
       user-select:none;
     `;
     }
-    return () => typeof src === 'string' && imgRemove(src);
+    return () => {
+      typeof srcRef.current === 'string' &&
+        srcRef.current !== errorCover &&
+        srcRef.current !== loadingCover &&
+        imgRemove(srcRef.current);
+    };
   }, []);
   const [handleWidthChangeDebounce] = useThrottle((f: Func, v: number) => {
     onWidthChange(v);
@@ -240,7 +249,9 @@ const EmptyImageMenu: React.FC<{
   alignMethod: (el: HTMLDivElement) => void;
 }> = ({ alignMethod, onClose, onChange }) => {
   const ref = React.useRef<HTMLDivElement>(null);
-  const root = React.useMemo(() => document.getElementById('root'), []);
+
+  const [overLayerId] = useLens(['core', 'overlayerId']);
+  const root = React.useMemo(() => document.getElementById(overLayerId), []);
   const [visible, setVisible] = React.useState(false);
   const [embedSrc, setEmbedSrc] = React.useState<string>('');
   const [imgOpen] = useLens(['image', 'imgOpen']);

@@ -83,9 +83,16 @@ const Audio: React.FC<{
     });
     return task.cancel;
   }, [audioSign, audioUpload, src, errorCover, loadingCover]);
+  const srcRef = React.useRef<string | File>(src);
+  srcRef.current = src;
   React.useEffect(() => {
     return () => {
-      if (typeof src === 'string') audioRemove(src);
+      if (
+        typeof srcRef.current === 'string' &&
+        srcRef.current !== errorCover &&
+        srcRef.current !== loadingCover
+      )
+        audioRemove(srcRef.current);
     };
   }, []);
   const triggerRef = React.useRef<HTMLDivElement>(null);

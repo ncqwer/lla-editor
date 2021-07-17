@@ -84,6 +84,8 @@ const Resizedvideo: React.FC<
     });
     return task.cancel;
   }, [videoSign, videoUpload, src, errorCover, loadingCover]);
+  const srcRef = React.useRef<string | File>(src);
+  srcRef.current = src;
   React.useEffect((): any => {
     if (ref.current) {
       ref.current.style.cssText = `
@@ -91,7 +93,11 @@ const Resizedvideo: React.FC<
       user-select:none;
     `;
     }
-    return () => typeof src === 'string' && videoRemove(src);
+    return () =>
+      typeof srcRef.current === 'string' &&
+      srcRef.current !== errorCover &&
+      srcRef.current !== loadingCover &&
+      videoRemove(srcRef.current);
   }, []);
   const [handleWidthChangeDebounce] = useThrottle((f: Func, v: number) => {
     onWidthChange(v);

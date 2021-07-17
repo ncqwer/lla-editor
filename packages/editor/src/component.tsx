@@ -158,10 +158,11 @@ export const LLAEditor: React.FC<{
   onChange: (v: Descendant[]) => void;
   readOnly?: boolean;
   className?: string;
-}> = ({ value, onChange, className, readOnly }) => {
+}> = ({ value, onChange, className, readOnly, children }) => {
   return (
     <Editor value={value} onChange={onChange}>
       <Editable className={className} readOnly={readOnly}></Editable>
+      {children}
     </Editor>
   );
 };
