@@ -8,6 +8,7 @@ export interface ImageElement extends BaseAtom {
   alt?: string;
   caption?: string;
   width: number;
+  height: number;
 }
 
 export const ImageElement = {
@@ -20,6 +21,7 @@ export const ImageElement = {
       children: [{ text: '' }],
       type: _TYPE_,
       width: 700,
+      height: 300,
     };
   },
 };

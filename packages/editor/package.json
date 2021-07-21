@@ -22,7 +22,8 @@
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "build": "vite build && tsc --emitDeclarationOnly && cp -r src/style dist",
+    "build": "vite build && tsc --emitDeclarationOnly && yarn build:css",
+    "build:css": "cp -r src/style dist && yarn postcss src/style/index.css -o dist/style/notailwindcss.css",
     "prepublish": "rm dist/tsconfig.tsbuildinfo"
   },
   "dependencies": {

@@ -92,7 +92,9 @@ const getHotkey = (str: string) => {
   if (_SHOTKEY_MOCK_ === true) return ({ raw }: any) => raw === str;
   let f = hotKeyMap.get(str);
   if (f) return f;
-  f = isHotkey(str);
+  f = (event) =>
+    isHotkey(str)(event) ||
+    (event.keyCode === 229 && event.key === str.toLowerCase());
   hotKeyMap.set(str, f);
   return f;
 };

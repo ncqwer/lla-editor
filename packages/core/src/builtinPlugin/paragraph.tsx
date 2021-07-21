@@ -113,6 +113,11 @@ const isControlKey = <T extends any[]>(...args: T): T | undefined => {
     return args;
   return undefined;
 };
+// const isMobileSlash = <T extends any[]>(...args: T): T | undefined => {
+//   const event = args[1] as React.KeyboardEvent;
+//   if (event.keyCode === 229 && event.key === 'Slash') return args;
+//   return undefined;
+// };
 type KeyDown = OnKeyDownType<BaseParagraph>;
 
 const handleConvert: KeyDown = (next, event, editor, entry) => {
@@ -198,7 +203,7 @@ const handleShiftEnter: KeyDown = (next, event, editor) => {
 
 const handleKeyDown = groupKeyDown<KeyDown>(
   [shotkey('/'), handleSlash],
-  // [shotkey('/'), handleSlash],
+  // [isMobileSlash, handleSlash],
   [shotkey('backspace'), handleBackspace],
   [shotkey('up'), handleUp],
   [shotkey('ctrl+p'), handleUp],

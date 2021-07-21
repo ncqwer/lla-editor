@@ -138,6 +138,10 @@ const Resizedvideo: React.FC<
               e.stopPropagation();
               openContextMenu(() => triggerRef.current);
             }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              openContextMenu(() => triggerRef.current);
+            }}
           >
             ...
           </div>{' '}
@@ -222,39 +226,39 @@ const Resizedvideo: React.FC<
   }
 };
 
-const Loadingvideo: React.FC<{
-  src: string;
-  alt?: string;
-  className?: string;
-}> = ({ src, alt, className }) => {
-  const [loadingCover] = useLens(['video', 'loadingCover']);
-  const [errorCover] = useLens(['video', 'errorCover']);
-  const [videoSign] = useLens(['video', 'videoSign']);
-  const [videoSrc, setVideoSrc] = React.useState(loadingCover);
-  // const [loading, setIsLoading] = React.useState(false);
+// const Loadingvideo: React.FC<{
+//   src: string;
+//   alt?: string;
+//   className?: string;
+// }> = ({ src, alt, className }) => {
+//   const [loadingCover] = useLens(['video', 'loadingCover']);
+//   const [errorCover] = useLens(['video', 'errorCover']);
+//   const [videoSign] = useLens(['video', 'videoSign']);
+//   const [videoSrc, setVideoSrc] = React.useState(loadingCover);
+//   // const [loading, setIsLoading] = React.useState(false);
 
-  // React.useEffect(() => {
-  //   const task = runWithCancel(function* () {
-  //     try {
-  //       // setIsLoading(true);
-  //       const video = new video();
-  //       const tmp = yield imgSign(src);
-  //       video.src = tmp;
-  //       yield new Promise((res) => {
-  //         video.onload = res;
-  //       });
-  //       setImgSrc(tmp);
-  //     } catch (e) {
-  //       setImgSrc(errorCover);
-  //     } finally {
-  //       // setIsLoading(false);
-  //     }
-  //   });
-  //   return task.cancel;
-  // }, [imgSign, src, errorCover]);
-  return null;
-  // return <img src={imgSrc} alt={alt} className={className} />;
-};
+//   // React.useEffect(() => {
+//   //   const task = runWithCancel(function* () {
+//   //     try {
+//   //       // setIsLoading(true);
+//   //       const video = new video();
+//   //       const tmp = yield imgSign(src);
+//   //       video.src = tmp;
+//   //       yield new Promise((res) => {
+//   //         video.onload = res;
+//   //       });
+//   //       setImgSrc(tmp);
+//   //     } catch (e) {
+//   //       setImgSrc(errorCover);
+//   //     } finally {
+//   //       // setIsLoading(false);
+//   //     }
+//   //   });
+//   //   return task.cancel;
+//   // }, [imgSign, src, errorCover]);
+//   return null;
+//   // return <img src={imgSrc} alt={alt} className={className} />;
+// };
 
 const VideoComponent = ({
   attributes,

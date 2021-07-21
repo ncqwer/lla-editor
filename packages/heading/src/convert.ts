@@ -57,6 +57,7 @@ const handleSpace: OnParagraphConvert = (next, event, editor, [node, path]) => {
 export const onParagraphConvert: OnParagraphConvert = (...args) => {
   return caseMatch<Parameters<OnParagraphConvert>>()<void>(
     [shotkey('space'), handleSpace],
+    [shotkey(' '), handleSpace],
     // [shotkey('】'), handleSquareBrackets_chinese],
     [(...args) => args, (next) => next()],
   )(...args);

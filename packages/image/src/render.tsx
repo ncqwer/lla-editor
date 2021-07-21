@@ -13,6 +13,7 @@ import {
   runWithCancel,
   Func,
   elementRender,
+  LLAOverLayer,
 } from '@lla-editor/core';
 import { useSpring, animated } from 'react-spring';
 import { ImageElement } from './element';
@@ -31,8 +32,10 @@ const ResizedImage: React.FC<
     alt?: string;
     selected?: boolean;
     width: number;
+    height: number;
     openContextMenu: (f: () => HTMLElement | null) => void;
     onWidthChange: (v: number) => void;
+    onHeightChange: (v: number) => void;
     onSrcChange: (v: string) => void;
   }
 > = ({
@@ -40,7 +43,9 @@ const ResizedImage: React.FC<
   alt,
   selected = false,
   width,
+  height = 300,
   onWidthChange,
+  onHeightChange,
   openContextMenu,
   onSrcChange,
   ...others
@@ -49,16 +54,19 @@ const ResizedImage: React.FC<
   const [imgRemove] = useLens(['image', 'imgRemove']);
   const [loadingCover] = useLens(['image', 'loadingCover']);
   const [errorCover] = useLens(['image', 'errorCover']);
-  const [styles, api] = useSpring(() => ({ width }));
+  const [styles, api] = useSpring(() => ({ width, height }));
   const triggerRef = React.useRef<HTMLDivElement>(null);
   const readonly = useReadOnly();
+  const imgRef = React.useRef<HTMLImageElement>(null);
   const srcRef = React.useRef<string | File>(src);
   srcRef.current = src;
   React.useEffect((): any => {
     if (ref.current) {
       ref.current.style.cssText = `
       width: ${width}px;
+      height: ${height}px;
       user-select:none;
+      max-height: fit-content;
     `;
     }
     return () => {
@@ -72,6 +80,10 @@ const ResizedImage: React.FC<
     onWidthChange(v);
     f();
   }, 1000 / 30);
+  const [handleHeightChangeDebounce] = useThrottle((f: Func, v: number) => {
+    onHeightChange(v);
+    f();
+  }, 1000 / 30);
   return (
     <animated.div
       style={styles}
@@ -83,6 +95,7 @@ const ResizedImage: React.FC<
       {...others}
     >
       <LoadingImage
+        ref={imgRef}
         src={src}
         alt={alt}
         className="lla-image__content"
@@ -103,6 +116,13 @@ const ResizedImage: React.FC<
             onTouchStart={handleTouchStart(false)}
           >
             <div className="lla-image__resizer__handler"></div>
+          </div>
+          <div
+            className="lla-image__resizer--bottom"
+            onMouseDown={handleMouseDown__bottom(false)}
+            onTouchStart={handleTouchStart__bottom(false)}
+          >
+            <div className="lla-image__resizer__handler--bottom"></div>
           </div>
           <div
             ref={triggerRef}
@@ -173,59 +193,125 @@ const ResizedImage: React.FC<
     if (v > 1200) return 1200;
     return v;
   }
+
+  function handleMouseDown__bottom(isLeftHandler: boolean) {
+    return (event: React.MouseEvent<HTMLDivElement>) => {
+      let srcY = event.pageY;
+      const changeWidthFunc = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!ref.current) return;
+        const offsetHeight = ref.current.offsetHeight;
+        const k = 0.7;
+        const diffY = isLeftHandler ? e.pageY - srcY : srcY - e.pageY;
+        const height = Math.min(
+          Math.max(offsetHeight - diffY * k, 100),
+          imgRef.current?.offsetHeight || 100,
+        );
+        //   ref.current.style.cssText = `
+        //   width: ${width}px;
+        //   user-select:none;
+        // `;
+        api.start({ height });
+        handleHeightChangeDebounce(() => (srcY = e.pageY), height);
+      };
+      document.addEventListener('mousemove', changeWidthFunc as any);
+      document.addEventListener('mouseup', () =>
+        document.removeEventListener('mousemove', changeWidthFunc as any),
+      );
+    };
+  }
+  function handleTouchStart__bottom(isLeftHandler: boolean) {
+    return (event: React.TouchEvent<HTMLDivElement>) => {
+      let srcY = event.touches[0].pageY;
+      const changeWidthFunc = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (!ref.current) return;
+        const pageY = e.touches[0].pageY;
+        const offsetHeight = ref.current.offsetHeight;
+        const k = 0.7;
+        const diffY = isLeftHandler ? pageY - srcY : srcY - pageY;
+        const height = Math.min(
+          Math.max(offsetHeight - diffY * k, 100),
+          imgRef.current?.offsetHeight || 100,
+        );
+        // console.log(pageY);
+        // console.log(offsetHeight - diffY * k);
+        // console.log(height);
+        //   ref.current.style.cssText = `
+        //   width: ${width}px;
+        //   user-select:none;
+        // `;
+        console.log('hhh');
+        api.start({ height });
+        handleWidthChangeDebounce(() => (srcY = pageY), width);
+      };
+      document.addEventListener('touchmove', changeWidthFunc as any);
+      document.addEventListener('touchend', () =>
+        document.removeEventListener('touchmove', changeWidthFunc as any),
+      );
+    };
+  }
 };
 
-const LoadingImage: React.FC<{
-  src: string | File;
-  alt?: string;
-  className?: string;
-  onSrcChange: (v: string) => void;
-}> = ({ src, alt, className, onSrcChange }) => {
-  const [loadingCover] = useLens(['image', 'loadingCover']);
-  const [errorCover] = useLens(['image', 'errorCover']);
-  const [imgSign] = useLens(['image', 'imgSign']);
-  const [imgUpload] = useLens(['image', 'imgUpload']);
-  const [imgSrc, setImgSrc] = React.useState(loadingCover);
-  // const [loading, setIsLoading] = React.useState(false);
-  React.useEffect(() => {
-    const task = runWithCancel(function* () {
-      try {
-        // setIsLoading(true);
-        if (typeof src !== 'string') {
-          const reader = new FileReader();
-          new Promise((res) => {
-            reader.onload = (event) => {
-              if (event.target) return res(event.target.result);
-              return res(null);
-            };
-          }).then((dataURL: any) => dataURL && setImgSrc(dataURL));
-          reader.readAsDataURL(src);
-          if (imgUpload) {
-            yield new Promise((res) => setTimeout(res, 1000));
-            const uploadSrc = yield imgUpload(src);
-            onSrcChange(uploadSrc);
+const LoadingImage = React.forwardRef(
+  (
+    {
+      src,
+      alt,
+      className,
+      onSrcChange,
+    }: {
+      src: string | File;
+      alt?: string;
+      className?: string;
+      onSrcChange: (v: string) => void;
+    },
+    ref: any,
+  ) => {
+    const [loadingCover] = useLens(['image', 'loadingCover']);
+    const [errorCover] = useLens(['image', 'errorCover']);
+    const [imgSign] = useLens(['image', 'imgSign']);
+    const [imgUpload] = useLens(['image', 'imgUpload']);
+    const [imgSrc, setImgSrc] = React.useState(loadingCover);
+    // const [loading, setIsLoading] = React.useState(false);
+    React.useEffect(() => {
+      const task = runWithCancel(function* () {
+        try {
+          // setIsLoading(true);
+          if (typeof src !== 'string') {
+            const reader = new FileReader();
+            new Promise((res) => {
+              reader.onload = (event) => {
+                if (event.target) return res(event.target.result);
+                return res(null);
+              };
+            }).then((dataURL: any) => dataURL && setImgSrc(dataURL));
+            reader.readAsDataURL(src);
+            if (imgUpload) {
+              yield new Promise((res) => setTimeout(res, 1000));
+              const uploadSrc = yield imgUpload(src);
+              onSrcChange(uploadSrc);
+            }
+          } else {
+            if (src === '') return setImgSrc(errorCover);
+            const image = new Image();
+            const tmp = yield imgSign(src);
+            image.src = tmp;
+            yield new Promise((res) => {
+              image.onload = res;
+            }).catch(() => setImgSrc(errorCover));
+            setImgSrc(tmp);
           }
-        } else {
-          if (src === '') return setImgSrc(errorCover);
-          const image = new Image();
-          const tmp = yield imgSign(src);
-          image.src = tmp;
-          yield new Promise((res) => {
-            image.onload = res;
-          }).catch(() => setImgSrc(errorCover));
-          setImgSrc(tmp);
+        } catch (e) {
+          setImgSrc(errorCover);
+        } finally {
+          // setIsLoading(false);
         }
-      } catch (e) {
-        setImgSrc(errorCover);
-      } finally {
-        // setIsLoading(false);
-      }
-    });
-    return task.cancel;
-  }, [imgSign, imgUpload, src, errorCover, loadingCover]);
+      });
+      return task.cancel;
+    }, [imgSign, imgUpload, src, errorCover, loadingCover]);
 
-  return <img src={imgSrc} alt={alt} className={className} />;
-};
+    return <img src={imgSrc} alt={alt} className={className} ref={ref} />;
+  },
+);
 
 const MenuItem: React.FC<{
   value: string;
@@ -243,63 +329,48 @@ const MenuItem: React.FC<{
   );
 };
 
+const alignOpts = { points: ['tc', 'bc'] };
 const EmptyImageMenu: React.FC<{
   onChange: (v: string | File) => void;
-  onClose: () => void;
-  alignMethod: (el: HTMLDivElement) => void;
-}> = ({ alignMethod, onClose, onChange }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-
-  const [overLayerId] = useLens(['core', 'overlayerId']);
-  const root = React.useMemo(() => document.getElementById(overLayerId), []);
-  const [visible, setVisible] = React.useState(false);
+  // onClose: () => void;
+  // alignMethod: (el: HTMLDivElement) => void;
+}> = ({ onChange }) => {
   const [embedSrc, setEmbedSrc] = React.useState<string>('');
   const [imgOpen] = useLens(['image', 'imgOpen']);
-  React.useEffect(() => {
-    if (ref.current) alignMethod(ref.current);
-    setVisible(true);
-  }, []);
   const [activeItem, setActiveItem] = React.useState('upload');
-  return createPortal(
+  return (
     <div
-      className="lla-overlay w-screen h-screen z-50 bg-transparent fixed top-0 left-0"
-      onClick={() => onClose()}
+      className={`lla-media__popmenu`}
+      onClick={(event) => event.stopPropagation()}
     >
-      <div
-        ref={ref}
-        className={`lla-image__popmenu ${visible ? 'visible' : 'invisible'}`}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="lla-image__popmenu__item-group ">
-          <MenuItem
-            value="upload"
-            label="本地图片"
-            onAcitve={setActiveItem}
-            active={activeItem === 'upload'}
-          ></MenuItem>
-          <MenuItem
-            value="embed"
-            label="在线图片"
-            onAcitve={setActiveItem}
-            active={activeItem === 'embed'}
-          ></MenuItem>
-        </div>
-        <div
-          className={`lla-image__popmenu__content lla-image__popmenu__content--${activeItem}`}
-        >
-          {activeItem === 'upload' && renderUpload()}
-          {activeItem === 'embed' && renderEmbed()}
-        </div>
+      <div className="lla-media__popmenu__item-group ">
+        <MenuItem
+          value="upload"
+          label="本地图片"
+          onAcitve={setActiveItem}
+          active={activeItem === 'upload'}
+        ></MenuItem>
+        <MenuItem
+          value="embed"
+          label="在线图片"
+          onAcitve={setActiveItem}
+          active={activeItem === 'embed'}
+        ></MenuItem>
       </div>
-    </div>,
-    root as any,
+      <div
+        className={`lla-media__popmenu__content lla-media__popmenu__content--${activeItem}`}
+      >
+        {activeItem === 'upload' && renderUpload()}
+        {activeItem === 'embed' && renderEmbed()}
+      </div>
+    </div>
   );
 
   function renderUpload() {
     return (
       <>
         <div
-          className="lla-image__open"
+          className="lla-media__open"
           onClick={async () => {
             try {
               const src = await imgOpen();
@@ -311,26 +382,7 @@ const EmptyImageMenu: React.FC<{
         >
           选择文件
         </div>
-        <div className="lla-image__open-helper-message">{`图片不能超过5MB`}</div>
-        {/* <input
-          type="file"
-          className="hidden"
-          ref={inputRef}
-          onChange={async (e) => {
-            const file = e.target?.files?.[0];
-            if (!file) return;
-            const reader = new FileReader();
-            const dataURL: string | null = await new Promise((res) => {
-              reader.onload = (event) => {
-                if (event.target) return res(event.target.result as string);
-                return res(null);
-              };
-              reader.readAsDataURL(file);
-            });
-            dataURL && onChange(dataURL);
-          }}
-          accept=".jpeg,.jpg,.png"
-        /> */}
+        <div className="lla-media__open-helper-message">{`图片不能超过5MB`}</div>
       </>
     );
   }
@@ -343,13 +395,13 @@ const EmptyImageMenu: React.FC<{
             autoFocus
             value={embedSrc}
             type="text"
-            className="lla-image__embed-input"
+            className="lla-media__embed-input"
             placeholder="添加图片链接"
             onChange={(e) => setEmbedSrc(e.target.value)}
           />
           {embedSrc && (
             <div
-              className="lla-image__embed-input__clear"
+              className="lla-media__embed-input__clear"
               onClick={() => setEmbedSrc('')}
             >
               <svg viewBox="0 0 30 30">
@@ -359,12 +411,12 @@ const EmptyImageMenu: React.FC<{
           )}
         </div>
         <div
-          className="lla-image__embed-submit"
+          className="lla-media__embed-submit"
           onClick={() => embedSrc && onChange(embedSrc)}
         >
           添加图片
         </div>
-        <div className="lla-image__embed-helper-message">支持任意外链图片</div>
+        <div className="lla-media__embed-helper-message">支持任意外链图片</div>
       </>
     );
   }
@@ -388,6 +440,7 @@ const EmptyImage: React.FC<
         }`}
         ref={ref}
         onClick={() => setIsOpen(true)}
+        onTouchStart={() => setIsOpen(true)}
         contentEditable={false}
         {...others}
       >
@@ -403,23 +456,29 @@ const EmptyImage: React.FC<
             e.stopPropagation();
             openContextMenu(() => triggerRef.current);
           }}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            openContextMenu(() => triggerRef.current);
+          }}
         >
           ...
         </div>
       </div>
       {isOpen && (
-        <EmptyImageMenu
+        <LLAOverLayer
+          alignOpts={alignOpts}
+          targetGet={() => ref.current}
           onClose={() => setIsOpen(false)}
-          alignMethod={handleAlign}
-          onChange={onSrcChange}
-        ></EmptyImageMenu>
+        >
+          <EmptyImageMenu onChange={onSrcChange}></EmptyImageMenu>
+        </LLAOverLayer>
       )}
     </>
   );
 
-  function handleAlign(source: HTMLDivElement) {
-    if (ref.current) domAlign(source, ref.current, { points: ['tc', 'bc'] });
-  }
+  // function handleAlign(source: HTMLDivElement) {
+  //   if (ref.current) domAlign(source, ref.current);
+  // }
 };
 
 const ImageComponent = ({
@@ -427,7 +486,7 @@ const ImageComponent = ({
   children,
   element,
 }: ExtendRenderElementProps<ImageElement>) => {
-  const { src, alt, width } = element;
+  const { src, alt, width, height } = element;
   const selected = useSelected();
   const editor = useSlateStatic();
   const readonly = useReadOnly();
@@ -440,7 +499,9 @@ const ImageComponent = ({
           selected={selected}
           onSrcChange={handleMetaChange('src')}
           width={width}
+          height={height}
           onWidthChange={handleMetaChange('width')}
+          onHeightChange={handleMetaChange('height')}
           openContextMenu={openContenxtMenu}
           // onMouseOver={() =>
           //   console.log(ReactEditor.toDOMNode(editor, element))

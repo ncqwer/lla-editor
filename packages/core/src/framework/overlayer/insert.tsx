@@ -329,7 +329,12 @@ const InsertPannel = React.forwardRef(
     // console.log('search', items);
 
     return (
-      <div className="lla-insert" {...others}>
+      <div
+        className="lla-insert"
+        {...others}
+        onMouseDown={(e) => e.preventDefault()}
+        // onTouchStart={(e) => e.preventDefault()}
+      >
         {totalLength === 0 && <div>没有对应结果</div>}
         {insertItems.length !== 0 && (
           <div className="lla-insert__group">
@@ -422,25 +427,45 @@ const InsertPannel = React.forwardRef(
           );
         });
       }
-      //将当前转换
-      return Editor.withoutNormalizing(editor, () => {
-        Transforms.delete(editor, {
-          reverse: true,
-          distance: search.length + 1,
+      const newBlock = create(editor);
+      if (editor.isParagraphable(newBlock)) {
+        //将当前转换
+        return Editor.withoutNormalizing(editor, () => {
+          Transforms.delete(editor, {
+            reverse: true,
+            distance: search.length + 1,
+          });
+          Transforms.wrapNodes(
+            editor,
+            Object.assign(
+              newBlock,
+              (parent as any).bgColor && { bgColor: (parent as any).bgColor },
+              (parent as any).txtColor && {
+                txtColor: (parent as any).txtColor,
+              },
+            ),
+            {
+              at: parentPath,
+            },
+          );
+          Transforms.unwrapNodes(editor, { at: parentPath.concat(0) });
         });
-        Transforms.wrapNodes(
-          editor,
-          Object.assign(
-            create(editor),
-            (parent as any).bgColor && { bgColor: (parent as any).bgColor },
-            (parent as any).txtColor && { txtColor: (parent as any).txtColor },
-          ),
-          {
-            at: parentPath,
-          },
-        );
-        Transforms.unwrapNodes(editor, { at: parentPath.concat(0) });
-      });
+      } else {
+        return Editor.withoutNormalizing(editor, () => {
+          Transforms.delete(editor, {
+            reverse: true,
+            distance: search.length + 1,
+          });
+          Transforms.insertNodes(editor, newBlock, {
+            at: Path.next(parentPath),
+          });
+          Transforms.select(
+            editor,
+            Editor.start(editor, Path.next(parentPath)),
+          );
+        });
+      }
+
       // return Editor.withoutNormalizing(editor, () => {
       //   Transforms.removeNodes(editor, { at: parentPath });
       //   Transforms.insertNodes(editor, create(editor), { at: parentPath });

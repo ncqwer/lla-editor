@@ -143,6 +143,7 @@ export const EmptyMedia: React.FC<
         }`}
         ref={ref}
         onClick={() => setIsOpen(true)}
+        onTouchStart={() => setIsOpen(true)}
         contentEditable={false}
         {...others}
       >
@@ -154,6 +155,10 @@ export const EmptyMedia: React.FC<
           ref={triggerRef}
           className="lla-context-menu-trigger"
           onClick={(e) => {
+            e.stopPropagation();
+            openContextMenu(() => triggerRef.current);
+          }}
+          onTouchStart={(e) => {
             e.stopPropagation();
             openContextMenu(() => triggerRef.current);
           }}

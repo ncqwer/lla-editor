@@ -522,6 +522,7 @@ const EmptyAudio: React.FC<
         }`}
         ref={ref}
         onClick={() => setIsOpen(true)}
+        onTouchStart={() => setIsOpen(true)}
         contentEditable={false}
         {...others}
       >
@@ -534,6 +535,10 @@ const EmptyAudio: React.FC<
           ref={triggerRef}
           className="lla-context-menu-trigger"
           onClick={(e) => {
+            e.stopPropagation();
+            openContextMenu(() => triggerRef.current);
+          }}
+          onTouchStart={(e) => {
             e.stopPropagation();
             openContextMenu(() => triggerRef.current);
           }}
