@@ -13,7 +13,8 @@
 }
 
 .lla-list-item--task .lla-list-item__leading__content {
-  @apply form-checkbox leading-6 focus:no-box-shadow cursor-pointer;
+  @apply form-checkbox leading-6  cursor-pointer;
+  box-shadow: none;
 }
 .lla-list-item__content {
   @apply flex-grow;
