@@ -27,6 +27,7 @@
   "dependencies": {
     "@lla-editor/audio": "^0.0.8",
     "@lla-editor/callout": "^0.0.7",
+    "@lla-editor/code": "^1.0.0",
     "@lla-editor/core": "^0.0.7",
     "@lla-editor/custom-void": "^0.0.4",
     "@lla-editor/divider": "^0.0.7",

@@ -20,12 +20,14 @@ import AudioImpl from '@lla-editor/audio';
 import VideoImpl from '@lla-editor/video';
 import QuoteImpl from '@lla-editor/quote';
 import LinkImpl from '@lla-editor/link';
+import CodeImpl from '@Lla-editor/code';
 
 export const availablePlugins = [
   TextBlockImpl,
   IndentImpl,
   ListImpl,
   HeadingImpl,
+  CodeImpl,
   ImageImpl,
   VideoImpl,
   AudioImpl,
@@ -166,6 +168,8 @@ export const LLAEditor: React.FC<{
     </Editor>
   );
 };
+
+export { Editor as RawEditor, Editable as RawEditable };
 export const createInitialValue: (intialValue?: string) => Descendant[] = (
   initialValue = '',
 ) => [

@@ -144,7 +144,7 @@ const Resizedvideo: React.FC<
             }}
           >
             ...
-          </div>{' '}
+          </div>
         </>
       )}
     </animated.div>

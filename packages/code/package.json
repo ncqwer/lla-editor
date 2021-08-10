@@ -1,0 +1,44 @@
+{
+  "name": "@lla-editor/code",
+  "version": "1.0.0",
+  "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
+  "keywords": [],
+  "author": "“ncqwer” <“18694039767@163.com”>",
+  "license": "MIT",
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/src/index.d.ts",
+  "source": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "prepublish": "rm dist/tsconfig.tsbuildinfo"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0",
+    "slate": ">=0.60.0",
+    "slate-history": ">=0.60.0",
+    "slate-react": ">=0.60.0"
+  },
+  "dependencies": {
+    "@lla-editor/core": "^0.0.7",
+    "@lla-editor/indent": "^0.0.7",
+    "detect-indent": "^6.1.0",
+    "prismjs": "^1.24.1"
+  },
+  "devDependencies": {
+    "@types/prismjs": "^1.16.6"
+  }
+}

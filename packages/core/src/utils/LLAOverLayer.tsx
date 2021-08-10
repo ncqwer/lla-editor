@@ -1,6 +1,9 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import domAlign from 'dom-align';
+import { ConfigHelers } from '../framework';
+
+const { useLens } = ConfigHelers;
 
 /**
  * @example
@@ -22,7 +25,11 @@ export const LLAOverLayer: React.FC<{
   targetGet: () => HTMLElement | null;
   alignOpts: any;
 }> = ({ onClose, targetGet, children, alignOpts }) => {
-  const root = React.useMemo(() => document.getElementById('root'), []);
+  const [overlayterId] = useLens(['core', 'overlayerId']);
+  const root = React.useMemo(
+    () => document.getElementById(overlayterId),
+    [overlayterId],
+  );
   const [visible, setVisible] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {

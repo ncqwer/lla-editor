@@ -27,6 +27,7 @@ import AudioImpl from '@lla-editor/audio';
 import VideoImpl from '@lla-editor/video';
 import QuoteImpl from '@lla-editor/quote';
 import LinkImpl from '@lla-editor/link';
+import CodeImpl from '@lla-editor/code';
 import Slider from 'rc-slider';
 import copy from 'copy-to-clipboard';
 import { Example, LLAEditor } from '@lla-editor/editor';
@@ -43,7 +44,7 @@ const processor = unified().use(parse).use(rehype2remark);
 const txtprocessor = unified().use(remarkParse);
 const mdprocessor = unified().use(stringify, {
   bullet: '*',
-  fence: '~',
+  fence: '`',
   fences: true,
   incrementListMarker: false,
 });
@@ -51,6 +52,7 @@ const mdprocessor = unified().use(stringify, {
 const availablePlugins = [
   TextBlockImpl,
   IndentImpl,
+  CodeImpl,
   ListImpl,
   HeadingImpl,
   ImageImpl,
@@ -243,6 +245,143 @@ const SubPage = () => {
   );
 };
 
+const CodeLineElement = () => {
+  return (
+    <div className={`lla-code-line`}>
+      <span>
+        {
+          'const compose = (...funcs) => funcs.reduce((acc,func)=>(...args)=>acc(func(...args)))'
+        }
+      </span>
+    </div>
+  );
+};
+
+const availableLanguage = Object.entries({
+  c: ['c'],
+  py: ['python', 'py'],
+  java: ['java'],
+  cpp: ['cpp', 'c++'],
+  'c#': ['csharp', 'cs', 'dotnet'],
+  vb: ['visual-basic', 'vb', 'vba'],
+  jsx: ['javascript', 'js', 'jsx'],
+  tsx: ['typescript', 'ts', 'tsx'],
+  php: ['php'],
+  wasm: ['wasm'],
+  sql: ['sql'],
+  markup: ['markup'],
+  html: ['html', 'svg'],
+  hs: ['haskell', 'hs'],
+  css: ['css'],
+}).reduce(
+  (acc, [k, v]) => ({
+    ...acc,
+    [v[0] as string]: {
+      label: k,
+      test: (str: string) => v.some((alias) => alias.startsWith(str)),
+    },
+  }),
+  {} as Record<string, { label: string; test: (str: string) => boolean }>,
+);
+
+const alignOpts = { points: ['tl', 'bl'] };
+const LanguageSelector = () => {
+  const [language, onLanguageChange] = React.useState('java');
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [search, setSearch] = React.useState('');
+  const getSearchResult = () => {
+    if (!search) return Object.entries(availableLanguage);
+    return Object.entries(availableLanguage).filter(([_, { test }]) =>
+      test(search),
+    );
+  };
+  React.useEffect(() => {
+    getSearchResult();
+    setTimeout(() => setIsOpen(true), 200);
+  }, []);
+  return (
+    <>
+      <div
+        ref={ref}
+        className="lla-code-language"
+        contentEditable={false}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(true);
+        }}
+        onTouchStart={(e) => {
+          e.stopPropagation();
+          setIsOpen(true);
+        }}
+      >
+        {availableLanguage[language].label}
+        <svg viewBox="0 0 30 30">
+          <polygon points="15,17.4 4.8,7 2,9.8 15,23 28,9.8 25.2,7 "></polygon>
+        </svg>
+      </div>
+      {isOpen && (
+        <LLAOverLayer
+          onClose={() => setIsOpen(false)}
+          targetGet={() => ref.current}
+          alignOpts={alignOpts}
+        >
+          <div className="lla-code-language__menu">
+            <div className="lla-code-language__search">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <div className="lla-code-language__item-group">
+              {renderLanguage()}
+            </div>
+          </div>
+        </LLAOverLayer>
+      )}
+    </>
+  );
+
+  function renderLanguage() {
+    return (
+      <div>
+        {getSearchResult()?.map(([type]) => (
+          <div
+            key={type}
+            className="lla-code-language__item"
+            onClick={() => {
+              onLanguageChange(type);
+              setIsOpen(false);
+            }}
+            onTouchStart={() => {
+              onLanguageChange(type);
+              setIsOpen(false);
+            }}
+          >
+            {type}
+          </div>
+        ))}
+      </div>
+    );
+  }
+};
+
+const CodeElement = () => {
+  return (
+    <div className={`lla-code-block`}>
+      <LanguageSelector></LanguageSelector>
+      <div className={`lla-code-action-group`}></div>
+      <pre className={`code language-javascript`}>
+        <code>
+          <CodeLineElement></CodeLineElement>
+          <CodeLineElement></CodeLineElement>
+        </code>
+      </pre>
+    </div>
+  );
+};
+
 const AEditor = () => {
   const [value, setValue] = useState<Descendant[]>(initialValue());
   const [v, setV] = useState(1080);
@@ -255,6 +394,7 @@ const AEditor = () => {
         onChange={setValue}
         readOnly={readOnly}
       ></LLAEditor>
+      {/* <CodeElement></CodeElement> */}
       <div className="lla-divider"></div>
       <button
         className="p-4 rounded border active:bg-gray-200 hover:bg-gray-100"
@@ -277,32 +417,9 @@ const AEditor = () => {
 };
 const initialValue: () => Descendant[] = () => [
   {
-    children: [
-      {
-        type: 'text-block',
-        children: [{ type: 'paragraph', children: [{ text: '' }] }],
-      },
-    ],
-    type: 'audio',
-    width: 700,
-  },
-  {
-    children: [
-      {
-        children: [{ type: 'paragraph', children: [{ text: '' }] }],
-        type: 'text-block',
-      },
-    ],
-    type: 'video',
-    width: 700,
-  },
-  {
-    children: [{ type: 'paragraph', children: [{ text: 'asdfasdfsadf' }] }],
-    type: 'text-block',
-  },
-  {
-    children: [{ type: 'paragraph', children: [{ text: '' }] }],
-    type: 'text-block',
+    children: [{ children: [{ text: 'cosnt ' }], type: 'codeline' }],
+    language: 'javascript',
+    type: 'codeblock',
   },
 ];
 

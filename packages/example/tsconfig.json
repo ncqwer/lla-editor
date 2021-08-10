@@ -18,6 +18,7 @@
     {"path":"../quote"},
     {"path":"../editor"},
     {"path":"../custom-void"},
-    {"path":"../link"}
+    {"path":"../link"},
+    {"path":"../code"}
   ]
 }

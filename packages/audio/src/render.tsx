@@ -169,7 +169,6 @@ const Audio: React.FC<{
               readOnly={readOnly}
               type="text"
               className={`lla-audio__title`}
-              contentEditable={true}
               placeholder={readOnly ? '音乐载入出错' : '请输入音频名称'}
               value={title}
               onChange={(e) => setTitle(e.target.value)}

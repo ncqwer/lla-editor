@@ -1,5 +1,5 @@
 import React from 'react';
-import { Editor, Transforms } from 'slate';
+import { Editor, Transforms, Range, NodeEntry } from 'slate';
 import { Editable as E, ReactEditor, useSlateStatic } from 'slate-react';
 import { useEditorRuntime } from '.';
 import { nextifyFlow } from '../rules';
@@ -17,6 +17,7 @@ export const Editable = ({
   const {
     renderElement,
     renderLeaf,
+    decorate,
     onKeyDownResponseZone,
     onKeyDownAlternative,
   } = useEditorRuntime();
@@ -44,6 +45,10 @@ export const Editable = ({
     },
     [onKeyDownResponseZone, editor],
   );
+  const handleDecorate = React.useCallback(
+    (entry: NodeEntry): Range[] => decorate(() => [], entry),
+    [decorate],
+  );
 
   return (
     <div className={`lla-editor ${className || ''}`}>
@@ -52,6 +57,7 @@ export const Editable = ({
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         onKeyDown={handleKeyDown}
+        decorate={handleDecorate}
         readOnly={readOnly}
       ></E>
       {!readOnly && (

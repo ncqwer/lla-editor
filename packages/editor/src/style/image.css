@@ -166,7 +166,7 @@
 
 .lla-image__open {
   @apply flex items-center justify-center text-sm align-middle bg-blue-400 hover:bg-blue-500 active:bg-blue-600 rounded text-center text-white flex-grow mr-28 ml-28 cursor-pointer;
-  width: stretch;
+  width: -webkit-fill-available;
   line-height: 2;
   font-weight: 500;
 }
@@ -176,7 +176,7 @@
 
 .lla-image__embed-input {
   @apply text-sm form-input block p-1 leading-5 mr-4 ml-4 rounded-sm bg-gray-100 border-gray-300;
-  width: stretch;
+  width: -webkit-fill-available;
 }
 
 .lla-image__embed-input:active,
@@ -187,7 +187,7 @@
 
 .lla-image__embed-submit {
   @apply flex items-center justify-center  text-sm bg-blue-400 hover:bg-blue-500 active:bg-blue-600 rounded text-center text-white flex-grow mr-28 ml-28 cursor-pointer mt-3;
-  width: stretch;
+  width: -webkit-fill-available;
   line-height: 2;
   font-weight: 500;
 }

@@ -9,6 +9,7 @@ import {
   NodeEntry,
   Path,
   BaseText,
+  BaseRange,
 } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';
@@ -81,6 +82,8 @@ export interface BaseParagraph extends BaseElement {
   type: string;
 }
 
+export interface CustomRange {}
+
 export interface StyledText extends BaseText {
   italic?: boolean;
   bold?: boolean;
@@ -89,6 +92,10 @@ export interface StyledText extends BaseText {
   inlineCode?: boolean;
   bgColor?: string;
   txtColor?: string;
+}
+
+export interface CustomText {
+  StyledText: StyledText;
 }
 
 export interface CustomOverLayer {
@@ -150,11 +157,13 @@ export interface CustomAtom {
 export type LLAContainer = ValueTypeForRecord<CustomContainer>;
 
 export type LLAParagraph = ValueTypeForRecord<CustomParagraph>;
+export type LLARange = ValueTypeForRecord<CustomRange>;
 export type LLAAtom = ValueTypeForRecord<CustomAtom>;
 
 export type LLAEditor = UnionToIntersection<ValueTypeForRecord<CustomEditor>>;
 
 export type LLAElement = LLAContainer | LLAParagraph | LLAAtom;
+export type LLAText = ValueTypeForRecord<CustomText>;
 
 export const LLAElement = {
   is(node: Node): node is LLAElement {
@@ -175,6 +184,7 @@ declare module 'slate' {
   interface CustomTypes {
     Element: LLAElement | BaseElement;
     Editor: LLAEditor;
-    Text: StyledText;
+    Text: LLAText;
+    Range: LLARange | BaseRange;
   }
 }

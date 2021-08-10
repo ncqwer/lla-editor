@@ -1,6 +1,7 @@
 import {
   caseMatch,
   groupKeyDown,
+  LLAElement,
   OnKeyDownAlternative,
   OnKeyDownResponseZone,
   OnKeyDownType,
@@ -50,9 +51,16 @@ const handleBackspace_a: OnKeyDownAlternative = (next, event, editor) => {
   const previousPoint = Editor.before(editor, start);
   if (!previousPoint) return next();
   let path = previousPoint.path.slice(0, -1);
+  // let [entry] = Editor.levels(editor, {
+  //   at: previousPoint.path,
+  //   match: (n) =>
+  //     Editor.isEditor(n) || (LLAElement.is(n) && editor.isParagraphable(n)),
+  //   reverse: true,
+  // });
+  // let [element, path] = entry!;
   let element = Node.get(editor, path);
   let flag = false;
-  while (Editor.isVoid(editor, element) && path[path.length - 1] > 0) {
+  while (editor.isVoid(element as LLAElement) && path[path.length - 1] > 0) {
     flag = true;
     path = Path.previous(path);
     element = Node.get(editor, path);

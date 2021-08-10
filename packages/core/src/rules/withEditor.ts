@@ -37,6 +37,7 @@ const withDefault: WithEditor = (editor) => {
   };
 
   editor.isParagraphable = (element: Element) => {
+    if (editor.isVoid(element)) return false;
     if (isParagraphable) return isParagraphable(element);
     return false;
   };
@@ -65,7 +66,9 @@ const withDefault: WithEditor = (editor) => {
       Editor.nodes(mockEditor, {
         at: [],
         match: (n): n is Element =>
-          Paragraph.is(n) || mockEditor.isVoid(n as any),
+          Paragraph.is(n) ||
+          mockEditor.isVoid(n as any) ||
+          (n as any).type === 'codeblock',
       }),
     ).forEach(([node, path]) => {
       if (Paragraph.is(node)) {
@@ -130,7 +133,9 @@ const withDefault: WithEditor = (editor) => {
         Editor.nodes(mockEditor, {
           at: [],
           match: (n): n is Element =>
-            Paragraph.is(n) || mockEditor.isVoid(n as any),
+            Paragraph.is(n) ||
+            mockEditor.isVoid(n as any) ||
+            (n as any).type === 'codeblock',
         }),
       ).forEach(([node, path]) => {
         if (Paragraph.is(node)) {
@@ -150,6 +155,7 @@ const withDefault: WithEditor = (editor) => {
       // if (Range.isExpanded(selection)) Transforms.delete(editor);
       // if (!editor.selection) return;
       const [e, path] = target;
+      if (added.length === 0) return;
       const [head, ...tail] = added;
       Editor.withoutNormalizing(editor, () => {
         if (!mockEditor.isVoid(head)) {
@@ -198,17 +204,7 @@ const getSlateNodes = (
 ): Element[] => {
   const files = Array.from(dataTransfer.files);
   let result = null;
-  if (!result && files.length > 0) {
-    //媒体文件和文字不支持同时粘贴
-    try {
-      result = files
-        .map((file) => editor.createMediaBlock(file, editor))
-        .filter(Boolean);
-      if (result.length === 0) result = null;
-    } catch {
-      result = null;
-    }
-  }
+
   const data = dataTransfer.types.reduce(
     (acc, type) => ({ ...acc, [type]: dataTransfer.getData(type) }),
     {},
@@ -240,6 +236,17 @@ const getSlateNodes = (
         result = null;
       }
     })();
+  }
+  if (!result && files.length > 0) {
+    //媒体文件和文字不支持同时粘贴
+    try {
+      result = files
+        .map((file) => editor.createMediaBlock(file, editor))
+        .filter(Boolean);
+      if (result.length === 0) result = null;
+    } catch {
+      result = null;
+    }
   }
   if (!result && data['text/plain']) {
     (() => {

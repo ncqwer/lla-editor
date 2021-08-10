@@ -30,7 +30,8 @@ export const Paragraph = {
       !!text.lineThrough ||
       !!text.bgColor ||
       !!text.underline ||
-      !!text.txtColor),
+      !!text.txtColor ||
+      !!text.inlineCode),
 };
 
 export const PlaceholderContext =
@@ -46,6 +47,11 @@ const render = [
       const selected = useSelected();
       const Tag = editor.isInline(element) ? 'span' : 'p';
       const text = element.children[0] as Text;
+      React.useEffect(() => {
+        if (attributes.ref.current && selected) {
+          attributes.ref.current.scrollIntoViewIfNeeded(false);
+        }
+      }, [selected]);
       const placeholder = React.useContext(PlaceholderContext);
       if (text.text.length === 0 && element.children.length === 1) {
         children = (

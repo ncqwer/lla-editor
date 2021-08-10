@@ -33,7 +33,7 @@
 
 .lla-link-input {
   @apply text-sm p-1 ml-4 mr-4 form-input block  leading-5  rounded-sm bg-gray-100 border-gray-300;
-  width: stretch;
+  width: -webkit-fill-available;
 }
 
 .lla-link-goto {

@@ -12,6 +12,7 @@ const initStatus = {
   italic: false,
   lineThrough: false,
   underline: false,
+  inlineCode: false,
   txtColor: '',
   bgColor: '',
   hasLink: false,
@@ -191,6 +192,14 @@ const TextStyleGroup = () => {
       >
         S
       </div>
+      <div
+        className={`lla-text-style-item lla-text-style-item--code${
+          activeMap.inlineCode ? ' active' : ''
+        }`}
+        onClick={handleClick('inlineCode')}
+      >
+        C
+      </div>
     </div>
   );
 
@@ -364,6 +373,7 @@ export const TextActionMenu = () => {
       italic: isStyleActive(texts, 'italic'),
       lineThrough: isStyleActive(texts, 'lineThrough'),
       underline: isStyleActive(texts, 'underline'),
+      inlineCode: isStyleActive(texts, 'inlineCode'),
       bgColor: getColor(texts, 'bgColor'),
       txtColor: getColor(texts, 'txtColor'),
       hasLink: !!link,
