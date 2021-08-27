@@ -1,0 +1,43 @@
+.lla-comment__action-group {
+  @apply flex items-center text-xs text-gray-500;
+}
+
+.lla-comment__like-action {
+  @apply flex items-center;
+}
+
+.lla-comment__createdAt {
+  @apply mr-4 lg:mr-8;
+}
+
+.lla-comment__like-action {
+  @apply hover:text-blue-400 cursor-pointer mr-4 lg:mr-8 flex items-center;
+}
+
+.lla-comment__like-action__count {
+  @apply flex items-center;
+}
+
+.lla-comment__like-action__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  vertical-align: middle;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+.lla-comment__like-action--active {
+  @apply text-blue-400 hover:text-blue-200;
+}
+
+.lla-comment__reply-action__icon svg {
+  @apply lg:hidden cursor-pointer hover:text-blue-400;
+  width: 1.25rem;
+  height: 1.25rem;
+  vertical-align: middle;
+  fill: currentColor;
+  overflow: hidden;
+}
+.lla-comment__reply-action__text {
+  @apply hidden lg:block cursor-pointer p-1 rounded hover:bg-gray-100 active:bg-gray-200 hover:text-blue-400;
+}

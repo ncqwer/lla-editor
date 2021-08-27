@@ -1,5 +1,5 @@
 import React from 'react';
-import { Editor, Transforms, Range, NodeEntry } from 'slate';
+import { Editor, Transforms, Range, NodeEntry, Path } from 'slate';
 import { Editable as E, ReactEditor, useSlateStatic } from 'slate-react';
 import { useEditorRuntime } from '.';
 import { nextifyFlow } from '../rules';
@@ -65,6 +65,17 @@ export const Editable = ({
           className="lla-editor__tail"
           onClick={() => {
             const path = [editor.children.length];
+            const lastElement = editor.children[
+              editor.children.length - 1
+            ] as any;
+            if (lastElement.type === 'text-block') {
+              Transforms.select(
+                editor,
+                Editor.end(editor, Path.previous(path)),
+              );
+              ReactEditor.focus(editor);
+              return;
+            }
             Transforms.insertNodes(editor, editor.createParagraph(''), {
               at: path,
             });

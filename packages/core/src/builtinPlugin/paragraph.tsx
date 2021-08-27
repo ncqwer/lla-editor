@@ -49,7 +49,7 @@ const render = [
       const text = element.children[0] as Text;
       React.useEffect(() => {
         if (attributes.ref.current && selected) {
-          attributes.ref.current.scrollIntoViewIfNeeded(false);
+          attributes.ref.current?.scrollIntoViewIfNeeded?.(false);
         }
       }, [selected]);
       const placeholder = React.useContext(PlaceholderContext);
@@ -207,6 +207,16 @@ const handleShiftEnter: KeyDown = (next, event, editor) => {
   Transforms.insertText(editor, '\n');
 };
 
+const handleModA: KeyDown = (next, event, editor, [, path]) => {
+  const insert = editor.getOvlerLayer('insert');
+  if (!insert) return next();
+  if (insert.isEmpty()) return next();
+  event.preventDefault();
+  Transforms.select(editor, path);
+  insert.close();
+  // insert.dow
+};
+
 const handleKeyDown = groupKeyDown<KeyDown>(
   [shotkey('/'), handleSlash],
   // [isMobileSlash, handleSlash],
@@ -216,6 +226,7 @@ const handleKeyDown = groupKeyDown<KeyDown>(
   [shotkey('down'), handleDown],
   [shotkey('ctrl+n'), handleDown],
   [shotkey('shift+enter'), handleShiftEnter],
+  [shotkey('mod+a'), handleModA],
   [shotkey('enter'), handleEnter],
   [shotkey('tab'), handleTab],
   [shotkey('esc'), handleEsc],

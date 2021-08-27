@@ -192,13 +192,13 @@ const handleBackspace: KeyDown = function (
     return Transforms.delete(editor);
   }
   const text = Node.string(codeline);
-  if (!spaceReg.test(text)) return next();
+  if (!spaceReg.test(text)) return;
   const nowIndent = Code.codeLineIndent(codeline);
   const preIndents = Code.prevCodeLineIndent(editor, path);
   const avaliableIndent = preIndents
     .reverse()
     .find((indent) => indent.length < nowIndent.length);
-  if (!avaliableIndent && avaliableIndent !== '') return next();
+  if (!avaliableIndent && avaliableIndent !== '') return;
   event.preventDefault();
   // console.log(preIndents);
   // console.log(`avaliableIndent:${avaliableIndent.length}`);

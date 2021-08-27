@@ -58,4 +58,5 @@
 
 .lla-context-menu-trigger {
   @apply rounded absolute top-1 right-1 w-4 h-4 flex items-center justify-center hover:bg-gray-200 active:bg-gray-300 select-none cursor-pointer;
+  z-index: 999;
 }

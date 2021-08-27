@@ -19,6 +19,7 @@
     {"path":"../editor"},
     {"path":"../custom-void"},
     {"path":"../link"},
-    {"path":"../code"}
+    {"path":"../code"},
+    {"path":"../table"}
   ]
 }

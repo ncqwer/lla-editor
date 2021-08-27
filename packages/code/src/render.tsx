@@ -1,5 +1,5 @@
 import React from 'react';
-import { Path, Range, Node } from 'slate';
+import { Path, Range, Node, Editor, Text, Point } from 'slate';
 import {
   LLAOverLayer,
   elementPropsIs,
@@ -305,7 +305,66 @@ const CodeElement: React.FC<ExtendRenderElementProps<CodeBlock>> = ({
         ...
       </div>
       <div className={`lla-code-action-group`}></div>
-      <pre className={`code language-${language}`}>
+      <pre
+        className={`code language-${language}`}
+        onCopy={(e) => {
+          const { selection } = editor;
+
+          if (!selection || Range.isCollapsed(selection)) return;
+          const path = ReactEditor.findPath(editor, element);
+          const [start, end] = Range.edges(selection);
+          const [codeStart, codeEnd] = Editor.edges(editor, path);
+          if (Point.isBefore(start, codeStart) || Point.isAfter(end, codeEnd)) {
+            return;
+          }
+          // 仅仅复制code块，不进入slate复制逻辑;
+          e.preventDefault();
+          e.stopPropagation();
+
+          let text = '';
+          Array.from(
+            Editor.nodes(editor, {
+              at: selection,
+              match: (n) => Text.isText(n),
+            }),
+          ).forEach(([node, path], idx) => {
+            let t = (node as any).text;
+
+            if (Path.equals(path, end.path)) {
+              t = t.slice(0, end.offset);
+            }
+
+            if (Path.equals(path, start.path)) {
+              t = t.slice(start.offset);
+            }
+
+            text += `${idx !== 0 ? '\n' : ''}${t}`;
+          });
+          e.clipboardData.setData('text/plain', text);
+        }}
+        onPaste={(e) => {
+          const { selection } = editor;
+          if (!selection) return;
+          const path = ReactEditor.findPath(editor, element);
+          const [start, end] = Range.edges(selection);
+          const [codeStart, codeEnd] = Editor.edges(editor, path);
+          if (Point.isBefore(start, codeStart) || Point.isAfter(end, codeEnd))
+            return;
+
+          const txt = e.clipboardData.getData('text/plain');
+          if (!txt) return;
+          console.log('仅仅复制code块，不进入slate复制逻辑');
+          e.stopPropagation();
+          e.preventDefault();
+          const [firstLine, ...otherLines] = txt.split('\n');
+          Transforms.insertText(editor, firstLine);
+          if (otherLines.length > 0)
+            Transforms.insertNodes(
+              editor,
+              otherLines.map((str) => Code.createCodeLine(str)),
+            );
+        }}
+      >
         <code>{children}</code>
       </pre>
     </div>

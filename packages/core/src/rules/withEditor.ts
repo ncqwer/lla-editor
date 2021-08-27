@@ -259,7 +259,8 @@ const getSlateNodes = (
             [],
           );
         }
-      } catch {
+      } catch (e) {
+        console.error(e);
         result = null;
       }
     })();

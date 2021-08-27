@@ -61,3 +61,35 @@ export const LLAOverLayer: React.FC<{
     root as any,
   );
 };
+
+export const LLAModal: React.FC<{
+  onClose: () => void;
+  hasMask?: boolean;
+  noMaskClose?: boolean;
+}> = ({ onClose, children, hasMask = false, noMaskClose = false }) => {
+  const [overlayterId] = useLens(['core', 'overlayerId']);
+  const root = React.useMemo(
+    () => document.getElementById(overlayterId),
+    [overlayterId],
+  );
+
+  return createPortal(
+    <div
+      className={`w-screen h-screen z-50 bg-transparent fixed top-0 left-0${
+        hasMask ? ' bg-gray-900 opacity-60' : ''
+      }`}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (noMaskClose) return;
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      {children}
+    </div>,
+    root as any,
+  );
+};

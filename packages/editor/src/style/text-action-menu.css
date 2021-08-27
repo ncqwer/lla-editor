@@ -4,6 +4,7 @@
 
   top: -99999px;
   left: -99999px;
+  z-index: 999;
 }
 
 .lla-text-style-group {

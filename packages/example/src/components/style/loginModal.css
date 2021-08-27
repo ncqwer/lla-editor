@@ -1,0 +1,8 @@
+.lla-comment__login-modal {
+  @apply bg-white md:p-12 p-8 flex flex-col items-center justify-center h-screen w-screen max-w-sm max-h-96  rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+}
+
+.lla-comment__login-item {
+  @apply mx-2 p-4 my-4 w-full text-lg  flex justify-around cursor-pointer border-2 text-gray-500 hover:text-blue-400 hover:border-blue-400;
+  border-radius: 14px;
+}

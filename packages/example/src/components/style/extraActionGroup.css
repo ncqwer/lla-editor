@@ -1,0 +1,28 @@
+.lla-comment__extra-action-group__trigger {
+  @apply absolute top-1 right-1 leading-4 pb-2 px-1 rounded bg-gray-100 hover:bg-gray-100 active:bg-gray-200  cursor-pointer hover:text-blue-400;
+  /* padding-top: -0.5rem; */
+}
+
+.lla-comment__extra-action-group__target {
+  @apply relative;
+}
+
+.lla-comment__extra-action-group__target
+  .lla-comment__extra-action-group__trigger {
+  @apply invisible;
+}
+
+.lla-comment__extra-action-group__target:hover
+  .lla-comment__extra-action-group__trigger,
+.lla-comment__extra-action-group__trigger--active {
+  @apply visible !important;
+}
+
+.lla-comment__extra-action-group {
+  @apply py-2  rounded text-sm text-gray-500 bg-white w-full max-w-md;
+  box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+}
+
+.lla-comment__extra-action-group__report-action {
+  @apply py-2 px-4 hover:bg-gray-100 active:bg-gray-200 hover:text-blue-400 cursor-pointer;
+}
