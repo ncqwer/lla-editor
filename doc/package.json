@@ -1,12 +1,12 @@
 {
   "name": "doc",
   "private": "true",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "@emotion/css": "^11.1.3",
-    "@lla-editor/editor": "^0.0.11",
+    "@lla-editor/editor": "^0.0.12",
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^11.0.1",
     "@tailwindcss/forms": "^0.3.3",
