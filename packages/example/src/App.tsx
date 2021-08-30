@@ -190,6 +190,15 @@ const PlainTextExample = () => {
                 videoSign: async (id: any) => id,
                 videoRemove: async (id: any) => console.log(id),
               },
+              table: {
+                HTableComponent: React.forwardRef((props: any, ref: any) => (
+                  <HotTable
+                    {...props}
+                    ref={ref}
+                    licenseKey="non-commercial-and-evaluation"
+                  ></HotTable>
+                )),
+              },
             }),
             [],
           )}
@@ -281,415 +290,6 @@ const CodeLineElement = () => {
   );
 };
 
-const availableLanguage = Object.entries({
-  c: ['c'],
-  py: ['python', 'py'],
-  java: ['java'],
-  cpp: ['cpp', 'c++'],
-  'c#': ['csharp', 'cs', 'dotnet'],
-  vb: ['visual-basic', 'vb', 'vba'],
-  jsx: ['javascript', 'js', 'jsx'],
-  tsx: ['typescript', 'ts', 'tsx'],
-  php: ['php'],
-  wasm: ['wasm'],
-  sql: ['sql'],
-  markup: ['markup'],
-  html: ['html', 'svg'],
-  hs: ['haskell', 'hs'],
-  css: ['css'],
-}).reduce(
-  (acc, [k, v]) => ({
-    ...acc,
-    [v[0] as string]: {
-      label: k,
-      test: (str: string) => v.some((alias) => alias.startsWith(str)),
-    },
-  }),
-  {} as Record<string, { label: string; test: (str: string) => boolean }>,
-);
-
-const alignOpts = { points: ['tl', 'bl'] };
-const LanguageSelector = () => {
-  const [language, onLanguageChange] = React.useState('java');
-  const ref = React.useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [search, setSearch] = React.useState('');
-  const getSearchResult = () => {
-    if (!search) return Object.entries(availableLanguage);
-    return Object.entries(availableLanguage).filter(([_, { test }]) =>
-      test(search),
-    );
-  };
-  React.useEffect(() => {
-    getSearchResult();
-    setTimeout(() => setIsOpen(true), 200);
-  }, []);
-  return (
-    <>
-      <div
-        ref={ref}
-        className="lla-code-language"
-        contentEditable={false}
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsOpen(true);
-        }}
-        onTouchStart={(e) => {
-          e.stopPropagation();
-          setIsOpen(true);
-        }}
-      >
-        {availableLanguage[language].label}
-        <svg viewBox="0 0 30 30">
-          <polygon points="15,17.4 4.8,7 2,9.8 15,23 28,9.8 25.2,7 "></polygon>
-        </svg>
-      </div>
-      {isOpen && (
-        <LLAOverLayer
-          onClose={() => setIsOpen(false)}
-          targetGet={() => ref.current}
-          alignOpts={alignOpts}
-        >
-          <div className="lla-code-language__menu">
-            <div className="lla-code-language__search">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className="lla-code-language__item-group">
-              {renderLanguage()}
-            </div>
-          </div>
-        </LLAOverLayer>
-      )}
-    </>
-  );
-
-  function renderLanguage() {
-    return (
-      <div>
-        {getSearchResult()?.map(([type]) => (
-          <div
-            key={type}
-            className="lla-code-language__item"
-            onClick={() => {
-              onLanguageChange(type);
-              setIsOpen(false);
-            }}
-            onTouchStart={() => {
-              onLanguageChange(type);
-              setIsOpen(false);
-            }}
-          >
-            {type}
-          </div>
-        ))}
-      </div>
-    );
-  }
-};
-
-const CodeElement = () => {
-  return (
-    <div className={`lla-code-block`}>
-      <LanguageSelector></LanguageSelector>
-      <div className={`lla-code-action-group`}></div>
-      <pre className={`code language-javascript`}>
-        <code>
-          <CodeLineElement></CodeLineElement>
-          <CodeLineElement></CodeLineElement>
-        </code>
-      </pre>
-    </div>
-  );
-};
-
-const tableSetting: HotTableProps = {
-  colHeaders: true,
-  rowHeaders: true,
-  width: 'auto',
-  height: 'auto',
-  undo: false,
-  mergeCells: true,
-  contextMenu: true,
-  licenseKey: 'non-commercial-and-evaluation',
-};
-
-const Table = () => {
-  const [data, onDataChange] = React.useState(() =>
-    Handsontable.helper.createSpreadsheetData(7, 7),
-  ); //值得注意的是，已引用的方式来修改了值。
-  const [mergeCells, onMergeCellsChange] = React.useState<
-    Handsontable.mergeCells.Settings[]
-  >([]);
-  console.log(
-    '%c [ data ]',
-    'font-size:13px; background:pink; color:#bf2c9f;',
-    data,
-  );
-  console.log(
-    '%c [ mergeCells ]',
-    'font-size:13px; background:pink; color:#bf2c9f;',
-    mergeCells,
-  );
-
-  const hotTableComponentRef = React.useRef<HotTable | null>(null);
-  return (
-    <div className="lla-table select-none" contentEditable={false}>
-      <HotTable
-        ref={hotTableComponentRef}
-        {...tableSetting}
-        // settings={React.useMemo(
-        //   () => ({
-        //     ...tableSetting,
-        //     mergeCells,
-        //     data,
-        //   }),
-        //   [],
-        // )}
-        data={data}
-        mergeCells={mergeCells}
-        // beforeChange={(...args) => console.log(...args)}
-        beforeChange={handleBeforeChange}
-        beforeRemoveCol={handleRemoveCol}
-        beforeRemoveRow={handleRemoveRow}
-        beforeCreateCol={handleCreateCol}
-        beforeCreateRow={handleCreateRow}
-        beforeMergeCells={handleMergedCell}
-        beforeUnmergeCells={handleUnmerge}
-      ></HotTable>
-    </div>
-  );
-
-  function handleRemoveCol(
-    _index: number,
-    amount: number,
-    idxs: number[],
-    // source: Handsontable.ChangeSource,
-  ) {
-    unstable_batchedUpdates(() => {
-      onDataChange((prev) =>
-        prev.map((col) => {
-          const cache = idxs.reduce(
-            (acc, idx) => ({ ...acc, [idx]: true }),
-            {},
-          );
-          const newCol = col.filter((_: any, idx: number) => !cache[idx]);
-          return newCol;
-        }),
-      );
-      onMergeCellsChange((prev) => applyMergeForRemoveCol(prev, idxs));
-    });
-    return false;
-  }
-
-  function handleCreateRow(index: number) {
-    unstable_batchedUpdates(() => {
-      onDataChange((prev) => {
-        const newData = [...prev];
-        newData.splice(index, 0, Array(prev[0].length).fill(null));
-        return newData;
-      });
-      onMergeCellsChange((prev) => applyMergeForAddRow(prev, index));
-    });
-
-    return false;
-  }
-  function handleCreateCol(index: number) {
-    unstable_batchedUpdates(() => {
-      onDataChange((prev) =>
-        prev.map((col) => {
-          const newCol = [...col];
-          newCol.splice(index, 0, null);
-          return newCol;
-        }),
-      );
-      onMergeCellsChange((prev) => applyMergeForAddCol(prev, index));
-    });
-    return false;
-  }
-
-  function handleRemoveRow(
-    _index: number,
-    amount: number,
-    idxs: number[],
-    // source: Handsontable.ChangeSource,
-  ) {
-    unstable_batchedUpdates(() => {
-      const cache = idxs.reduce((acc, idx) => ({ ...acc, [idx]: true }), {});
-      onDataChange((prev) => prev.filter((_, i) => !cache[i]));
-      onMergeCellsChange((prev) => applyMergeForRemoveRow(prev, idxs));
-    });
-    return false;
-  }
-
-  function handleMergedCell(
-    cellRange: Handsontable.wot.CellRange,
-    auto: boolean,
-  ) {
-    if (auto) return;
-    onMergeCellsChange((prev) => {
-      const nV = applyMergeForMerge(prev, cellRange);
-      return nV;
-    });
-    return false;
-  }
-
-  function handleBeforeChange(
-    changes: Handsontable.CellChange[],
-    source: Handsontable.ChangeSource,
-  ) {
-    if (source === 'edit' || source === 'Autofill.fill') {
-      onDataChange((prev) => {
-        const newData = [...prev];
-
-        changes.forEach(([row, column, oldValue, newValue]) => {
-          newData[row][column] = newValue;
-        });
-
-        return newData;
-      });
-      return false;
-    }
-  }
-
-  function handleUnmerge(cellRange: Handsontable.wot.CellRange, auto: boolean) {
-    if (auto) return;
-    onMergeCellsChange((prev) => {
-      const idx = prev.findIndex(
-        ({ row, col }) =>
-          row === cellRange.from.row && col === cellRange.to.col,
-      );
-      if (!~idx) return prev;
-      const nV = [...prev];
-      nV.splice(idx, 1);
-      return nV;
-    });
-    return false;
-  }
-};
-
-function mergeInclude(
-  lhs: Handsontable.wot.CellRange,
-  rhs: Handsontable.mergeCells.Settings,
-) {
-  return (
-    lhs.from.col <= rhs.col &&
-    lhs.from.row <= rhs.row &&
-    lhs.to.col >= rhs.col + rhs.colspan - 1 &&
-    lhs.to.row >= rhs.row + rhs.rowspan - 1
-  );
-}
-
-function applyMergeForMerge(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  cellRange: Handsontable.wot.CellRange,
-) {
-  const newMergeCells = mergeCells.filter((m) => !mergeInclude(cellRange, m));
-  return newMergeCells.concat({
-    row: cellRange.from.row,
-    col: cellRange.from.col,
-    rowspan: cellRange.to.row - cellRange.from.row + 1,
-    colspan: cellRange.to.col - cellRange.from.col + 1,
-  });
-}
-
-function applyMergeForRemoveCol(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  colIdxs: number[],
-) {
-  const getMergeCellStatus = (
-    begin: number,
-    width: number,
-    idx: number,
-  ): -1 | 0 | 1 => {
-    if (begin + width - 1 < idx) return 0; //do nothing
-    if (begin <= idx && idx <= begin + width - 1) return -1; // width-1
-    return 1; // begin-1
-  };
-  return mergeCells
-    .map((cellMeta) => {
-      return colIdxs
-        .map((idx) => getMergeCellStatus(cellMeta.col, cellMeta.colspan, idx))
-        .reduce((acc, status) => {
-          if (status === -1) return { ...acc, colspan: acc.colspan - 1 };
-          if (status === 1) return { ...acc, col: acc.col - 1 };
-          return acc;
-        }, cellMeta);
-    })
-    .filter(({ colspan, rowspan }) => !(colspan === 1 && rowspan === 1));
-}
-
-function applyMergeForRemoveRow(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  rowIdxs: number[],
-) {
-  const getMergeCellStatus = (
-    begin: number,
-    width: number,
-    idx: number,
-  ): -1 | 0 | 1 => {
-    if (begin + width - 1 < idx) return 0; //do nothing
-    if (begin <= idx && idx <= begin + width - 1) return -1; // width-1
-    return 1; // begin-1
-  };
-  return mergeCells
-    .map((cellMeta) => {
-      return rowIdxs
-        .map((idx) => getMergeCellStatus(cellMeta.row, cellMeta.rowspan, idx))
-        .reduce((acc, status) => {
-          if (status === -1) return { ...acc, rowspan: acc.rowspan - 1 };
-          if (status === 1) return { ...acc, row: acc.row - 1 };
-          return acc;
-        }, cellMeta);
-    })
-    .filter(({ colspan, rowspan }) => !(colspan === 1 && rowspan === 1));
-}
-
-function applyMergeForAddCol(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  colIdx: number,
-) {
-  const getMergeCellStatus = (
-    begin: number,
-    width: number,
-    idx: number,
-  ): -1 | 0 | 1 => {
-    if (begin + width - 1 < idx) return 0; //do nothing
-    if (begin <= idx && idx <= begin + width - 1) return -1; // width+1
-    return 1; // begin+1
-  };
-  return mergeCells.map((cellMeta) => {
-    const status = getMergeCellStatus(cellMeta.col, cellMeta.colspan, colIdx);
-    if (status === -1) return { ...cellMeta, colspan: cellMeta.colspan + 1 };
-    if (status === 1) return { ...cellMeta, col: cellMeta.col + 1 };
-    return cellMeta;
-  });
-}
-
-function applyMergeForAddRow(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  rowIdx: number,
-) {
-  const getMergeCellStatus = (
-    begin: number,
-    width: number,
-    idx: number,
-  ): -1 | 0 | 1 => {
-    if (begin + width - 1 < idx) return 0; //do nothing
-    if (begin <= idx && idx <= begin + width - 1) return -1; // width+1
-    return 1; // begin+1
-  };
-  return mergeCells.map((cellMeta) => {
-    const status = getMergeCellStatus(cellMeta.row, cellMeta.rowspan, rowIdx);
-    if (status === -1) return { ...cellMeta, rowspan: cellMeta.colspan + 1 };
-    if (status === 1) return { ...cellMeta, row: cellMeta.row + 1 };
-    return cellMeta;
-  });
-}
-
 const Try = () => {
   const [value, setValue] = React.useState(2);
   if (value !== 7) setValue(7);
@@ -733,8 +333,39 @@ const Try = () => {
   );
 };
 
+const useLocalStorage = function <T>(
+  key: string,
+  _value: T | (() => T),
+  delay: number = 1000,
+) {
+  const [value, setValue] = React.useState<T>(() => {
+    let v = null;
+    if (window?.localStorage) v = window.localStorage.getItem(key);
+    if (!v) return typeof _value === 'function' ? (_value as any)() : _value;
+    return JSON.parse(v);
+  });
+  const preValueRef = React.useRef<T | null>(null);
+  const [syncToLocalStorage] = useDebounce((newV: T) => {
+    if (window?.localStorage)
+      window.localStorage.setItem(key, JSON.stringify(newV));
+    preValueRef.current = newV;
+  }, delay);
+  React.useEffect(() => {
+    preValueRef.current = null;
+  }, [key]);
+  React.useEffect(() => {
+    if (preValueRef.current !== value) {
+      syncToLocalStorage(value);
+    }
+  });
+  return [value, setValue] as const;
+};
+
 const AEditor = () => {
-  const [value, setValue] = useState<Descendant[]>(initialValue());
+  const [value, setValue] = useLocalStorage<Descendant[]>(
+    'lla-comment',
+    initialValue(),
+  );
   const [v, setV] = useState(1080);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [readOnly, setReadOnly] = useState(false);

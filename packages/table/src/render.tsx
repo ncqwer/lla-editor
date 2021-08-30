@@ -1,17 +1,27 @@
 import React from 'react';
-import Handsontable from 'handsontable';
-import { HotTable, HotTableProps } from '@handsontable/react';
 import {
+  ConfigHelers,
   ElementJSX,
   elementPropsIs,
   elementRender,
   ExtendRenderElementProps,
+  LLAConfig,
+  SharedApi,
 } from '@lla-editor/core';
-import { TableElement, Table } from './element';
+import {
+  TableElement,
+  Table,
+  MergeSetting,
+  MergeCellRange,
+  CellChange,
+  ChangeSource,
+} from './element';
 import { ReactEditor, useReadOnly, useSlateStatic } from 'slate-react';
 import { Transforms } from 'slate';
 
-const tableSetting: HotTableProps = {
+const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
+
+const tableSetting = {
   colHeaders: true,
   rowHeaders: true,
   width: 'auto',
@@ -19,7 +29,6 @@ const tableSetting: HotTableProps = {
   undo: false,
   mergeCells: true,
   contextMenu: true,
-  licenseKey: 'non-commercial-and-evaluation',
 };
 
 const HTable = React.memo(
@@ -30,22 +39,19 @@ const HTable = React.memo(
     onChange,
   }: {
     data: any[][];
-    mergeCells: Handsontable.mergeCells.Settings[];
+    mergeCells: MergeSetting[];
     readOnly?: boolean;
     onChange?: (
       data: any[][],
-      mergeCells: (
-        v: Handsontable.mergeCells.Settings[],
-      ) => Handsontable.mergeCells.Settings[],
+      mergeCells: (v: MergeSetting[]) => MergeSetting[],
     ) => void;
   }) => {
     const [data] = React.useState(() => _data.map((v) => [...v])); //值得注意的是，已引用的方式来修改了值。
-    const [mergeCells] = React.useState<Handsontable.mergeCells.Settings[]>(
-      () => [..._mergeCells],
-    );
-    const hotTableComponentRef = React.useRef<HotTable | null>(null);
+    const [mergeCells] = React.useState<MergeSetting[]>(() => [..._mergeCells]);
+    const [HTableComponent] = useLens(['table', 'HTableComponent']);
+    const hotTableComponentRef = React.useRef<any | null>(null);
     return (
-      <HotTable
+      <HTableComponent
         {...tableSetting}
         data={data}
         mergeCells={mergeCells}
@@ -59,7 +65,7 @@ const HTable = React.memo(
         afterUnmergeCells={handleUnmerge}
         readOnly={readOnly}
         contextMenu={!readOnly}
-      ></HotTable>
+      ></HTableComponent>
     );
     function handleRemoveCol(_index: number, amount: number, idxs: number[]) {
       console.log(
@@ -108,10 +114,7 @@ const HTable = React.memo(
       // return false;
     }
 
-    function handleMergedCell(
-      cellRange: Handsontable.wot.CellRange,
-      auto: boolean,
-    ) {
+    function handleMergedCell(cellRange: MergeCellRange, auto: boolean) {
       if (auto) return;
       if (!hotTableComponentRef.current?.__hotInstance) return;
       const instance = hotTableComponentRef.current.__hotInstance;
@@ -122,10 +125,7 @@ const HTable = React.memo(
         });
     }
 
-    function handleChange(
-      _changes: Handsontable.CellChange[] | null,
-      source: Handsontable.ChangeSource,
-    ) {
+    function handleChange(_changes: CellChange[] | null, source: ChangeSource) {
       if (source === 'edit' || source === 'Autofill.fill') {
         if (!hotTableComponentRef.current?.__hotInstance) return;
         const instance = hotTableComponentRef.current.__hotInstance;
@@ -135,10 +135,7 @@ const HTable = React.memo(
       }
     }
 
-    function handleUnmerge(
-      cellRange: Handsontable.wot.CellRange,
-      auto: boolean,
-    ) {
+    function handleUnmerge(cellRange: MergeCellRange, auto: boolean) {
       if (auto) return;
       if (!hotTableComponentRef.current?.__hotInstance) return;
       const instance = hotTableComponentRef.current.__hotInstance;
@@ -228,10 +225,7 @@ export default [
   [elementPropsIs(Table.is), elementRender(TableComponent)],
 ] as ElementJSX<TableElement>;
 
-function mergeInclude(
-  lhs: Handsontable.wot.CellRange,
-  rhs: Handsontable.mergeCells.Settings,
-) {
+function mergeInclude(lhs: MergeCellRange, rhs: MergeSetting) {
   return (
     lhs.from.col <= rhs.col &&
     lhs.from.row <= rhs.row &&
@@ -241,8 +235,8 @@ function mergeInclude(
 }
 
 function applyMergeForMerge(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  cellRange: Handsontable.wot.CellRange,
+  mergeCells: MergeSetting[],
+  cellRange: MergeCellRange,
 ) {
   const newMergeCells = mergeCells.filter((m) => !mergeInclude(cellRange, m));
   return newMergeCells.concat({
@@ -253,10 +247,7 @@ function applyMergeForMerge(
   });
 }
 
-function applyMergeForRemoveCol(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  colIdxs: number[],
-) {
+function applyMergeForRemoveCol(mergeCells: MergeSetting[], colIdxs: number[]) {
   const getMergeCellStatus = (
     begin: number,
     width: number,
@@ -279,10 +270,7 @@ function applyMergeForRemoveCol(
     .filter(({ colspan, rowspan }) => !(colspan === 1 && rowspan === 1));
 }
 
-function applyMergeForRemoveRow(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  rowIdxs: number[],
-) {
+function applyMergeForRemoveRow(mergeCells: MergeSetting[], rowIdxs: number[]) {
   const getMergeCellStatus = (
     begin: number,
     width: number,
@@ -305,10 +293,7 @@ function applyMergeForRemoveRow(
     .filter(({ colspan, rowspan }) => !(colspan === 1 && rowspan === 1));
 }
 
-function applyMergeForAddCol(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  colIdx: number,
-) {
+function applyMergeForAddCol(mergeCells: MergeSetting[], colIdx: number) {
   const getMergeCellStatus = (
     begin: number,
     width: number,
@@ -326,10 +311,7 @@ function applyMergeForAddCol(
   });
 }
 
-function applyMergeForAddRow(
-  mergeCells: Handsontable.mergeCells.Settings[],
-  rowIdx: number,
-) {
+function applyMergeForAddRow(mergeCells: MergeSetting[], rowIdx: number) {
   const getMergeCellStatus = (
     begin: number,
     width: number,

@@ -29,12 +29,12 @@
     "react-dom": ">=17.0.0",
     "slate": ">=0.60.0",
     "slate-history": ">=0.60.0",
-    "slate-react": ">=0.60.0"
+    "slate-react": ">=0.60.0",
+    "@handsontable/react": "^9.0.2",
+    "handsontable": "^9.0.2"
   },
   "dependencies": {
-    "@handsontable/react": "^9.0.2",
-    "@lla-editor/core": "^0.0.9",
-    "handsontable": "^9.0.2"
+    "@lla-editor/core": "^0.0.9"
   },
   "homepage": "https://github.com/ncqwer/lla-editor#readme"
 }

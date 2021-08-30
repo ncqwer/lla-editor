@@ -1,4 +1,3 @@
-import { Range, Node, Editor, Point, Transforms } from 'slate';
 import { Deserialize, Serialize } from '@lla-editor/core';
 import { Table } from './element';
 

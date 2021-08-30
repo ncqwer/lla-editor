@@ -8370,6 +8370,11 @@ react-spring@^9.2.3:
     "@react-spring/web" "~9.2.0"
     "@react-spring/zdog" "~9.2.0"
 
+react-use-localstorage@^3.5.3:
+  version "3.5.3"
+  resolved "https://registry.npmjs.org/react-use-localstorage/-/react-use-localstorage-3.5.3.tgz#c4bcc097859a2d2879e969f0a57b16345905df82"
+  integrity sha512-1oNvJmo72G4v5P9ytJZZTb6ywD3UzWBiainTtfbNlb+U08hc+SOD5HqgiLTKUF0MxGcIR9JSnZGmBttNLXaQYA==
+
 react-use-measure@^2.0.4:
   version "2.0.4"
   resolved "https://registry.npmjs.org/react-use-measure/-/react-use-measure-2.0.4.tgz#cb675b36eaeaf3681b94d5f5e08b2a1e081fedc9"
