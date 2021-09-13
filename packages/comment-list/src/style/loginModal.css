@@ -3,6 +3,6 @@
 }
 
 .lla-comment__login-item {
-  @apply mx-2 p-4 my-4 w-full text-lg  flex justify-around cursor-pointer border-2 text-gray-500 hover:text-blue-400 hover:border-blue-400;
+  @apply bg-white mx-2 p-4 my-4 w-full text-lg  flex justify-around cursor-pointer border-2 text-gray-500 hover:text-blue-400 hover:border-blue-400;
   border-radius: 14px;
 }

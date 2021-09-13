@@ -19,6 +19,10 @@
 @import './link.css';
 @import './code.css';
 
+/* support for lla commment list */
+
+@import '../comment_list/style/index.css';
+
 @layer utilities {
   @variants focus,hover {
     .no-box-shadow {

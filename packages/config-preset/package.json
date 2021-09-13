@@ -1,0 +1,38 @@
+{
+  "name": "@lla-editor/config-preset",
+  "version": "0.0.1",
+  "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
+  "keywords": [],
+  "author": "“ncqwer” <“18694039767@163.com”>",
+  "license": "MIT",
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "source": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "vite build"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0"
+  },
+  "dependencies": {
+    "@lla-editor/core": "^0.0.9",
+    "unified": "^9.2.1",
+    "rehype-parse": "^7.0.1",
+    "rehype-remark": "^8.1.1",
+    "remark-gfm": "^1.0.0",
+    "remark-parse": "^9.0.0",
+    "remark-stringify": "^9.0.1"
+  }
+}

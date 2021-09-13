@@ -28,6 +28,8 @@
     "@lla-editor/audio": "^0.0.10",
     "@lla-editor/callout": "^0.0.9",
     "@lla-editor/code": "^1.0.2",
+    "@lla-editor/comment-list": "^0.0.1",
+    "@lla-editor/config-preset": "^0.0.1",
     "@lla-editor/core": "^0.0.9",
     "@lla-editor/custom-void": "^0.0.6",
     "@lla-editor/divider": "^0.0.9",

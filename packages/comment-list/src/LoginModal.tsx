@@ -1,15 +1,15 @@
 import { useQuery } from '@apollo/client';
 import { LLAModal } from '@lla-editor/core';
 import React from 'react';
-import { useLens } from './CommentList';
 import { getAllOAuthConfigs } from './gql/oauthConfig';
 import { User } from './User';
 
 export const LoginModal: React.FC<{
+  isShow?: boolean;
+  onClose: () => void;
   appId: string;
   onUserChange: (user: User | null) => void;
-}> = ({ appId }) => {
-  const [isShow, setIsShow] = useLens(['isLoginModalShow']);
+}> = ({ appId, onUserChange, isShow = false, onClose }) => {
   const { data } = useQuery(getAllOAuthConfigs, {
     variables: {
       where: {
@@ -20,8 +20,8 @@ export const LoginModal: React.FC<{
   if (!isShow || !data) return null;
   const { oauthConfig } = data.app;
   return (
-    <LLAModal onClose={() => setIsShow(false)} hasMask>
-      <div className="lla-comment__login-modal">
+    <LLAModal onClose={onClose} hasMask>
+      <div className="lla-comment__login-modal opacity-100">
         {oauthConfig.map(({ config, type }: { config: any; type: string }) => {
           if (type === 'direct')
             return (
@@ -38,6 +38,12 @@ export const LoginModal: React.FC<{
                 className="lla-comment__login-item lla-comment__login-item--github"
                 key={type}
                 onClick={async () => {
+                  // return onUserChange({
+                  //   nickName: 'ncqwer',
+                  //   id: 1,
+                  //   avatar:
+                  //     'https://avatars.githubusercontent.com/u/12671657?v=4',
+                  // } as any);
                   const { clientId } = config;
                   const authorize_uri =
                     'https://github.com/login/oauth/authorize';
@@ -70,12 +76,9 @@ export const LoginModal: React.FC<{
                     );
                   }, 1000);
                   const data = await promise;
-                  console.log(
-                    '%c [ data ]',
-                    'font-size:13px; background:pink; color:#bf2c9f;',
-                    data,
-                  );
+                  onUserChange(data as any);
                   window.removeEventListener('message', handler);
+
                   clearInterval(intervalId);
                 }}
               >

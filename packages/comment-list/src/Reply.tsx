@@ -1,6 +1,5 @@
 import React from 'react';
 import { Descendant } from 'slate';
-import { getBrief, getContent } from '../data/comment';
 import { ActionGroup } from './ActionGroup';
 import { Content, ContentItem } from './Content';
 import { ExtraActionGroup } from './ExtraActionGroup';

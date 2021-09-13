@@ -6,7 +6,6 @@ import { ExtraActionGroup } from './ExtraActionGroup';
 import { UserAvatar, UserTitleExtra, User, UserTitle } from './user';
 import { ReplyItem } from './Reply';
 
-import { getBrief, getContent } from '../data/comment';
 import { ReplyList } from './ReplyList';
 import { ReplyEditor, CommmentEditorContext } from './CommentEditor';
 import { useLens } from './CommentList';

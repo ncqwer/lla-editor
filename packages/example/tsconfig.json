@@ -20,6 +20,8 @@
     {"path":"../custom-void"},
     {"path":"../link"},
     {"path":"../code"},
-    {"path":"../table"}
+    {"path":"../table"},
+    {"path":"../comment-list"},
+    {"path":"../config-preset"}
   ]
 }

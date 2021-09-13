@@ -23,55 +23,7 @@ export const { SharedProvider, useLens, useSetLens } = createShared<{
     targetReplyId?: number;
     targetAuthorName: string;
   };
-  isLoginModalShow: boolean;
-}>({
-  isLoginModalShow: true,
-});
-
-export const {
-  SharedProvider: UserInfoProviderImpl,
-  useLens: useUserInfo,
-  useSetLens: useSetUserInfo,
-} = createShared<{
-  user: User;
 }>({});
-
-export const UserInfoProvider: React.FC<{
-  user: User | null;
-  onUserChange: (user: User | null) => void;
-}> = ({ user, onUserChange, children }) => {
-  const onUserChangeRef = React.useRef(onUserChange);
-  onUserChangeRef.current = onUserChange;
-  const [client, realUser] = React.useMemo(() => {
-    const { accessToken } = user || {};
-    const authLink = setContext((_, { headers }) => {
-      return {
-        headers: Object.assign(
-          {},
-          headers,
-          accessToken && {
-            authorization: `Bearer ${accessToken}`,
-          },
-        ),
-      };
-    });
-    const onTokenExpiredError = onError(({ networkError }) => {
-      if (networkError === '401' && onUserChangeRef.current) {
-        onUserChangeRef.current(null);
-      }
-    });
-    return [
-      createClientWithLink(authLink, onTokenExpiredError),
-      user || {},
-    ] as const;
-  }, [user]);
-
-  return (
-    <UserInfoProviderImpl value={realUser} initialValue={realUser}>
-      <ApolloProvider client={client}>{children}</ApolloProvider>
-    </UserInfoProviderImpl>
-  );
-};
 
 export const CommentList: React.FC<{
   resourceType: string;

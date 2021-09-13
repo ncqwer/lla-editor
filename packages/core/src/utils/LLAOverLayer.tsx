@@ -74,20 +74,21 @@ export const LLAModal: React.FC<{
   );
 
   return createPortal(
-    <div
-      className={`w-screen h-screen z-50 bg-transparent fixed top-0 left-0${
-        hasMask ? ' bg-gray-900 opacity-60' : ''
-      }`}
-      onClick={(e) => {
-        e.stopPropagation();
-        if (noMaskClose) return;
-        if (e.target === e.currentTarget) onClose();
-      }}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
+    <div className={`w-screen h-screen z-50 bg-transparent fixed top-0 left-0`}>
+      {hasMask && (
+        <div
+          className={`absolute inset-0 w-screen h-screen bg-gray-900 opacity-60`}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (noMaskClose) return;
+            if (e.target === e.currentTarget) onClose();
+          }}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        ></div>
+      )}
       {children}
     </div>,
     root as any,

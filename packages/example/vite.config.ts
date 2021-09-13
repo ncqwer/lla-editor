@@ -24,7 +24,7 @@ const watchWorkspaces = (rootPath: string): Plugin => {
         },
       };
 
-      console.log('Automatic aliases:', modifiedConfig.alias);
+      console.log('Automatic aliases:', modifiedConfig.resolve.alias);
 
       return modifiedConfig;
     },

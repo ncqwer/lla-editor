@@ -1,0 +1,56 @@
+.lla-comment__editor-wrapper {
+  @apply flex text-sm;
+}
+
+.lla-comment__editor-wrapper .lla-comment__user-avatar {
+  @apply mr-4 lg:mr-8 flex-grow-0 flex-shrink-0;
+}
+
+.lla-comment__editor {
+  @apply flex-grow flex-shrink relative;
+}
+
+.lla-comment__editor__save-action {
+  @apply rounded p-1  bg-blue-500 hover:bg-blue-400 active:bg-blue-300 absolute right-0 top-0 text-gray-50 text-xs;
+}
+
+.lla-comment__editor-wrapper .lla-editor {
+  @apply flex-grow border rounded p-2 overflow-auto max-h-80;
+}
+
+.lla-commment__editor-toolbar {
+  @apply w-full flex items-center mb-2;
+}
+
+.lla-commment__editor-toolbar .icon {
+  margin-right: 0.25rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.125rem;
+  position: relative;
+  cursor: pointer;
+  /* height: -webkit-fill-available; */
+}
+
+.lla-commment__editor-toolbar .icon .label {
+  display: none;
+  padding: 0.25rem;
+  border-radius: 2px;
+}
+
+.lla-commment__editor-toolbar .icon:hover {
+  background: #eee;
+}
+
+.lla-commment__editor-toolbar .icon.icon--active {
+  color: rgb(59, 130, 246);
+}
+
+.lla-commment__editor-toolbar .icon:hover .label {
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%, -130%);
+  white-space: pre;
+}

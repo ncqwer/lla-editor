@@ -1,0 +1,84 @@
+.lla-comment__reply-item {
+  @apply flex text-sm;
+}
+
+.lla-comment__reply-item .lla-comment__user-avatar {
+  @apply flex-shrink-0 flex-grow-0 mr-2;
+}
+
+.lla-comment__reply-body {
+  @apply w-full;
+}
+
+.lla-comment__reply-content {
+  @apply relative;
+}
+
+.lla-comment__reply-content .lla-comment__user-info {
+  @apply absolute py-1 pr-2 flex text-xs z-10;
+}
+
+.lla-comment__replyto {
+  @apply text-blue-400;
+}
+
+.lla-comment__replylabel {
+  @apply mx-2;
+}
+
+.lla-comment__content {
+  @apply mb-4 relative cursor-pointer;
+}
+
+.lla-comment__reply-content--brief {
+  @apply overflow-y-hidden;
+  max-height: 3.75rem;
+}
+
+.lla-comment__reply-content--full .lla-comment__content__more {
+  @apply hidden;
+}
+
+.lla-comment__content__more {
+  @apply flex absolute left-0 right-0 bottom-0 h-5  justify-end text-xs text-blue-400;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+}
+
+.lla-comment__content__more__text {
+  @apply backdrop-blur backdrop-filter;
+}
+
+.lla-comment__content__more svg {
+  fill: currentColor;
+}
+
+div.lla-comment__reply-content > div.lla-editor > div > div:nth-child(1) > p {
+  padding-top: 0;
+}
+
+div.lla-comment__reply-content
+  > div.lla-editor
+  > div
+  > div:nth-child(1)
+  > p
+  > span {
+  margin-inline-start: var(--lla-comment-reply-indent);
+}
+
+div.lla-comment__reply-content
+  > div.lla-editor
+  > div
+  > div:nth-child(1).lla-text-block {
+  @apply mt-0;
+}
+
+div.lla-comment__reply-content > div.lla-editor {
+  border: 1px solid transparent;
+}
+
+div.lla-comment__reply-content > div.lla-editor > div > div:nth-child(1) {
+  @apply mt-6;
+}

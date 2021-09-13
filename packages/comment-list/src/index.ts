@@ -1,5 +1,3 @@
-import './style/index.css';
-
 export * from './User';
 export * from './ActionGroup';
 export * from './ExtraActionGroup';

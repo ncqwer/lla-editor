@@ -1,9 +1,10 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { useLens, useSetLens, useUserInfo } from './CommentList';
+import { useLens, useSetLens } from './CommentList';
 import { useMutation } from '@apollo/client';
 import { likeContent, unLikeContent } from './gql/content';
+import { useRequestLoginModal, useUserInfo } from './User';
 
 dayjs.extend(customParseFormat);
 
@@ -28,6 +29,7 @@ export const ActionGroup: React.FC<{
   const setReplyInfo = useSetLens(['replyInfo']);
   const [user] = useUserInfo(['user']);
   const [isLiked, setIsLiked] = React.useState(_isLiked);
+  const openLoginModal = useRequestLoginModal();
   const [likeAction] = useMutation(likeContent, {
     variables: {
       contentId,
@@ -85,9 +87,11 @@ export const ActionGroup: React.FC<{
   );
 
   async function handleLike() {
+    if (!user) return openLoginModal();
     likeAction();
   }
   async function handleUnlike() {
+    if (!user) return openLoginModal();
     unLikeAction();
   }
   function handleReply() {

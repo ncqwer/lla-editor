@@ -3,9 +3,9 @@ import { useSlateStatic, useSlate } from 'slate-react';
 import { Path, Transforms, Editor, Text, Descendant } from 'slate';
 import { LLAElement, useDebounce } from '@lla-editor/core';
 
-import { User, UserAvatar } from './User';
+import { User, UserAvatar, useRequestLoginModal, useUserInfo } from './User';
 import { createInitialValue, RawEditor, RawEditable } from '@lla-editor/editor';
-import { useLens, useSetLens, useUserInfo } from './CommentList';
+import { useLens, useSetLens } from './CommentList';
 
 export const CommmentEditorContext = React.createContext<{
   commentId?: string;
@@ -22,6 +22,23 @@ export const CommentEditor: React.FC<{
 }> = ({ createComment }) => {
   const [value, setValue] = React.useState(createInitialValue);
   const [user] = useUserInfo(['user']);
+
+  const openLoginModal = useRequestLoginModal();
+  if (!user)
+    return (
+      <div
+        className={`flex rounded items-center justify-center bg-gray-100 p-4 text-sm`}
+      >
+        请
+        <span
+          className={`mx-1 px-2 py-0.5 rounded cursor-pointer bg-blue-400 text-white`}
+          onClick={openLoginModal}
+        >
+          登录
+        </span>
+        后发表评论
+      </div>
+    );
   return (
     <div className="lla-comment__editor-wrapper">
       <UserAvatar user={user}></UserAvatar>
@@ -62,8 +79,26 @@ export const ReplyEditor: React.FC<{
 }> = ({ createReply }) => {
   const [value, setValue] = React.useState(createInitialValue);
   const [user] = useUserInfo(['user']);
+
   const [replyInfo, setReplyInfo] = useLens(['replyInfo']);
   const { targetAuthorName, targetReplyId } = replyInfo;
+  const openLoginModal = useRequestLoginModal();
+  if (!user)
+    return (
+      <div
+        className={`flex rounded items-center justify-center bg-gray-100 p-4 text-sm`}
+      >
+        请
+        <span
+          className={`mx-1 px-2 py-0.5 rounded cursor-pointer bg-blue-400 text-white`}
+          onClick={openLoginModal}
+        >
+          登录
+        </span>
+        后发表评论
+      </div>
+    );
+
   return (
     <div className="lla-comment__editor-wrapper">
       <UserAvatar user={user}></UserAvatar>
