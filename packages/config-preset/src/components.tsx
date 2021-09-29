@@ -52,7 +52,7 @@ export const SharedProviderPreset: React.FC<{
             md2txt: (ast: any) => {
               return mdprocessor.stringify(ast);
             },
-            overlayerId: 'root',
+            overlayerId: overlayerId || 'root',
           },
           indentContainer: {
             indent: 24,

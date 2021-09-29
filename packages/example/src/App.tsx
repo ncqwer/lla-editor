@@ -81,7 +81,7 @@ const PlainTextExample = () => {
   // return <TryParent></TryParent>;
   return (
     <LLAEnvironment>
-      <SharedProviderPreset>
+      <SharedProviderPreset overlayerId="root1">
         <AEditor></AEditor>
       </SharedProviderPreset>
     </LLAEnvironment>
@@ -190,7 +190,9 @@ const AEditor = () => {
         <ExtraActionGroup></ExtraActionGroup>
       </div> */}
       <LLACommentUser
-        appId="3f827c80-0c8d-45fe-b245-b03ca4a45c2c"
+        // appId="3f827c80-0c8d-45fe-b245-b03ca4a45c2c"
+        appId="bc77e108-b81a-493a-ab77-394b72c04136"
+        serverURL="http://1.116.105.219:7003"
         direct={{ id: 1, nickName: 'zhujianshi' }}
       >
         <CommentList
