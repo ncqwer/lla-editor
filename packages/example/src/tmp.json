@@ -1,0 +1,159 @@
+[
+	{
+		"type": "heading",
+		"level": 1,
+		"children": [
+			{
+				"children": [
+					{
+						"text": "Traverseable 和 traverse"
+					}
+				],
+				"type": "codeline"
+			},
+			{
+				"type": "codeline",
+				"children": [
+					{
+						"text": ""
+					}
+				]
+			}
+		]
+	},
+	{
+		"children": [
+			{
+				"type": "paragraph",
+				"children": [
+					{
+						"text": "traverse 的 类型为"
+					}
+				]
+			},
+			{
+				"children": [
+					{
+						"children": [
+							{
+								"children": [
+									{
+										"text": "traverse :: Traversable t, Applicative f => (a -> f b) -> t a -> f(t b)"
+									}
+								],
+								"type": "codeline"
+							}
+						],
+						"language": "haskell",
+						"type": "codeblock"
+					},
+					{
+						"children": [
+							{
+								"children": [
+									{
+										"text": "type traverse<A,B> "
+									}
+								],
+								"type": "codeline"
+							},
+							{
+								"type": "codeline",
+								"children": [
+									{
+										"text": "    = (of: (v: B)=>Applicaive<B>, "
+									}
+								]
+							},
+							{
+								"type": "codeline",
+								"children": [
+									{
+										"text": "       f: (v: A)=>Applicative<B>, "
+									}
+								]
+							},
+							{
+								"type": "codeline",
+								"children": [
+									{
+										"text": "       ta: Traversable<A>) => Applicative<Traversable<B>>;"
+									}
+								]
+							}
+						],
+						"language": "typescript",
+						"type": "codeblock"
+					},
+					{
+						"children": [
+							{
+								"type": "paragraph",
+								"children": [
+									{
+										"text": "通常来说，"
+									},
+									{
+										"text": "traverse",
+										"inlineCode": true
+									},
+									{
+										"text": "可以由"
+									},
+									{
+										"text": "reduce",
+										"inlineCode": true
+									},
+									{
+										"text": "方法来得到，即："
+									}
+								]
+							}
+						],
+						"type": "text-block"
+					},
+					{
+						"children": [
+							{
+								"children": [
+									{
+										"text": "const traverseForArray = (of, f, as)=>{"
+									}
+								],
+								"type": "codeline"
+							},
+							{
+								"type": "codeline",
+								"children": [
+									{
+										"text": "    const concat = a=>as=>as.concat([a]);"
+									}
+								]
+							},
+							{
+								"type": "codeline",
+								"children": [
+									{
+										"text": "    return as.reduce((acc,a)=>ap(fmap(concat,f(a)),acc),of([]));"
+									}
+								]
+							},
+							{
+								"type": "codeline",
+								"children": [
+									{
+										"text": "}"
+									}
+								]
+							}
+						],
+						"language": "javascript",
+						"type": "codeblock"
+					}
+				],
+				"type": "indent_container"
+			}
+		],
+		"type": "text-block"
+	}
+]

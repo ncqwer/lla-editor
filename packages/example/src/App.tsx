@@ -78,6 +78,7 @@ const availablePlugins = [
 const activeNames = availablePlugins.map(({ pluginName }) => pluginName);
 
 const PlainTextExample = () => {
+  // return <TryParent></TryParent>;
   return (
     <LLAEnvironment>
       <SharedProviderPreset>
@@ -115,6 +116,51 @@ const useLocalStorage = function <T>(
   return [value, setValue] as const;
 };
 
+let flag = 0;
+
+const TryGrandson = ({ value }) => {
+  React.useEffect(() => {
+    console.log('mounted');
+    return () => console.log('unmounted');
+  }, []);
+  return <div>{value}</div>;
+};
+
+const TryChild = ({ value }) => {
+  console.log('hhh');
+  const [num, setNum] = React.useState(value);
+  console.log('sss');
+  if (num !== value) {
+    setNum(value);
+    return null;
+  }
+  console.log(num);
+  console.log(
+    '%c [ flag ]',
+    'font-size:13px; background:pink; color:#bf2c9f;',
+    flag++,
+  );
+  return <TryGrandson value={num}></TryGrandson>;
+};
+
+const TryParent = () => {
+  const [value, incr] = React.useState(0);
+  return (
+    <div>
+      <TryChild value={value}></TryChild>
+      <button
+        onClick={async () => {
+          await Promise.resolve();
+          incr((prev) => prev + 1);
+          console.log('jj');
+        }}
+      >
+        plus
+      </button>
+    </div>
+  );
+};
+
 const AEditor = () => {
   const [value, setValue] = useLocalStorage<Descendant[]>(
     'lla-comment',
@@ -132,6 +178,7 @@ const AEditor = () => {
         onChange={setValue}
         readOnly={readOnly}
       ></LLAEditor> */}
+      {/* <TryParent></TryParent> */}
       {/* <CodeElement></CodeElement> */}
       {/* <Table></Table> */}
       {/* <ActionGroup likeCount={100} createdAt={dayjs()}></ActionGroup> */}
@@ -190,20 +237,6 @@ const initialValue: () => Descendant[] = () => [
   {
     children: [{ type: 'paragraph', children: [{ text: '' }] }],
     type: 'text-block',
-  },
-  {
-    children: [{ text: '' }],
-    type: 'table',
-    mergeCells: [{ row: 1, col: 3, rowspan: 3, colspan: 3 }],
-    data: [
-      ['A1sfsadf', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1'],
-      ['A1sfsadf', 'B2', 'C2', 'D2', null, null, 'G2'],
-      ['A1sfsadf', null, 'C3', null, null, null, 'G3'],
-      ['A1sfsadf', null, 'C4', null, null, null, 'G4'],
-      ['A1sfsadf', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5'],
-      ['A6', 'B6', 'C6', 'D6', 'E6', 'F6', 'G6'],
-      ['A7', 'B7', 'C7', 'D7', 'E7', 'F7', 'G7'],
-    ],
   },
 ];
 

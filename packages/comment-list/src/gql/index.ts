@@ -13,10 +13,11 @@ import { offsetLimitPagination } from '@apollo/client/utilities';
 // import { onError } from '@apollo/client/link/error';
 // import { API_SERVER_HOST } from '@/env';
 
-const httpLink = createHttpLink({
-  uri: `http://192.168.31.240:7001/graphql`,
-  // uri: `http://yinglian.zhaji.wiki/graphql`,
-});
+export const createLink = (url: string) =>
+  createHttpLink({
+    uri: `${url}/graphql` || `http://192.168.31.240:7001/graphql`,
+    // uri: `http://yinglian.zhaji.wiki/graphql`,
+  });
 // const onTokenExpiredError = onError(({ networkError }) => {
 //   if (networkError === '401') {
 //     updateAccessToken(null);
@@ -46,7 +47,7 @@ export const createClientWithLink = (
   ...links: (RequestHandler | ApolloLink)[]
 ) =>
   new ApolloClient({
-    link: from([...links, httpLink]),
+    link: from([...links]),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {

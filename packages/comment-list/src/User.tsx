@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { createShared } from '@zhujianshi/use-lens';
-import { createClientWithLink } from './gql';
+import { createClientWithLink, createLink } from './gql';
 import useSWR from 'swr';
 import { LoginModal } from './LoginModal';
 
@@ -73,7 +73,11 @@ const DirectUser: React.FC<{
       }).then((res) => res.json()),
   );
   return (
-    <UserInfoProvider user={data || null} onUserChange={revalidate}>
+    <UserInfoProvider
+      user={data || null}
+      onUserChange={revalidate}
+      url={serverURL}
+    >
       {children}
     </UserInfoProvider>
   );
@@ -83,7 +87,7 @@ export const LLACommentUser: React.FC<{
   appId: string;
   direct?: Omit<User, 'accessToken'>;
   serverURL?: string;
-}> = ({ direct, appId, children, serverURL }) => {
+}> = ({ direct, appId, children, serverURL = 'http://localhost:7001' }) => {
   const [isShow, setIsShow] = React.useState(false);
   const [userByOauth, setUserByOauth] = React.useState<User | null>(null);
 
@@ -105,6 +109,7 @@ export const LLACommentUser: React.FC<{
       <UserInfoProvider
         user={userByOauth}
         onUserChange={() => setUserByOauth(null)}
+        url={serverURL}
       >
         {children}
         <LoginModal
@@ -130,8 +135,9 @@ export const LLACommentUser: React.FC<{
 
 const UserInfoProvider: React.FC<{
   user: User | null;
+  url: string;
   onUserChange: (user: User | null) => void;
-}> = ({ user, onUserChange, children }) => {
+}> = ({ user, url, onUserChange, children }) => {
   const onUserChangeRef = React.useRef(onUserChange);
   onUserChangeRef.current = onUserChange;
   const [client, realUser] = React.useMemo(() => {
@@ -153,7 +159,7 @@ const UserInfoProvider: React.FC<{
       }
     });
     return [
-      createClientWithLink(authLink, onTokenExpiredError),
+      createClientWithLink(authLink, onTokenExpiredError, createLink(url)),
       user ? { user } : {},
     ] as const;
   }, [user]);
