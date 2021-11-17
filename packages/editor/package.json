@@ -1,6 +1,6 @@
 {
   "name": "@lla-editor/editor",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
   "keywords": [],
   "author": "“ncqwer” <“18694039767@163.com”>",
@@ -38,7 +38,7 @@
     "@lla-editor/link": "^0.0.6",
     "@lla-editor/list": "^0.0.10",
     "@lla-editor/quote": "^0.0.10",
-    "@lla-editor/text-block": "^0.0.10",
+    "@lla-editor/text-block": "^0.0.11",
     "@lla-editor/video": "^0.0.11",
     "@zhujianshi/use-lens": "^0.0.6",
     "slate": "^0.63.0",
