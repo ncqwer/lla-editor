@@ -19,9 +19,8 @@
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
   "source": "src/index.ts",
-  "types": "dist/src/index.d.ts",
+  "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "vite build"
   },
   "peerDependencies": {

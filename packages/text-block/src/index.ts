@@ -5,7 +5,7 @@ import { withEditor } from './withEditor';
 import { serialize } from './convert';
 
 export default {
-  pluginName: 'indent-container',
+  pluginName: 'text-block',
   onKeyDownResponseZone,
   renderElement: Render,
   withEditor,
