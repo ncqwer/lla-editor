@@ -7,11 +7,11 @@
 }
 
 .lla-comment__reply-body {
-  @apply w-full;
+  @apply flex-1;
 }
 
 .lla-comment__reply-content {
-  @apply relative;
+  @apply relative w-full;
 }
 
 .lla-comment__reply-content .lla-comment__user-info {
@@ -24,10 +24,6 @@
 
 .lla-comment__replylabel {
   @apply mx-2;
-}
-
-.lla-comment__content {
-  @apply mb-4 relative cursor-pointer;
 }
 
 .lla-comment__reply-content--brief {
@@ -66,6 +62,7 @@ div.lla-comment__reply-content
   > p
   > span {
   margin-inline-start: var(--lla-comment-reply-indent);
+  /* text-indent: 100px; */
 }
 
 div.lla-comment__reply-content

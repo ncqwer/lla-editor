@@ -15,5 +15,12 @@ export interface ContentItem {
 }
 
 export const Content: React.FC<{ value: any }> = ({ value }) => {
-  return <LLAEditor value={value} readOnly onChange={() => {}}></LLAEditor>;
+  return (
+    <LLAEditor
+      value={value}
+      readOnly
+      onChange={() => {}}
+      className="overflow-hidden"
+    ></LLAEditor>
+  );
 };

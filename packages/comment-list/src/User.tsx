@@ -71,6 +71,10 @@ const DirectUser: React.FC<{
           avatar: direct.avatar,
         }),
       }).then((res) => res.json()),
+    {
+      revalidateOnFocus: false,
+      // revalidateOnMount: false,
+    },
   );
   return (
     <UserInfoProvider

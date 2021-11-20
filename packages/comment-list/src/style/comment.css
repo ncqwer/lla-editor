@@ -35,7 +35,7 @@
 }
 
 .lla-comment__body {
-  @apply w-full;
+  @apply flex-1;
 }
 
 .lla-comment__body .lla-comment__editor-wrapper {

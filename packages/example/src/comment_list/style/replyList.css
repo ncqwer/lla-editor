@@ -59,3 +59,11 @@
 .lla-comment__replies__pageIndex--active {
   @apply text-blue-400;
 }
+
+.lla-comment__replies {
+  @apply w-full;
+}
+
+.lla-comment--mobile .lla-comment__replies {
+  @apply rounded py-1 px-2 bg-gray-100 border;
+}

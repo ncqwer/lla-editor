@@ -15,6 +15,14 @@
   @apply w-6 h-6;
 }
 
+.lla-comment--mobile .lla-comment__user-avatar {
+  @apply w-8 h-8 mt-1;
+}
+
+.lla-comment--mobile .lla-comment__user-avatar span {
+  @apply text-sm;
+}
+
 .lla-comment__user-avatar--reply span {
   @apply text-xs;
 }
@@ -22,4 +30,17 @@
 .lla-comment__user-title {
   @apply cursor-pointer text-xs text-red-300;
   width: fit-content;
+}
+
+.lla-comment--mobile .lla-comment__user-info .lla-comment__createdAt {
+  @apply cursor-pointer text-sm text-gray-400;
+  width: fit-content;
+}
+
+.lla-comment--mobile .lla-comment__user-title {
+  @apply text-sm text-gray-400;
+}
+
+.lla-comment--mobile .lla-comment__reply-item .lla-comment__user-title {
+  @apply text-xs;
 }

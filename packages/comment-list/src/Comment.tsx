@@ -12,15 +12,21 @@ import { useLens } from './CommentList';
 import { useApolloClient, useMutation } from '@apollo/client';
 import { createReply, ReplyFragment } from './gql/reply';
 import { showFullContent } from './gql/content';
+import dayjs from 'dayjs';
 
 export interface CommentItem {
   id: number;
   resourceId: string;
   resourceType: String;
   content: ContentItem;
+  isMobile?: boolean;
 }
 
-export const Comment: React.FC<CommentItem> = ({ id, content }) => {
+export const Comment: React.FC<CommentItem> = ({
+  id,
+  content,
+  isMobile = false,
+}) => {
   const {
     author,
     createdAt,
@@ -43,6 +49,9 @@ export const Comment: React.FC<CommentItem> = ({ id, content }) => {
           <div className="lla-comment__user-info">
             <UserTitle user={author}></UserTitle>
             <UserTitleExtra user={author}></UserTitleExtra>
+            <div className="lla-comment__createdAt">
+              {dayjs(createdAt).format('YYYY-MM-DD HH:mm')}
+            </div>
           </div>
           <div
             className={`lla-comment__content${
@@ -94,10 +103,11 @@ export const Comment: React.FC<CommentItem> = ({ id, content }) => {
             isLiked={isLiked}
             commentId={id}
             targetAuthorName={author.nickName}
+            isMobile={isMobile}
           ></ActionGroup>
           <ExtraActionGroup></ExtraActionGroup>
         </div>
-        <ReplyList commentId={id as any}></ReplyList>
+        <ReplyList commentId={id as any} isMobile={isMobile}></ReplyList>
       </div>
     </div>
   );

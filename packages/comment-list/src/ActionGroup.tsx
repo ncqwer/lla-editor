@@ -16,6 +16,7 @@ export const ActionGroup: React.FC<{
   commentId: number;
   replyId?: number;
   targetAuthorName: string;
+  isMobile?: boolean;
 }> = ({
   createdAt,
   likeCount,
@@ -24,6 +25,7 @@ export const ActionGroup: React.FC<{
   replyId,
   contentId,
   targetAuthorName,
+  isMobile = false,
 }) => {
   const createdAtString = dayjs(createdAt).format('YYYY-MM-DD HH:mm');
   const setReplyInfo = useSetLens(['replyInfo']);
@@ -48,26 +50,31 @@ export const ActionGroup: React.FC<{
   });
   return (
     <div className="lla-comment__action-group">
-      <div className="lla-comment__createdAt">{createdAtString}</div>
-      <div
-        className={`lla-comment__like-action${
-          isLiked ? ' lla-comment__like-action--active' : ''
-        }`}
-        onClick={isLiked ? handleUnlike : handleLike}
-      >
-        <div className="lla-comment__like-action__icon">
-          <svg
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
+      {!isMobile && (
+        <>
+          <div className="lla-comment__createdAt">{createdAtString}</div>
+          <div
+            className={`lla-comment__like-action${
+              isLiked ? ' lla-comment__like-action--active' : ''
+            }`}
+            onClick={isLiked ? handleUnlike : handleLike}
           >
-            <path d="M588.64000033 367.99999967V175.99999967a5.333333 5.333333 0 0 0-2.88-4.693333L423.04000033 87.73333367a5.333333 5.333333 0 0 0-7.146667 2.24l-147.733333 280.533333a5.333333 5.333333 0 0 1-4.693334 2.826667H133.33333333a5.333333 5.333333 0 0 0-5.333333 5.333333v512a5.333333 5.333333 0 0 0 5.333333 5.333333h635.146667a5.333333 5.333333 0 0 0 4.853333-3.093333l164.853333-362.666667a5.333333 5.333333 0 0 0 0.48-2.24V378.66666667a5.333333 5.333333 0 0 0-5.333333-5.333333h-339.413333a5.333333 5.333333 0 0 1-5.28-5.333334zM261.33333333 821.33333367H208.00000033a5.333333 5.333333 0 0 1-5.333334-5.333334V453.33333367a5.333333 5.333333 0 0 1 5.333334-5.333334h53.333333a5.333333 5.333333 0 0 1 5.333333 5.333334v362.666666a5.333333 5.333333 0 0 1-5.333333 5.333334z m602.186667-307.2l-138.293334 304a5.333333 5.333333 0 0 1-4.8 3.093333H346.66666633a5.333333 5.333333 0 0 1-5.333333-5.333333V393.11999967a5.973333 5.973333 0 0 1 0.586667-2.506666l105.6-200.426667a5.333333 5.333333 0 0 1 7.146666-2.24l56.426667 29.013333a5.333333 5.333333 0 0 1 2.88 4.746667V442.66666667a5.333333 5.333333 0 0 0 5.333333 5.333333H858.66666633a5.333333 5.333333 0 0 1 5.333334 5.333334v58.666666a5.333333 5.333333 0 0 1-0.48 2.133334z"></path>
-          </svg>
-        </div>
-        <div className="lla-comment__like-action__count">
-          {isLiked ? likeCount + 1 : likeCount}
-        </div>
-      </div>
+            <div className="lla-comment__like-action__icon">
+              <svg
+                viewBox="0 0 1024 1024"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M588.64000033 367.99999967V175.99999967a5.333333 5.333333 0 0 0-2.88-4.693333L423.04000033 87.73333367a5.333333 5.333333 0 0 0-7.146667 2.24l-147.733333 280.533333a5.333333 5.333333 0 0 1-4.693334 2.826667H133.33333333a5.333333 5.333333 0 0 0-5.333333 5.333333v512a5.333333 5.333333 0 0 0 5.333333 5.333333h635.146667a5.333333 5.333333 0 0 0 4.853333-3.093333l164.853333-362.666667a5.333333 5.333333 0 0 0 0.48-2.24V378.66666667a5.333333 5.333333 0 0 0-5.333333-5.333333h-339.413333a5.333333 5.333333 0 0 1-5.28-5.333334zM261.33333333 821.33333367H208.00000033a5.333333 5.333333 0 0 1-5.333334-5.333334V453.33333367a5.333333 5.333333 0 0 1 5.333334-5.333334h53.333333a5.333333 5.333333 0 0 1 5.333333 5.333334v362.666666a5.333333 5.333333 0 0 1-5.333333 5.333334z m602.186667-307.2l-138.293334 304a5.333333 5.333333 0 0 1-4.8 3.093333H346.66666633a5.333333 5.333333 0 0 1-5.333333-5.333333V393.11999967a5.973333 5.973333 0 0 1 0.586667-2.506666l105.6-200.426667a5.333333 5.333333 0 0 1 7.146666-2.24l56.426667 29.013333a5.333333 5.333333 0 0 1 2.88 4.746667V442.66666667a5.333333 5.333333 0 0 0 5.333333 5.333333H858.66666633a5.333333 5.333333 0 0 1 5.333334 5.333334v58.666666a5.333333 5.333333 0 0 1-0.48 2.133334z"></path>
+              </svg>
+            </div>
+            <div className="lla-comment__like-action__count">
+              {isLiked ? likeCount + 1 : likeCount}
+            </div>
+          </div>
+        </>
+      )}
+
       <div className="lla-comment__reply-action" onClick={handleReply}>
         <div className="lla-comment__reply-action__icon">
           <svg

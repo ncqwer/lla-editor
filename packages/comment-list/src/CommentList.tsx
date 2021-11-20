@@ -29,7 +29,8 @@ export const CommentList: React.FC<{
   resourceType: string;
   resourceId: string;
   appId: string;
-}> = ({ resourceId, resourceType, appId }) => {
+  isMobile?: boolean;
+}> = ({ resourceId, resourceType, appId, isMobile = false }) => {
   const pageSize = 3;
   // const [skip, setSkip] = React.useState(0);
   const {} = useQuery(getAllOAuthConfigs, {
@@ -103,36 +104,46 @@ export const CommentList: React.FC<{
   } = totalCountData;
   return (
     <SharedProvider initialValue={sharedValue}>
-      <div>共{totalCount}条回复</div>
-      <div className={`lla-comment__comments-wrapper`}>
-        <CommentEditor
-          createComment={async (userId, brief, fullContent) => {
-            addComment({
-              variables: {
-                data: {
-                  resourceType,
-                  resourceId,
-                  appId,
-                  content: {
-                    create: {
-                      brief,
-                      author: {
-                        connect: {
-                          id: userId,
+      {!isMobile && <div>共{totalCount}条回复</div>}
+      <div
+        className={`lla-comment__comments-wrapper${
+          isMobile ? ' lla-comment--mobile' : ''
+        }`}
+      >
+        {!isMobile && (
+          <CommentEditor
+            createComment={async (userId, brief, fullContent) => {
+              addComment({
+                variables: {
+                  data: {
+                    resourceType,
+                    resourceId,
+                    appId,
+                    content: {
+                      create: {
+                        brief,
+                        author: {
+                          connect: {
+                            id: userId,
+                          },
                         },
+                        hasMore: !!fullContent,
+                        fullContent,
                       },
-                      hasMore: !!fullContent,
-                      fullContent,
                     },
                   },
                 },
-              },
-            });
-          }}
-        ></CommentEditor>
+              });
+            }}
+          ></CommentEditor>
+        )}
         <div className="lla-comment__comments">
           {comments.map((comment) => (
-            <Comment {...comment} key={comment.id}></Comment>
+            <Comment
+              {...comment}
+              key={comment.id}
+              isMobile={isMobile}
+            ></Comment>
           ))}
         </div>
         {comments.length < totalCount && (

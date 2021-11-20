@@ -35,9 +35,13 @@
 }
 
 .lla-comment__body {
-  @apply w-full;
+  @apply flex-1;
 }
 
 .lla-comment__body .lla-comment__editor-wrapper {
   @apply mt-4;
+}
+
+.lla-comment--mobile .lla-comment__content {
+  @apply mb-2;
 }

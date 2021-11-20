@@ -13,6 +13,7 @@ export interface ReplyItem {
   id: number;
   content: ContentItem;
   targetReply?: any;
+  isMobile?: boolean;
 }
 
 export const Reply: React.FC<ReplyItem> = ({
@@ -20,6 +21,7 @@ export const Reply: React.FC<ReplyItem> = ({
   content,
   targetReply,
   commentId,
+  isMobile = false,
 }) => {
   const {
     author,
@@ -109,6 +111,7 @@ export const Reply: React.FC<ReplyItem> = ({
           commentId={commentId}
           replyId={id}
           targetAuthorName={author.nickName}
+          isMobile={isMobile}
         ></ActionGroup>
         <ExtraActionGroup></ExtraActionGroup>
       </div>

@@ -12,7 +12,10 @@ import {
 
 import { ReplyItem, Reply } from './Reply';
 
-export const ReplyList: React.FC<{ commentId: number }> = ({ commentId }) => {
+export const ReplyList: React.FC<{ commentId: number; isMobile?: boolean }> = ({
+  commentId,
+  isMobile = false,
+}) => {
   const pageSize = 10;
   const [currentPage, setCurrentPage] = React.useState<number>(0);
   const [take, setTake] = React.useState<number>(3);
@@ -76,11 +79,18 @@ export const ReplyList: React.FC<{ commentId: number }> = ({ commentId }) => {
           isExpanded ? ' lla-comment__replies-wrapper--expanded' : ''
         }`}
       >
-        <div className="lla-comment__replies">
-          {replies.map((reply) => (
-            <Reply {...reply} key={reply.id} commentId={commentId}></Reply>
-          ))}
-        </div>
+        {replies.length > 0 && (
+          <div className="lla-comment__replies">
+            {replies.map((reply) => (
+              <Reply
+                {...reply}
+                key={reply.id}
+                commentId={commentId}
+                isMobile={isMobile}
+              ></Reply>
+            ))}
+          </div>
+        )}
         {replies.length > 0 && replies.length < totalCount && (
           <div className="lla-comment__replies__footer">
             <span>共{totalCount}条回复</span>
@@ -112,7 +122,7 @@ export const ReplyList: React.FC<{ commentId: number }> = ({ commentId }) => {
           ></Paginator>
         )}
       </div>
-      {replyCommentId === commentId && (
+      {isMobile && replyCommentId === commentId && (
         <ReplyEditor
           createReply={async (authorId, brief, fullContent, targetReplyId) => {
             addReply({

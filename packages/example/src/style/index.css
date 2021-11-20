@@ -55,3 +55,11 @@
 .lla-custom-void-content {
   @apply select-none;
 }
+
+.lla-editor {
+  @apply w-full;
+}
+
+.lla-editor > div {
+  @apply w-full;
+}
