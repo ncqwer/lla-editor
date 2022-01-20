@@ -34,5 +34,6 @@
   },
   "dependencies": {
     "@lla-editor/core": "^0.0.11"
-  }
+  },
+  "gitHead": "aba2f06e328ae389ddac542c49eed8012d219fb8"
 }

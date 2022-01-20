@@ -36,5 +36,6 @@
   "dependencies": {
     "@lla-editor/core": "^0.0.11"
   },
-  "homepage": "https://github.com/ncqwer/lla-editor#readme"
+  "homepage": "https://github.com/ncqwer/lla-editor#readme",
+  "gitHead": "aba2f06e328ae389ddac542c49eed8012d219fb8"
 }
