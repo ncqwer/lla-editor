@@ -73,7 +73,7 @@ const Resizedvideo: React.FC<
           }
         } else {
           if (src === '') return setVideoSrc(errorCover);
-          const tmp = yield videoSign(src);
+          const tmp = yield videoSign(src, { width });
           setVideoSrc(tmp);
         }
       } catch (e) {

@@ -17,7 +17,7 @@ import {
 import { getAllOAuthConfigs, OAuthConfigFragment } from './gql/oauthConfig';
 import { User } from './User';
 
-export const { SharedProvider, useLens, useSetLens } = createShared<{
+export const { SharedProvider, useLens, useSetting } = createShared<{
   replyInfo: {
     commentId: number;
     targetReplyId?: number;

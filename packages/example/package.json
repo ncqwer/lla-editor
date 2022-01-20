@@ -43,7 +43,7 @@
     "@lla-editor/table": "^0.0.4",
     "@lla-editor/text-block": "^0.0.11",
     "@lla-editor/video": "^0.0.11",
-    "@zhujianshi/use-lens": "^0.0.6",
+    "@zhujianshi/use-lens": "^0.0.12",
     "is-hotkey": "^0.2.0",
     "slate": "^0.63.0",
     "slate-history": "^0.62.0",

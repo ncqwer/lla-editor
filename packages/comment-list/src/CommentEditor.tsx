@@ -5,7 +5,7 @@ import { LLAElement, useDebounce } from '@lla-editor/core';
 
 import { User, UserAvatar, useRequestLoginModal, useUserInfo } from './User';
 import { createInitialValue, RawEditor, RawEditable } from '@lla-editor/editor';
-import { useLens, useSetLens } from './CommentList';
+import { useLens } from './CommentList';
 
 export const CommmentEditorContext = React.createContext<{
   commentId?: string;

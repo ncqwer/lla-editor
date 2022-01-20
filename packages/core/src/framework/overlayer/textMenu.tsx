@@ -17,7 +17,7 @@ const initStatus = {
   bgColor: '',
   hasLink: false,
 };
-const { useLens, useSetLens } = createShared<typeof initStatus>(initStatus);
+const { useLens, useSetting } = createShared<typeof initStatus>(initStatus);
 
 const storeLens = lens(
   (x) => x,
@@ -329,7 +329,7 @@ const TextLink = () => {
 
 export const TextActionMenu = () => {
   const positionRef = React.useRef<HTMLDivElement>(null);
-  const setActiveStyleMap = useSetLens(storeLens);
+  const setActiveStyleMap = useSetting(storeLens);
   const editor = useSlate();
   const [adjustPosition] = useDebounce(adjustPositionRaw, 100);
   React.useEffect(() => adjustPosition());

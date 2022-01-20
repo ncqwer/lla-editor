@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@herbart-editor/pae": "^0.0.5",
-    "@zhujianshi/use-lens": "^0.0.6",
+    "@zhujianshi/use-lens": "^0.0.12",
     "dom-align": "^1.12.2",
     "is-hotkey": "^0.2.0"
   },

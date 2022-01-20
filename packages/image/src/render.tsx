@@ -95,6 +95,8 @@ const ResizedImage: React.FC<
       {...others}
     >
       <LoadingImage
+        width={width}
+        height={height}
         ref={imgRef}
         src={src}
         alt={alt}
@@ -257,10 +259,14 @@ const LoadingImage = React.forwardRef(
       src,
       alt,
       className,
+      width,
+      height,
       onSrcChange,
     }: {
       src: string | File;
       alt?: string;
+      width: number;
+      height: number;
       className?: string;
       onSrcChange: (v: string) => void;
     },
@@ -293,7 +299,7 @@ const LoadingImage = React.forwardRef(
           } else {
             if (src === '') return setImgSrc(errorCover);
             const image = new Image();
-            const tmp = yield imgSign(src);
+            const tmp = yield imgSign(src, { width, height });
             image.src = tmp;
             yield new Promise((res) => {
               image.onload = res;

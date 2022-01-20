@@ -43,7 +43,7 @@ export const UserTitleExtra: React.FC<{ user: User }> = () => {
 export const {
   SharedProvider: UserInfoProviderImpl,
   useLens: useUserInfo,
-  useSetLens: useSetUserInfo,
+  useSetting: useSetUserInfo,
 } = createShared<{
   user: User;
 }>({});
@@ -174,7 +174,7 @@ const UserInfoProvider: React.FC<{
   );
 
   return (
-    <UserInfoProviderImpl value={realUser} initialValue={realUser}>
+    <UserInfoProviderImpl value={realUser as any} initialValue={realUser}>
       <ApolloProvider client={client}>{children}</ApolloProvider>
     </UserInfoProviderImpl>
   );

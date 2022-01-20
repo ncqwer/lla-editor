@@ -12,8 +12,8 @@
   @apply contents;
 }
 
-.lla-list-item--task .lla-list-item__leading__content {
-  @apply form-checkbox leading-6  cursor-pointer;
+.lla-list-item--task .lla-list-item__leading__content.input {
+  @apply form-checkbox leading-6 cursor-pointer;
   box-shadow: none;
 }
 .lla-list-item__content {

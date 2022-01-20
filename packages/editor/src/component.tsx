@@ -20,7 +20,7 @@ import AudioImpl from '@lla-editor/audio';
 import VideoImpl from '@lla-editor/video';
 import QuoteImpl from '@lla-editor/quote';
 import LinkImpl from '@lla-editor/link';
-import CodeImpl from '@Lla-editor/code';
+import CodeImpl from '@lla-editor/code';
 
 export const availablePlugins = [
   TextBlockImpl,
@@ -55,105 +55,6 @@ export const LLAEnvironment: React.FC<{ plugins?: { pluginName: string }[] }> =
       </PluginProvider>
     );
   };
-
-export const Example = () => {
-  const imageRef = React.useRef<HTMLInputElement>(null);
-  const audioRef = React.useRef<HTMLInputElement>(null);
-  const videoRef = React.useRef<HTMLInputElement>(null);
-  const promiseRef = React.useRef<any>(null);
-  const [value, setValue] = useState<Descendant[]>(createInitialValue());
-  return (
-    <LLAEnvironment>
-      <SharedProvider
-        initialValue={React.useMemo<Partial<LLAConfig>>(
-          () => ({
-            core: {
-              overlayerId: 'root',
-            },
-            indentContainer: {
-              indent: 24,
-            },
-            image: {
-              loadingCover: 'loadingCover',
-              errorCover: 'errorCover',
-              imgOpen: async () => {
-                if (promiseRef.current) promiseRef.current[1]();
-                imageRef.current?.click();
-                return new Promise<string>((res, rej) => {
-                  promiseRef.current = [res, rej];
-                });
-              },
-              imgSign: async (id: any) => id,
-              imgRemove: async (id) => console.log(id),
-            },
-            audio: {
-              loadingCover: 'loadingCover',
-              errorCover: 'errorCover',
-              audioOpen: async () => {
-                if (promiseRef.current) promiseRef.current[1]();
-                audioRef.current?.click();
-                return new Promise<string>((res, rej) => {
-                  promiseRef.current = [res, rej];
-                });
-              },
-              audioSign: async (id: any) => id,
-              audioRemove: async (id: any) => console.log(id),
-            },
-            video: {
-              loadingCover: 'loadingCover',
-              errorCover: 'errorCover',
-              videoOpen: async () => {
-                if (promiseRef.current) promiseRef.current[1]();
-                videoRef.current?.click();
-                return new Promise<string>((res, rej) => {
-                  promiseRef.current = [res, rej];
-                });
-              },
-              videoSign: async (id: any) => id,
-              videoRemove: async (id: any) => console.log(id),
-            },
-          }),
-          [],
-        )}
-      >
-        <LLAEditor value={value} onChange={setValue}></LLAEditor>
-        <input
-          type="file"
-          className="hidden"
-          ref={imageRef}
-          onChange={async (e) => {
-            const file = e.target?.files?.[0];
-            if (!file) return;
-            promiseRef.current && promiseRef.current[0](file);
-          }}
-          accept=".jpeg,.jpg,.png"
-        />
-        <input
-          type="file"
-          className="hidden"
-          ref={audioRef}
-          onChange={async (e) => {
-            const file = e.target?.files?.[0];
-            if (!file) return;
-            promiseRef.current && promiseRef.current[0](file);
-          }}
-          accept=".mp3"
-        />
-        <input
-          type="file"
-          className="hidden"
-          ref={videoRef}
-          onChange={async (e) => {
-            const file = e.target?.files?.[0];
-            if (!file) return;
-            promiseRef.current && promiseRef.current[0](file);
-          }}
-          accept=".mp4"
-        />
-      </SharedProvider>
-    </LLAEnvironment>
-  );
-};
 
 export const LLAEditor: React.FC<{
   value: Descendant[];

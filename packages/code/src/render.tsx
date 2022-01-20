@@ -73,9 +73,11 @@ const createDecoration = ({
     className,
   };
 };
+const weakMap = new WeakMap();
 
 export const decorate: Decorate<CodeBlock> = (next, [element, elementPath]) => {
   if (!Code.isCode(element)) return next();
+  if (weakMap.has(element)) return weakMap.get(element);
   const textEntry = Array.from(Node.texts(element));
   const blockTotalText = textEntry.map((t) => t[0].text).join('\n');
   const language = element.language;
@@ -106,6 +108,7 @@ export const decorate: Decorate<CodeBlock> = (next, [element, elementPath]) => {
               className: type,
             });
           }
+          if (!decoration) return [offset + token.length, innerDecorations];
           return [offset + token.length, innerDecorations.concat(decoration)];
         } else {
           // typeof token === 'object'
@@ -122,6 +125,8 @@ export const decorate: Decorate<CodeBlock> = (next, [element, elementPath]) => {
               end: offset + token.content.length,
               className: currentClassName,
             });
+            if (!decoration)
+              return [offset + token.content.length, innerDecorations];
             return [
               offset + token.content.length,
               innerDecorations.concat(decoration),
@@ -146,7 +151,8 @@ export const decorate: Decorate<CodeBlock> = (next, [element, elementPath]) => {
     },
     [0, []] as [number, (Range | null)[]],
   );
-  return decorations.filter((x) => !!x) as Range[];
+  weakMap.set(element, decorations);
+  return decorations;
 };
 
 const CodeLineElement: React.FC<ExtendRenderElementProps<CodeLine>> = ({
@@ -353,7 +359,6 @@ const CodeElement: React.FC<ExtendRenderElementProps<CodeBlock>> = ({
 
           const txt = e.clipboardData.getData('text/plain');
           if (!txt) return;
-          console.log('仅仅复制code块，不进入slate复制逻辑');
           e.stopPropagation();
           e.preventDefault();
           const [firstLine, ...otherLines] = txt.split('\n');
@@ -395,10 +400,10 @@ const PrismTokenElement: React.FC<ExtendRenderLeafProps<PrismText>> = ({
 };
 
 export const renderLeaf = [
-  [textPropsIs(Code.isPrismText), elementRender(PrismTokenElement)],
+  [textPropsIs(Code.isPrismText), elementRender(React.memo(PrismTokenElement))],
 ];
 
 export const renderElement = [
-  [elementPropsIs(Code.isCode), elementRender(CodeElement)],
-  [elementPropsIs(Code.isCodeLine), elementRender(CodeLineElement)],
+  [elementPropsIs(Code.isCode), elementRender(React.memo(CodeElement))],
+  [elementPropsIs(Code.isCodeLine), elementRender(React.memo(CodeLineElement))],
 ];

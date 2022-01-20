@@ -11,9 +11,7 @@ export type ContextMenuInfo = {
   targetGet: () => HTMLElement | null;
 };
 
-const { useLens, SharedProvider, useSetLens } = createShared<ContextMenuInfo>(
-  {},
-);
+const { useLens, SharedProvider } = createShared<ContextMenuInfo>({});
 
 const storeLens = lens(
   (x: ContextMenuInfo) => x,

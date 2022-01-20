@@ -1,28 +1,28 @@
 import React from 'react';
-import { Picker } from 'emoji-mart';
 import {
+  ConfigHelers,
   ElementJSX,
   elementPropsIs,
   elementRender,
   ExtendRenderElementProps,
+  LLAConfig,
   LLAOverLayer,
   PlaceholderContext,
+  SharedApi,
 } from '@lla-editor/core';
 import { CalloutElement } from './element';
 import { Transforms } from 'slate';
 import { ReactEditor, useReadOnly, useSlateStatic } from 'slate-react';
 
-const emojiI18 = {
-  search: '查询',
-  clear: '清除',
-  notfound: '暂无emoji',
-  categories: {
-    search: '查询结果',
-    recent: '最近使用',
-  },
-};
+const { useGetting } = ConfigHelers as SharedApi<LLAConfig>;
 
 const alignOpts = { points: ['tl', 'bl'] };
+
+const DefaultPicker = () => (
+  <div className="p-4 rounded shadow-sm bg-white border text-xs text-gray-400">
+    正在加载emoji组件...
+  </div>
+);
 
 const Callout: React.FC<ExtendRenderElementProps<CalloutElement>> = ({
   element,
@@ -34,6 +34,8 @@ const Callout: React.FC<ExtendRenderElementProps<CalloutElement>> = ({
   const ref = React.useRef<HTMLSpanElement>(null);
   const editor = useSlateStatic();
   const readOnly = useReadOnly();
+  const PickerRaw = useGetting(['callout', 'PickerComponent']);
+  const Picker = PickerRaw || DefaultPicker;
   return (
     <>
       <div
@@ -74,10 +76,6 @@ const Callout: React.FC<ExtendRenderElementProps<CalloutElement>> = ({
               }
               setIsOpen(false);
             }}
-            showSkinTones={false}
-            showPreview={false}
-            emojiTooltip={true}
-            i18n={emojiI18}
           ></Picker>
         </LLAOverLayer>
       )}

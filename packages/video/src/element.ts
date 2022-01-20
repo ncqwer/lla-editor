@@ -27,7 +27,7 @@ interface VideoConfig {
   videoOpen: () => Promise<string | File>;
   videoRemove: (src: string) => Promise<void>;
   videoUpload?: (src: File) => Promise<void>;
-  videoSign: (src: string) => Promise<string>;
+  videoSign: (src: string, options?: { width: number }) => Promise<string>;
   loadingCover?: string;
   errorCover?: string;
 }

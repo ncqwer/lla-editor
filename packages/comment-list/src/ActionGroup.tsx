@@ -1,7 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { useLens, useSetLens } from './CommentList';
+import { useLens, useSetting } from './CommentList';
 import { useMutation } from '@apollo/client';
 import { likeContent, unLikeContent } from './gql/content';
 import { useRequestLoginModal, useUserInfo } from './User';
@@ -28,7 +28,7 @@ export const ActionGroup: React.FC<{
   isMobile = false,
 }) => {
   const createdAtString = dayjs(createdAt).format('YYYY-MM-DD HH:mm');
-  const setReplyInfo = useSetLens(['replyInfo']);
+  const setReplyInfo = useSetting(['replyInfo']);
   const [user] = useUserInfo(['user']);
   const [isLiked, setIsLiked] = React.useState(_isLiked);
   const openLoginModal = useRequestLoginModal();

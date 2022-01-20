@@ -25,4 +25,9 @@ declare module '@lla-editor/core' {
   interface CustomAtom {
     CalloutElement: CalloutElement;
   }
+  interface LLAConfig {
+    callout: {
+      PickerComponent: any;
+    };
+  }
 }

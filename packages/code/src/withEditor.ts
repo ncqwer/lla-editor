@@ -30,7 +30,6 @@ export const withEditor = (editor: Editor) => {
       let p: Path | null = null;
       node.children.forEach((codeline: CodeLine | BaseElement, i) => {
         if (Code.isCodeLine(codeline)) return;
-        console.log('heavy');
         const str = Node.string(codeline);
         p = path.concat(i);
         Transforms.removeNodes(editor, { at: p });

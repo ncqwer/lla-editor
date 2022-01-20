@@ -35,7 +35,10 @@ export const createMediaBlock: CreateMediaBlock = (next, file, editor) => {
 interface ImageConfig {
   imgOpen: () => Promise<string | File>;
   imgRemove: (src: string) => Promise<void>;
-  imgSign: (src: string) => Promise<string>;
+  imgSign: (
+    src: string,
+    options?: { width: number; height: number },
+  ) => Promise<string>;
   imgUpload?: (file: File) => Promise<string>;
   loadingCover: string;
   errorCover: string;
