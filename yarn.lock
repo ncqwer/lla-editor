@@ -2192,9 +2192,9 @@
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
 "@types/lodash@^4.14.149":
-  version "4.14.178"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.178.tgz#341f6d2247db528d4a13ddbb374bcdc80406f4f8"
-  integrity sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==
+  version "4.14.182"
+  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.182.tgz#05301a4d5e62963227eaafe0ce04dd77c54ea5c2"
+  integrity sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==
 
 "@types/mdast@^3.0.0":
   version "3.0.3"
@@ -2428,17 +2428,17 @@
   dependencies:
     tslib "^2.3.0"
 
-"@zhujianshi/lens@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.npmjs.org/@zhujianshi/lens/-/lens-0.0.7.tgz#477fdeec550b8474a22c67059fb05fe87c3fcabb"
-  integrity sha512-1gj4e75YhBD4pjEsLQVv6svs5YfdNAG2kxc0CIA0CIureIkxxJjJVwXH3+fF8KhBvmgZjLPXbTcUJimOzV3xfw==
+"@zhujianshi/lens@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.npmjs.org/@zhujianshi/lens/-/lens-0.0.8.tgz#02aa579a6a822736a099a441bb07a1b110266cc9"
+  integrity sha512-lo4YSbdw2zLdnO6MONn4cOC2L8E0GmSgzC467GpGnwHmG2UYdDUEQpABsh6SRc6d5F7zkuiWlKarg4s1Hz+smg==
 
-"@zhujianshi/use-lens@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.npmjs.org/@zhujianshi/use-lens/-/use-lens-0.0.12.tgz#c64eb12b3606e627d22cd513b6d2639dded88e22"
-  integrity sha512-PhfJBJ5Ns3weE29hT9tgCr7WVdeNgscyOk9VX10oLqMUAa0NgmxvuuQZ8BrzqUCHycuYioqAFQIDYbKi0gI8Tw==
+"@zhujianshi/use-lens@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.npmjs.org/@zhujianshi/use-lens/-/use-lens-0.0.13.tgz#a20238e8325d40692d5c7c0522ef27b681ec7dad"
+  integrity sha512-b/L2AO2K+8l78FGBabYLYnueK7sAUeRaWw9f2KF2U1mCeVrXaq4VTbAYjxRFu76P6xncLwyojG6VMh0SOwRAWA==
   dependencies:
-    "@zhujianshi/lens" "^0.0.7"
+    "@zhujianshi/lens" "^0.0.8"
     use-sync-external-store "^1.0.0-rc.0"
 
 JSONStream@^1.0.4:
@@ -5467,9 +5467,9 @@ immer@^8.0.1:
   integrity sha512-jMfL18P+/6P6epANRvRk6q8t+3gGhqsJ9EuJ25AXE+9bNTYtssvzeYbEd0mXRYWCmmXSIbnlpz6vd6iJlmGGGQ==
 
 immer@^9.0.6:
-  version "9.0.12"
-  resolved "https://registry.npmjs.org/immer/-/immer-9.0.12.tgz#2d33ddf3ee1d247deab9d707ca472c8c942a0f20"
-  integrity sha512-lk7UNmSbAukB5B6dh9fnh5D0bJTOFKxVg2cyJWTYrWRfhLrLMBquONcUs3aFq507hNoIZEDDh8lb8UtOizSMhA==
+  version "9.0.14"
+  resolved "https://registry.npmjs.org/immer/-/immer-9.0.14.tgz#e05b83b63999d26382bb71676c9d827831248a48"
+  integrity sha512-ubBeqQutOSLIFCUBN03jGeOS6a3DoYlSYwYJTa+gSKEZKU5redJIqkIdZ3JVv/4RZpfcXdAWH5zCNLWPRv2WDw==
 
 import-cwd@^3.0.0:
   version "3.0.0"
@@ -9228,9 +9228,9 @@ scheduler@^0.20.2:
     object-assign "^4.1.1"
 
 scroll-into-view-if-needed@^2.2.20:
-  version "2.2.28"
-  resolved "https://registry.npmjs.org/scroll-into-view-if-needed/-/scroll-into-view-if-needed-2.2.28.tgz#5a15b2f58a52642c88c8eca584644e01703d645a"
-  integrity sha512-8LuxJSuFVc92+0AdNv4QOxRL4Abeo1DgLnGNkn1XlaujPH/3cCFz3QI60r2VNu4obJJROzgnIUw5TKQkZvZI1w==
+  version "2.2.29"
+  resolved "https://registry.npmjs.org/scroll-into-view-if-needed/-/scroll-into-view-if-needed-2.2.29.tgz#551791a84b7e2287706511f8c68161e4990ab885"
+  integrity sha512-hxpAR6AN+Gh53AdAimHM6C8oTN1ppwVZITihix+WqalywBeFcQ6LdQP5ABNl26nX8GTEL7VT+b8lKpdqq65wXg==
   dependencies:
     compute-scroll-into-view "^1.0.17"
 
@@ -9384,10 +9384,10 @@ slate-react@^0.65.0:
     scroll-into-view-if-needed "^2.2.20"
     tiny-invariant "1.0.6"
 
-slate-react@^0.72.5:
-  version "0.72.5"
-  resolved "https://registry.npmjs.org/slate-react/-/slate-react-0.72.5.tgz#6d384412a0c3a532104a0a2fb9afb83bb7937216"
-  integrity sha512-uYxBMSViAxyMtllz1U/tvLB6vj41/wnjpKF08K9BhNNnYjq8gYEV8BeFBwtd5Y8m4yU+ddk+cdryV1KNHtLqNA==
+slate-react@^0.72.5, slate-react@^0.72.9:
+  version "0.72.9"
+  resolved "https://registry.npmjs.org/slate-react/-/slate-react-0.72.9.tgz#b05dd533bd29dd2d4796b614a8d8e01f214bb714"
+  integrity sha512-FEsqB+D1R/h+w1eCtHH367Krw2X7vju2GjMRL/d0bUiCRXlV50J9I9TJizvi7aaZyqBY8BypCuIiq9nNmsulCA==
   dependencies:
     "@types/is-hotkey" "^0.1.1"
     "@types/lodash" "^4.14.149"
@@ -9410,10 +9410,10 @@ slate@^0.63.0:
     is-plain-object "^3.0.0"
     tiny-warning "^1.0.3"
 
-slate@^0.72.3:
-  version "0.72.3"
-  resolved "https://registry.npmjs.org/slate/-/slate-0.72.3.tgz#c74eb85133b975b2d44d219462c127cdb992e76b"
-  integrity sha512-ALsYQHKTN4rC+iHnOJzV+aC4AHdhoPkBWrfEK3W/LbXOzPrR+wL80a66OZiYg9Xb0QeGzlLSGdOOFQd2ix9Wmg==
+slate@^0.72.3, slate@^0.72.8:
+  version "0.72.8"
+  resolved "https://registry.npmjs.org/slate/-/slate-0.72.8.tgz#5a018edf24e45448655293a68bfbcf563aa5ba81"
+  integrity sha512-/nJwTswQgnRurpK+bGJFH1oM7naD5qDmHd89JyiKNT2oOKD8marW0QSBtuFnwEbL5aGCS8AmrhXQgNOsn4osAw==
   dependencies:
     immer "^9.0.6"
     is-plain-object "^5.0.0"

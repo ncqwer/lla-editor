@@ -32,6 +32,7 @@ const Resizedvideo: React.FC<
     width: number;
     openContextMenu: (f: () => HTMLElement | null) => void;
     onWidthChange: (v: number) => void;
+    onSrcChange: (v: string) => void;
   }
 > = ({
   src,
@@ -39,6 +40,7 @@ const Resizedvideo: React.FC<
   selected = false,
   width,
   onWidthChange,
+  onSrcChange,
   openContextMenu,
   ...others
 }) => {
@@ -69,7 +71,7 @@ const Resizedvideo: React.FC<
           if (videoUpload) {
             yield new Promise((res) => setTimeout(res, 1000));
             const uploadSrc = yield videoUpload(src);
-            setVideoSrc(uploadSrc);
+            onSrcChange(uploadSrc);
           }
         } else {
           if (src === '') return setVideoSrc(errorCover);
@@ -277,6 +279,7 @@ const VideoComponent = ({
           src={src || ''}
           selected={selected}
           width={width}
+          onSrcChange={handleMetaChange('src')}
           onWidthChange={handleMetaChange('width')}
           openContextMenu={openContenxtMenu}
           // onMouseOver={() =>

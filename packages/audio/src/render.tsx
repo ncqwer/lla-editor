@@ -32,10 +32,11 @@ const alignOpt = {
 };
 
 const Audio: React.FC<{
+  onSrcChange: (v: string) => void;
   src: string | File;
   selected?: boolean;
   openContextMenu: (f: () => HTMLElement | null) => void;
-}> = ({ src, selected = false, openContextMenu }) => {
+}> = ({ src, onSrcChange, selected = false, openContextMenu }) => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const ref = React.useRef<HTMLAudioElement>(null);
   const [progress, setProgress] = React.useState(0);
@@ -69,7 +70,7 @@ const Audio: React.FC<{
           if (audioUpload) {
             yield new Promise((res) => setTimeout(res, 1000));
             const uploadSrc = yield audioUpload(src);
-            setAudioSrc(uploadSrc);
+            onSrcChange(uploadSrc);
           }
         } else {
           const tmp = yield audioSign(src);
@@ -572,6 +573,7 @@ const AudioComponent = ({
       {(src || readOnly) && (
         <Audio
           src={src || ''}
+          onSrcChange={handleMetaChange('src')}
           selected={selected}
           openContextMenu={openContenxtMenu}
           // onMouseOver={() =>

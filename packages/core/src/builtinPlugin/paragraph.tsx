@@ -56,10 +56,13 @@ const render = [
       if (text.text.length === 0 && element.children.length === 1) {
         children = (
           <>
-            <span className="lla-placeholder " contentEditable={false}>
+            {_children}
+            <span
+              className="lla-placeholder absolute top-1"
+              contentEditable={false}
+            >
               {placeholder}
             </span>
-            {_children}
           </>
         );
       }
