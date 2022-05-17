@@ -16,7 +16,7 @@ import LinkImpl from '@lla-editor/link';
 import CodeImpl from '@lla-editor/code';
 import TableImpl from '@lla-editor/table';
 import copy from 'copy-to-clipboard';
-import { Example, LLAEditor } from '@lla-editor/editor';
+import { LLAEditor } from '@lla-editor/editor';
 
 import Handsontable from 'handsontable';
 import { HotTable, HotTableProps } from '@handsontable/react';

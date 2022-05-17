@@ -39,6 +39,7 @@ export const Editor: React.FC<{
   editor.html2md = html2md;
   editor.txt2md = txt2md;
   editor.md2txt = md2txt;
+  editor.children = value;
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
     setMounted(true);
