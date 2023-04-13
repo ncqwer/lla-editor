@@ -1,10 +1,21 @@
 {
   "packages": [
     "packages/*",
-    "doc"
+    "doc",
+    "playground"
   ],
   "version": "independent",
   "useWorkspaces": true,
+  "useNx": true,
+  "command": {
+    "publish": {
+      "npmClient": "yarn",
+      "registry": "https://registry.npmjs.org/"
+    },
+    "bootstrap": {
+      "npmClient": "yarn"
+    }
+  },
   "npmClient": "yarn",
-  "esModule":true
+  "esModule": true
 }

@@ -1,12 +1,13 @@
-import reactRefresh from '@vitejs/plugin-react-refresh';
+/* eslint-disable import/no-extraneous-dependencies */
+import react from '@vitejs/plugin-react';
 // import typescript from 'rollup-plugin-typescript2';
 import { defineConfig } from 'vite';
 
 import pkg from './package.json';
 
-const deps = []
-  .concat(pkg.dependencies ? Object.keys(pkg.dependencies) : [])
-  .concat(pkg.peerDependencies ? Object.keys(pkg.peerDependencies) : []);
+const deps = ([] as any[])
+  .concat(pkg?.dependencies ? Object.keys(pkg?.dependencies) : [])
+  .concat(pkg?.peerDependencies ? Object.keys(pkg?.peerDependencies) : []);
 
 const name = `LLAEditor${pkg.name
   .replace('@lla-editor/', '')
@@ -25,5 +26,5 @@ export default defineConfig({
       external: deps,
     },
   },
-  plugins: [reactRefresh()],
+  plugins: [react()],
 });

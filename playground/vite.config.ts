@@ -1,8 +1,10 @@
-import reactRefresh from '@vitejs/plugin-react-refresh';
-import prismjsPlugin from 'vite-plugin-prismjs';
+/* eslint-disable import/no-extraneous-dependencies */
+import react from '@vitejs/plugin-react';
+// import prismjsPlugin from 'vite-plugin-prismjs';
 import path from 'path';
 import fs from 'fs';
-import { defineConfig, Plugin } from 'vite';
+import { defineConfig } from 'vite';
+import type { Plugin } from 'vite';
 
 const watchWorkspaces = (rootPath: string): Plugin => {
   return {
@@ -67,8 +69,8 @@ export default defineConfig({
     port: 3001,
   },
   plugins: [
-    reactRefresh(),
-    watchWorkspaces('../../'),
+    react(),
+    watchWorkspaces('../'),
     // prismjsPlugin({
     //   // languages: [
     //   //   'c',

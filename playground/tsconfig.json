@@ -1,0 +1,26 @@
+{
+  "extends": "../config/tsconfig.base.json",
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "references": [
+    { "path": "../packages/core" },
+    { "path": "../packages/indent" },
+    { "path": "../packages/text-block" },
+    { "path": "../packages/list" },
+    { "path": "../packages/image" },
+    { "path": "../packages/heading" },
+    { "path": "../packages/divider" },
+    { "path": "../packages/callout" },
+    { "path": "../packages/audio" },
+    { "path": "../packages/video" },
+    { "path": "../packages/quote" },
+    { "path": "../packages/editor" },
+    { "path": "../packages/custom-void" },
+    { "path": "../packages/link" },
+    { "path": "../packages/code" },
+    { "path": "../packages/table" },
+    { "path": "../packages/config-preset" }
+  ]
+}

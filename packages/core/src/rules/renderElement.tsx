@@ -1,12 +1,9 @@
 import React from 'react';
 import { Element } from 'slate';
-import {
-  DefaultElement,
-  RenderElementProps,
-  useSlateStatic,
-} from 'slate-react';
+// eslint-disable-next-line import/named
+import { RenderElementProps } from 'slate-react';
 import { Func } from '../type';
-import { ExtendRenderLeafProps } from './renderLeaf';
+// import { ExtendRenderLeafProps } from './renderLeaf';
 import { caseMatch, extractValueFromPlugin } from './utils';
 
 export type ExtendRenderElementProps<E extends Element> = Omit<

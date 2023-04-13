@@ -1,17 +1,17 @@
 {
-  "files":[],
+  "files": [],
   "references": [
     {
-      "path":"./packages/core"
+      "path": "./packages/core"
     },
     {
-      "path":"./packages/example"
+      "path": "./playground"
     },
     {
-      "path":"./packages/indent"
+      "path": "./packages/indent"
     },
-    {"path":"./packages/text-block"},
-    {"path":"./packages/list"},
-    {"path":"./packages/image"},
-  ],
+    { "path": "./packages/text-block" },
+    { "path": "./packages/list" },
+    { "path": "./packages/image" }
+  ]
 }

@@ -75,7 +75,7 @@ const handleBackspace: keyDownType = (next, event, editor, [node, path]) => {
         let path = previousPoint.path.slice(0, -1);
         let element = Node.get(editor, path);
         let flag = false;
-        while (Editor.isVoid(editor, element)) {
+        while (Editor.isVoid(editor, element as Element)) {
           flag = true;
           path = Path.previous(path);
           element = Node.get(editor, path);
