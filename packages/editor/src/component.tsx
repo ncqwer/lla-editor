@@ -9,8 +9,6 @@ import {
   ParagraphImpl,
   LLAConfig,
 } from '@lla-editor/core';
-import IndentImpl from '@lla-editor/indent';
-import TextBlockImpl from '@lla-editor/text-block';
 import ListImpl from '@lla-editor/list';
 import ImageImpl from '@lla-editor/image';
 import HeadingImpl from '@lla-editor/heading';
@@ -21,6 +19,8 @@ import VideoImpl from '@lla-editor/video';
 import QuoteImpl from '@lla-editor/quote';
 import LinkImpl from '@lla-editor/link';
 import CodeImpl from '@lla-editor/code';
+import IndentImpl from '@lla-editor/indent';
+import TextBlockImpl from '@lla-editor/text-block';
 
 export const availablePlugins = [
   TextBlockImpl,
@@ -40,21 +40,22 @@ export const availablePlugins = [
 
 export const { SharedProvider } = ConfigHelers;
 
-export const LLAEnvironment: React.FC<{ plugins?: { pluginName: string }[] }> =
-  ({ children, plugins = availablePlugins }) => {
-    return (
-      <PluginProvider availablePlugins={plugins}>
-        <Environment
-          activePluginNames={React.useMemo(
-            () => plugins.map(({ pluginName }) => pluginName),
-            [plugins],
-          )}
-        >
-          {children}
-        </Environment>
-      </PluginProvider>
-    );
-  };
+export const LLAEnvironment: React.FC<{
+  plugins?: { pluginName: string }[];
+}> = ({ children, plugins = availablePlugins }) => {
+  return (
+    <PluginProvider availablePlugins={plugins}>
+      <Environment
+        activePluginNames={React.useMemo(
+          () => plugins.map(({ pluginName }) => pluginName),
+          [plugins],
+        )}
+      >
+        {children}
+      </Environment>
+    </PluginProvider>
+  );
+};
 
 export const LLAEditor: React.FC<{
   value: Descendant[];

@@ -2,16 +2,7 @@
   "files": [],
   "references": [
     {
-      "path": "./packages/core"
-    },
-    {
       "path": "./playground"
-    },
-    {
-      "path": "./packages/indent"
-    },
-    { "path": "./packages/text-block" },
-    { "path": "./packages/list" },
-    { "path": "./packages/image" }
+    }
   ]
 }

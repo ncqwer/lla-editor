@@ -6,7 +6,7 @@
   ],
   "version": "independent",
   "useWorkspaces": true,
-  "useNx": true,
+  "useNx": false,
   "command": {
     "publish": {
       "npmClient": "yarn",

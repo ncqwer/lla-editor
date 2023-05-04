@@ -7,7 +7,7 @@
   "license": "MIT",
   "source": "src/index.ts",
   "main": "dist/index.umd.js",
-  "module": "dist/index.es.js",
+  "module": "dist/index.mjs",
   "types": "dist/src/index.d.ts",
   "directories": {
     "lib": "dist",
