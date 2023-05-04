@@ -2492,10 +2492,10 @@
     js-yaml "^3.10.0"
     tslib "^2.4.0"
 
-"@zhujianshi/lens@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.npmjs.org/@zhujianshi/lens/-/lens-0.0.8.tgz#02aa579a6a822736a099a441bb07a1b110266cc9"
-  integrity sha512-lo4YSbdw2zLdnO6MONn4cOC2L8E0GmSgzC467GpGnwHmG2UYdDUEQpABsh6SRc6d5F7zkuiWlKarg4s1Hz+smg==
+"@zhujianshi/lens@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.npmjs.org/@zhujianshi/lens/-/lens-0.0.9.tgz#1c7e0d42a8f7a5dc3b83f3a566e284f98acadea4"
+  integrity sha512-HseN2IXebcEQplO7izjfg99fGaZUwQPDSSOqOAC027r79UE0lIARwC08VZB6znd0jPL3l83JD73BOqGj27YLyg==
 
 "@zhujianshi/lint@^1.0.2":
   version "1.0.2"
@@ -2511,13 +2511,13 @@
     eslint-plugin-react "^7.31.2"
     prettier "^2.7.1"
 
-"@zhujianshi/use-lens@^0.0.13":
-  version "0.0.13"
-  resolved "https://registry.npmjs.org/@zhujianshi/use-lens/-/use-lens-0.0.13.tgz#a20238e8325d40692d5c7c0522ef27b681ec7dad"
-  integrity sha512-b/L2AO2K+8l78FGBabYLYnueK7sAUeRaWw9f2KF2U1mCeVrXaq4VTbAYjxRFu76P6xncLwyojG6VMh0SOwRAWA==
+"@zhujianshi/use-lens@^0.0.17":
+  version "0.0.17"
+  resolved "https://registry.npmjs.org/@zhujianshi/use-lens/-/use-lens-0.0.17.tgz#492bd7bcea3acc2ad0b90a703a1c66c0463bd777"
+  integrity sha512-KqEFBQhhSlxy1Di9J/JQJyJcl0ltiEGGMl9vQIjIrf+qs5H6i51mpgBj0APOgnIUugl4IpIWUAgWvEW1bQHLLg==
   dependencies:
-    "@zhujianshi/lens" "^0.0.8"
-    use-sync-external-store "^1.0.0-rc.0"
+    "@zhujianshi/lens" "^0.0.9"
+    use-sync-external-store "^1.2.0"
 
 "@zkochan/js-yaml@0.0.6":
   version "0.0.6"
@@ -11996,10 +11996,10 @@ use-subscription@1.5.1:
   dependencies:
     object-assign "^4.1.1"
 
-use-sync-external-store@^1.0.0-rc.0:
-  version "1.0.0-rc.0-next-fe905f152-20220107"
-  resolved "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.0.0-rc.0-next-fe905f152-20220107.tgz#1a244bd9c97f6853552df1f5a29fca726e7a3e96"
-  integrity sha512-1kK4h4Qubjnkmk6UObQKkYv+XwGTd5SuH6/hx1dfzEEvIWLkVd326Lg7Y1EOxfMUxJ5binWXndYX8ZrXFKHGuw==
+use-sync-external-store@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
+  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"

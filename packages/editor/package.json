@@ -40,7 +40,7 @@
     "@lla-editor/quote": "^0.0.14",
     "@lla-editor/text-block": "^0.0.15",
     "@lla-editor/video": "^0.0.15",
-    "@zhujianshi/use-lens": "^0.0.13",
+    "@zhujianshi/use-lens": "^0.0.17",
     "slate": "^0.93.0",
     "slate-history": "^0.93.0",
     "slate-react": "^0.93.0"
