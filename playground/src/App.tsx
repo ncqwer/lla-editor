@@ -16,7 +16,7 @@ const PlainTextExample = () => {
   // return <TryParent></TryParent>;
   return (
     <LLAEnvironment>
-      <SharedProviderPreset overlayerId="root1">
+      <SharedProviderPreset overlayerId="root">
         <AEditor></AEditor>
       </SharedProviderPreset>
     </LLAEnvironment>

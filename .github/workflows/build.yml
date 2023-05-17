@@ -55,6 +55,8 @@ jobs:
         run: |
           yarn build
           yarn build:vite
+        env:
+          NODE_ENV_FOR_PLAYGROUND: CI
 
       - name: Lerna publish
         run: |

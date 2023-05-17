@@ -68,7 +68,8 @@ export default defineConfig({
   server: {
     port: 3001,
   },
-  base: 'lla-editor',
+  // base: process.env.No'lla-editor',
+  base: process.env.NODE_ENV_FOR_PLAYGROUND === 'CI' ? 'lla-editor' : undefined,
   plugins: [
     react(),
     watchWorkspaces('../'),
