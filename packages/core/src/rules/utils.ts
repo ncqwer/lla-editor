@@ -1,5 +1,5 @@
 import type { PluginRuleObjType } from '@herbart-editor/pae';
-import isHotkey from 'is-hotkey';
+import { isHotkey } from 'is-hotkey';
 import { Element, Text } from 'slate';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { Nextify, Func, NextifParams } from '../index';
