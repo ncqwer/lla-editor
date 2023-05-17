@@ -1,6 +1,5 @@
-import React, { MouseEvent } from 'react';
-import { createPortal } from 'react-dom';
-import domAlign from 'dom-align';
+import React from 'react';
+
 import { Transforms } from 'slate';
 import {
   ElementJSX,
@@ -11,11 +10,10 @@ import {
   SharedApi,
   ConfigHelers,
   runWithCancel,
-  Func,
   elementRender,
   LLAOverLayer,
 } from '@lla-editor/core';
-import { useSpring, animated } from 'react-spring';
+
 import { ImageElement } from './element';
 import {
   ReactEditor,
@@ -54,7 +52,7 @@ const ResizedImage: React.FC<
   const [imgRemove] = useLens(['image', 'imgRemove']);
   const [loadingCover] = useLens(['image', 'loadingCover']);
   const [errorCover] = useLens(['image', 'errorCover']);
-  const [styles, api] = useSpring(() => ({ width, height }));
+  // const [styles, api] = useSpring(() => ({ width, height }));
   const triggerRef = React.useRef<HTMLDivElement>(null);
   const readonly = useReadOnly();
   const imgRef = React.useRef<HTMLImageElement>(null);
@@ -76,17 +74,15 @@ const ResizedImage: React.FC<
         imgRemove(srcRef.current);
     };
   }, []);
-  const [handleWidthChangeDebounce] = useThrottle((f: Func, v: number) => {
+  const [handleWidthChangeDebounce] = useThrottle((v: number) => {
     onWidthChange(v);
-    f();
-  }, 1000 / 30);
-  const [handleHeightChangeDebounce] = useThrottle((f: Func, v: number) => {
+  }, 1000 / 60);
+  const [handleHeightChangeDebounce] = useThrottle((v: number) => {
     onHeightChange(v);
-    f();
-  }, 1000 / 30);
+  }, 1000 / 60);
   return (
-    <animated.div
-      style={styles}
+    <div
+      // style={styles}
       className={`lla-context-menu-target lla-image relative ${
         selected ? 'lla-selected' : ''
       }`}
@@ -138,25 +134,33 @@ const ResizedImage: React.FC<
           </div>
         </>
       )}
-    </animated.div>
+    </div>
   );
 
   function handleMouseDown(isLeftHandler: boolean) {
     return (event: React.MouseEvent<HTMLDivElement>) => {
-      let srcX = event.pageX;
+      const srcX = event.pageX;
+      if (!ref.current) return;
+      const offsetWidth = ref.current.offsetWidth;
+      const offsetHeight = ref.current.offsetHeight;
       const changeWidthFunc = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return;
-        const offsetWidth = ref.current.offsetWidth;
+        // const offsetWidth = ref.current.offsetWidth;
+        // const offsetWidth = ref.current.offsetWidth;
+        // const offsetHeight = ref.current.offsetHeight;
         const k = 1;
-        const diffX = isLeftHandler ? e.pageX - srcX : srcX - e.pageX;
+        const diffX = isLeftHandler
+          ? Math.round(e.pageX - srcX)
+          : Math.round(srcX - e.pageX);
+        // srcX = e.pageX;
         const width = getProperlyWidth(offsetWidth - diffX * k);
-        //   ref.current.style.cssText = `
-        //   width: ${width}px;
-        //   user-select:none;
-        // `;
-        // console.log(width);
-        api.start({ width });
-        handleWidthChangeDebounce(() => (srcX = e.pageX), width);
+        ref.current.style.cssText = `
+          width: ${width}px;
+          height: ${offsetHeight}px;
+          user-select:none;
+        `;
+        // api.start({ width });
+        handleWidthChangeDebounce(width);
       };
       document.addEventListener('mousemove', changeWidthFunc as any);
       document.addEventListener('mouseup', () =>
@@ -167,21 +171,28 @@ const ResizedImage: React.FC<
 
   function handleTouchStart(isLeftHandler: boolean) {
     return (event: React.TouchEvent<HTMLDivElement>) => {
-      let srcX = event.touches[0].pageX;
+      const srcX = event.touches[0].pageX;
+      if (!ref.current) return;
+      const offsetWidth = ref.current.offsetWidth;
+      const offsetHeight = ref.current.offsetHeight;
       const changeWidthFunc = (e: React.TouchEvent<HTMLDivElement>) => {
         if (!ref.current) return;
         const pageX = e.touches[0].pageX;
-        const offsetWidth = ref.current.offsetWidth;
+        // const offsetWidth = ref.current.offsetWidth;
+        // const offsetHeight = ref.current.offsetHeight;
         const k = 1;
-        const diffX = isLeftHandler ? pageX - srcX : srcX - pageX;
+        const diffX = isLeftHandler
+          ? Math.round(pageX - srcX)
+          : Math.round(srcX - pageX);
         const width = getProperlyWidth(offsetWidth - diffX * k);
-        //   ref.current.style.cssText = `
-        //   width: ${width}px;
-        //   user-select:none;
-        // `;
+        ref.current.style.cssText = `
+          width: ${width}px;
+          height: ${offsetHeight}px;
+          user-select:none;
+        `;
         // console.log(width);
-        api.start({ width });
-        handleWidthChangeDebounce(() => (srcX = pageX), width);
+        // api.start({ width });
+        handleWidthChangeDebounce(width);
       };
       document.addEventListener('touchmove', changeWidthFunc as any);
       document.addEventListener('touchend', () =>
@@ -198,22 +209,26 @@ const ResizedImage: React.FC<
 
   function handleMouseDown__bottom(isLeftHandler: boolean) {
     return (event: React.MouseEvent<HTMLDivElement>) => {
-      let srcY = event.pageY;
+      const srcY = event.pageY;
+      if (!ref.current) return;
+      const offsetWidth = ref.current.offsetWidth;
+      const offsetHeight = ref.current.offsetHeight;
       const changeWidthFunc = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return;
-        const offsetHeight = ref.current.offsetHeight;
-        const k = 0.7;
+        // const offsetHeight = ref.current.offsetHeight;
+        const k = 1;
         const diffY = isLeftHandler ? e.pageY - srcY : srcY - e.pageY;
         const height = Math.min(
           Math.max(offsetHeight - diffY * k, 100),
           imgRef.current?.offsetHeight || 100,
         );
-        //   ref.current.style.cssText = `
-        //   width: ${width}px;
-        //   user-select:none;
-        // `;
-        api.start({ height });
-        handleHeightChangeDebounce(() => (srcY = e.pageY), height);
+        ref.current.style.cssText = `
+          width: ${offsetWidth}px;
+          height: ${height}px;
+          user-select:none;
+        `;
+        // api.start({ height });
+        handleHeightChangeDebounce(height);
       };
       document.addEventListener('mousemove', changeWidthFunc as any);
       document.addEventListener('mouseup', () =>
@@ -223,12 +238,15 @@ const ResizedImage: React.FC<
   }
   function handleTouchStart__bottom(isLeftHandler: boolean) {
     return (event: React.TouchEvent<HTMLDivElement>) => {
-      let srcY = event.touches[0].pageY;
+      const srcY = event.touches[0].pageY;
+      if (!ref.current) return;
+      const offsetWidth = ref.current.offsetWidth;
+      const offsetHeight = ref.current.offsetHeight;
       const changeWidthFunc = (e: React.TouchEvent<HTMLDivElement>) => {
         if (!ref.current) return;
         const pageY = e.touches[0].pageY;
-        const offsetHeight = ref.current.offsetHeight;
-        const k = 0.7;
+        // const offsetHeight = ref.current.offsetHeight;
+        const k = 1;
         const diffY = isLeftHandler ? pageY - srcY : srcY - pageY;
         const height = Math.min(
           Math.max(offsetHeight - diffY * k, 100),
@@ -241,9 +259,13 @@ const ResizedImage: React.FC<
         //   width: ${width}px;
         //   user-select:none;
         // `;
-        console.log('hhh');
-        api.start({ height });
-        handleWidthChangeDebounce(() => (srcY = pageY), width);
+        ref.current.style.cssText = `
+        width: ${offsetWidth}px;
+        height: ${height}px;
+        user-select:none;
+      `;
+        // api.start({ height });
+        handleHeightChangeDebounce(height);
       };
       document.addEventListener('touchmove', changeWidthFunc as any);
       document.addEventListener('touchend', () =>

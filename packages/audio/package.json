@@ -34,8 +34,7 @@
   },
   "dependencies": {
     "@lla-editor/core": "^0.0.16",
-    "rc-slider": "^9.7.2",
-    "react-spring": "^9.2.3"
+    "rc-slider": "^9.7.2"
   },
   "gitHead": "aba2f06e328ae389ddac542c49eed8012d219fb8"
 }

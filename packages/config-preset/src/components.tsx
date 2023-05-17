@@ -36,6 +36,7 @@ export const SharedProviderPreset: React.FC<{
   const audioRef = React.useRef<HTMLInputElement>(null);
   const videoRef = React.useRef<HTMLInputElement>(null);
   const promiseRef = React.useRef<any>(null);
+
   return (
     <SharedProvider
       initialValue={React.useMemo<any>(
@@ -117,6 +118,7 @@ export const SharedProviderPreset: React.FC<{
         type="file"
         className="hidden"
         ref={imageRef}
+        value=""
         onChange={async (e) => {
           const file = e.target?.files?.[0];
           if (!file) return;
@@ -127,6 +129,7 @@ export const SharedProviderPreset: React.FC<{
       <input
         type="file"
         className="hidden"
+        value=""
         ref={audioRef}
         onChange={async (e) => {
           const file = e.target?.files?.[0];
@@ -138,6 +141,7 @@ export const SharedProviderPreset: React.FC<{
       <input
         type="file"
         className="hidden"
+        value=""
         ref={videoRef}
         onChange={async (e) => {
           const file = e.target?.files?.[0];

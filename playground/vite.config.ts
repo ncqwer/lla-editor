@@ -16,10 +16,17 @@ const watchWorkspaces = (rootPath: string): Plugin => {
           ...userConfig?.resolve,
           alias: {
             ...Object.fromEntries(
-              getPackages(rootPath).map((pkg) => [
-                pkg.name,
-                path.join(pkg.name, pkg.source),
-              ]),
+              getPackages(rootPath).reduce(
+                (acc: any, pkg: any) =>
+                  acc.concat([
+                    [
+                      `${pkg.name}/style`,
+                      path.join(pkg.name, 'src/style/index.css'),
+                    ],
+                    [pkg.name, path.join(pkg.name, pkg.source)],
+                  ]),
+                [] as any,
+              ),
             ),
             ...userConfig?.resolve?.alias,
           },

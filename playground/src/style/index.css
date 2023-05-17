@@ -1,26 +1,7 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-@import 'rc-slider/assets/index.css';
-@import 'emoji-mart/css/emoji-mart.css';
-@import './paragraph.css';
-@import './insert-pannel.css';
-@import './context-menu.css';
-@import './heading.css';
-@import './divider.css';
-@import './callout.css';
-@import './list.css';
-@import './image.css';
-@import './media.css';
-@import './audio.css';
-@import './video.css';
-@import './quote.css';
-@import './text-action-menu.css';
-@import './link.css';
-@import './code.css';
+@import '@lla-editor/editor/style'
 
 /* support for lla commment list */
-
+/* 
 @import '../comment_list/style/index.css';
 
 @layer utilities {
@@ -62,4 +43,4 @@
 
 .lla-editor > div {
   @apply w-full;
-}
+} */

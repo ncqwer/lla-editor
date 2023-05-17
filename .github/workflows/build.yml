@@ -60,6 +60,7 @@ jobs:
 
       - name: Lerna publish
         run: |
+          yarn lerna version patch --yes
           yarn lerna publish from-package --yes
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

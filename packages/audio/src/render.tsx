@@ -1,21 +1,17 @@
-import React, { MouseEvent } from 'react';
-import { createPortal } from 'react-dom';
-import domAlign from 'dom-align';
+import React from 'react';
+
 import { Transforms } from 'slate';
 import {
   ElementJSX,
   elementPropsIs,
   ExtendRenderElementProps,
-  useThrottle,
   LLAConfig,
   SharedApi,
   ConfigHelers,
   runWithCancel,
-  Func,
   elementRender,
   LLAOverLayer,
 } from '@lla-editor/core';
-import { useSpring, animated } from 'react-spring';
 import { AudioElement } from './element';
 import {
   ReactEditor,
@@ -591,7 +587,9 @@ const AudioComponent = ({
               const src = await audioOpen();
               // console.log(src);
               handleMetaChange('src')(src);
-            } catch (e) {}
+            } catch (e) {
+              console.error(e);
+            }
           }}
           // onMouseOver={() =>
           //   console.log(ReactEditor.toDOMNode(editor, element))

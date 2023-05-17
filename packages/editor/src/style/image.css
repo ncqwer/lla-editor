@@ -208,3 +208,7 @@
   flex-shrink: 0;
   backface-visibility: hidden;
 }
+
+.lla-image.lla-selected img{
+  @apply pointer-events-none;
+}

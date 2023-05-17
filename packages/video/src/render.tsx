@@ -9,11 +9,9 @@ import {
   SharedApi,
   ConfigHelers,
   runWithCancel,
-  Func,
   elementRender,
   EmptyMedia,
 } from '@lla-editor/core';
-import { useSpring, animated } from 'react-spring';
 import { VideoElement } from './element';
 import {
   ReactEditor,
@@ -36,7 +34,6 @@ const Resizedvideo: React.FC<
   }
 > = ({
   src,
-  alt,
   selected = false,
   width,
   onWidthChange,
@@ -46,7 +43,6 @@ const Resizedvideo: React.FC<
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const [videoRemove] = useLens(['video', 'videoRemove']);
-  const [styles, api] = useSpring(() => ({ width }));
   const triggerRef = React.useRef<HTMLDivElement>(null);
   const [loadingCover] = useLens(['video', 'loadingCover']);
   const [errorCover] = useLens(['video', 'errorCover']);
@@ -66,7 +62,9 @@ const Resizedvideo: React.FC<
               if (event.target) return res(event.target.result);
               return res(null);
             };
-          }).then((dataURL: any) => dataURL && setVideoSrc(dataURL));
+          }).then((dataURL: any) => {
+            dataURL && setVideoSrc(dataURL);
+          });
           reader.readAsDataURL(src);
           if (videoUpload) {
             yield new Promise((res) => setTimeout(res, 1000));
@@ -101,14 +99,12 @@ const Resizedvideo: React.FC<
       srcRef.current !== loadingCover &&
       videoRemove(srcRef.current);
   }, []);
-  const [handleWidthChangeDebounce] = useThrottle((f: Func, v: number) => {
+  const [handleWidthChangeDebounce] = useThrottle((v: number) => {
     onWidthChange(v);
-    f();
   }, 1000 / 30);
   const readOnly = useReadOnly();
   return (
-    <animated.div
-      style={styles}
+    <div
       className={`lla-context-menu-target lla-video relative ${
         selected ? 'lla-selected' : ''
       }`}
@@ -149,7 +145,7 @@ const Resizedvideo: React.FC<
           </div>
         </>
       )}
-    </animated.div>
+    </div>
   );
 
   function renderVideo() {
@@ -174,20 +170,28 @@ const Resizedvideo: React.FC<
 
   function handleMouseDown(isLeftHandler: boolean) {
     return (event: React.MouseEvent<HTMLDivElement>) => {
-      let srcX = event.pageX;
+      const srcX = event.pageX;
+      if (!ref.current) return;
+      const offsetWidth = ref.current.offsetWidth;
+      const offsetHeight = ref.current.offsetHeight;
       const changeWidthFunc = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return;
-        const offsetWidth = ref.current.offsetWidth;
+        // const offsetWidth = ref.current.offsetWidth;
+        // const offsetWidth = ref.current.offsetWidth;
+        // const offsetHeight = ref.current.offsetHeight;
         const k = 1;
-        const diffX = isLeftHandler ? e.pageX - srcX : srcX - e.pageX;
+        const diffX = isLeftHandler
+          ? Math.round(e.pageX - srcX)
+          : Math.round(srcX - e.pageX);
+        // srcX = e.pageX;
         const width = getProperlyWidth(offsetWidth - diffX * k);
-        //   ref.current.style.cssText = `
-        //   width: ${width}px;
-        //   user-select:none;
-        // `;
-        // console.log(width);
-        api.start({ width });
-        handleWidthChangeDebounce(() => (srcX = e.pageX), width);
+        ref.current.style.cssText = `
+          width: ${width}px;
+          height: ${offsetHeight}px;
+          user-select:none;
+        `;
+        // api.start({ width });
+        handleWidthChangeDebounce(width);
       };
       document.addEventListener('mousemove', changeWidthFunc as any);
       document.addEventListener('mouseup', () =>
@@ -198,21 +202,28 @@ const Resizedvideo: React.FC<
 
   function handleTouchStart(isLeftHandler: boolean) {
     return (event: React.TouchEvent<HTMLDivElement>) => {
-      let srcX = event.touches[0].pageX;
+      const srcX = event.touches[0].pageX;
+      if (!ref.current) return;
+      const offsetWidth = ref.current.offsetWidth;
+      const offsetHeight = ref.current.offsetHeight;
       const changeWidthFunc = (e: React.TouchEvent<HTMLDivElement>) => {
         if (!ref.current) return;
         const pageX = e.touches[0].pageX;
-        const offsetWidth = ref.current.offsetWidth;
+        // const offsetWidth = ref.current.offsetWidth;
+        // const offsetHeight = ref.current.offsetHeight;
         const k = 1;
-        const diffX = isLeftHandler ? pageX - srcX : srcX - pageX;
+        const diffX = isLeftHandler
+          ? Math.round(pageX - srcX)
+          : Math.round(srcX - pageX);
         const width = getProperlyWidth(offsetWidth - diffX * k);
-        //   ref.current.style.cssText = `
-        //   width: ${width}px;
-        //   user-select:none;
-        // `;
+        ref.current.style.cssText = `
+          width: ${width}px;
+          height: ${offsetHeight}px;
+          user-select:none;
+        `;
         // console.log(width);
-        api.start({ width });
-        handleWidthChangeDebounce(() => (srcX = pageX), width);
+        // api.start({ width });
+        handleWidthChangeDebounce(width);
       };
       document.addEventListener('touchmove', changeWidthFunc as any);
       document.addEventListener('touchend', () =>
@@ -303,7 +314,9 @@ const VideoComponent = ({
               const src = await videoOpen();
               // console.log(src);
               handleMetaChange('src')(src);
-            } catch (e) {}
+            } catch (e) {
+              console.error(e);
+            }
           }}
           // onMouseOver={() =>
           //   console.log(ReactEditor.toDOMNode(editor, element))

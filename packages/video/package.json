@@ -33,8 +33,7 @@
     "slate-react": ">=0.60.0"
   },
   "dependencies": {
-    "@lla-editor/core": "^0.0.16",
-    "react-spring": "^9.2.3"
+    "@lla-editor/core": "^0.0.16"
   },
   "gitHead": "aba2f06e328ae389ddac542c49eed8012d219fb8"
 }

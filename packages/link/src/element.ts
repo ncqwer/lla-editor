@@ -1,5 +1,5 @@
 import { LLAElement } from '@lla-editor/core';
-import { Editor, Element, Node, Text } from 'slate';
+import { Node, Text } from 'slate';
 
 const _TYPE_ = 'link';
 
