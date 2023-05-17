@@ -12,6 +12,7 @@
     "devadd": "yarn add -D --ignore-workspace-root-check",
     "build": "lerna run build --ignore doc --ignore @lla-editor/example",
     "dev": "cd playground && yarn dev",
+    "build:vite": "cd playground && yarn build",
     "publish": "yarn lerna publish",
     "test": "jest"
   },
