@@ -2,7 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 @import 'rc-slider/assets/index.css';
-@import 'emoji-mart/css/emoji-mart.css';
+/* @import 'emoji-mart/css/emoji-mart.css'; */
 @import './paragraph.css';
 @import './insert-pannel.css';
 @import './context-menu.css';
