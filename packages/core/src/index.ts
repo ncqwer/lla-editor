@@ -24,3 +24,5 @@ export { ParagraphImpl, PlaceholderContext };
 export * from './utils/runWithCancel';
 export * from './utils/LLAOverLayer';
 export * from './utils/EmptyMedia';
+
+export const No_meaning = 'zhujianshi';
