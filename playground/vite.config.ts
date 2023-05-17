@@ -68,6 +68,7 @@ export default defineConfig({
   server: {
     port: 3001,
   },
+  base: 'lla-editor',
   plugins: [
     react(),
     watchWorkspaces('../'),
