@@ -51,3 +51,9 @@
 .lla-custom-void-content {
   @apply select-none;
 }
+
+.lla-image-input,
+.lla-video-input,
+.lla-audio-input{
+  display: none;
+}

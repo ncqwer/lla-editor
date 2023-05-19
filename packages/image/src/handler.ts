@@ -21,7 +21,7 @@ export const onKeyDownResponseZone: OnKeyDownResponseZone = (
 
 type KeyDown = OnKeyDownType<ImageElement>;
 
-const handleEnter: KeyDown = (next, event, editor, [node, path]) => {
+const handleEnter: KeyDown = (next, event, editor, [, path]) => {
   event.preventDefault();
   Transforms.insertNodes(editor, editor.createParagraph(''), {
     at: Path.next(path),
@@ -34,6 +34,7 @@ const handleKeyDown = groupKeyDown<KeyDown>(
   // [shotkey('backspace'), handleBackspace],
   [(...args) => args, (next) => next()],
 );
+// eslint-disable-next-line valid-jsdoc
 /**
  * readme: 当前方法为作用于所有的void(计划独立到单独的包中)
  *

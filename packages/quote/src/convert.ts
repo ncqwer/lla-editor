@@ -1,4 +1,11 @@
-import { Range, Node, Editor, Point, Transforms, Path } from 'slate';
+import {
+  // Range,
+  Node,
+  Editor,
+  // Point,
+  Transforms,
+  Path,
+} from 'slate';
 import {
   caseMatch,
   OnParagraphConvert,
@@ -6,7 +13,7 @@ import {
   Deserialize,
   Serialize,
 } from '@lla-editor/core';
-import { IndentContainer } from '@lla-editor/indent';
+import '@lla-editor/indent';
 import { QuoteElement } from './element';
 
 const quoteReg = /^>/;
@@ -24,7 +31,7 @@ const handleSpace: OnParagraphConvert = (next, event, editor, [node, path]) => {
   }
   event.preventDefault();
   if (editor.isContainable(parentNode) && parentNode.children.length > 1) {
-    //当前为可能包含IndentContainer
+    // 当前为可能包含IndentContainer
     Editor.withoutNormalizing(editor, () => {
       Transforms.moveNodes(editor, {
         at: parentPath.concat(1),
@@ -38,7 +45,7 @@ const handleSpace: OnParagraphConvert = (next, event, editor, [node, path]) => {
     Transforms.insertNodes(
       editor,
       Object.assign(QuoteElement.create(editor), {
-        children: [editor.createParagraph(str.slice(1))], //这里假定paragraph仅仅有一个text
+        children: [editor.createParagraph(str.slice(1))], // 这里假定paragraph仅仅有一个text
       }),
       { at: parentPath },
     );

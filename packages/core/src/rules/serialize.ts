@@ -1,4 +1,3 @@
-import React from 'react';
 import { Editor, Node } from 'slate';
 
 import { Nextify } from '../type';

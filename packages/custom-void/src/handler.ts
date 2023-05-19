@@ -4,7 +4,7 @@ import {
   OnKeyDownType,
   shotkey,
 } from '@lla-editor/core';
-import { Path, Transforms, Editor, Range, Node } from 'slate';
+import { Path, Transforms, Editor } from 'slate';
 
 import { CustomVoidElement } from './element';
 
@@ -18,7 +18,7 @@ export const onKeyDownResponseZone: OnKeyDownResponseZone = (
 
 type KeyDown = OnKeyDownType<CustomVoidElement>;
 
-const handleEnter: KeyDown = (next, event, editor, [node, path]) => {
+const handleEnter: KeyDown = (next, event, editor, [, path]) => {
   event.preventDefault();
   Transforms.insertNodes(editor, editor.createParagraph(''), {
     at: Path.next(path),

@@ -1,8 +1,10 @@
-/**@jsx jsx */
+/** @jsx jsx */
 import { mockKey, setShotKeyMock } from '@lla-editor/core';
 import { runtime, jsx } from '.';
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 declare namespace jsx.JSX {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface IntrinsicElements {
     [elemName: string]: any; // eslint-disable-line
   }

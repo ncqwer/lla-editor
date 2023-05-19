@@ -1,9 +1,10 @@
-import React, { MouseEvent, useState } from 'react';
-import { Editor, Range, Node, Text, Transforms } from 'slate';
+import React, { MouseEvent } from 'react';
+import { Editor, Range, Text, Transforms } from 'slate';
 import { ReactEditor, useSlate, useSlateStatic } from 'slate-react';
 import { Paragraph } from '../../builtinPlugin/paragraph';
 import { useDebounce } from '../../hooks';
 import { ColorItem } from './insert';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Lens, lens } from '@zhujianshi/lens';
 import { createShared } from '@zhujianshi/use-lens';
 
@@ -238,7 +239,7 @@ const TextColor = () => {
         </svg>
       </div>
       {isOpen && (
-        <div className="absolute lla-text-color-menu -top-10">
+        <div className="lla-text-color-menu">
           <div className="lla-insert__group">
             <div className="lla-insert__group-label">背景颜色</div>
             {bgColorInfo.map(({ title, value }, i) => (
@@ -314,7 +315,6 @@ const TextLink = () => {
         mode: 'lowest',
         match: Text.isText,
       });
-      const hh = rangeRef.current;
       Transforms.wrapNodes(
         editor,
         { url: 'https://www.baidu.com', type: 'link' } as any,

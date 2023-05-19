@@ -1,4 +1,4 @@
-import { BaseAtom, CreateMediaBlock, LLAElement } from '@lla-editor/core';
+import { BaseAtom, LLAElement } from '@lla-editor/core';
 import { Editor, Node } from 'slate';
 
 const _TYPE_ = 'custom-void';

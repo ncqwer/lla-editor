@@ -1,6 +1,7 @@
-import { BaseElement, Editor, Node, Transforms, Path } from 'slate';
+import { Editor, Node, Transforms, Path } from 'slate';
+import type { BaseElement } from 'slate';
 import { Code, CodeLine } from './element';
-import { IndentContainer } from '@lla-editor/indent';
+import '@lla-editor/indent';
 
 export const withEditor = (editor: Editor) => {
   const e = editor;

@@ -1,6 +1,6 @@
-import { PluginRuleObjType } from '@herbart-editor/pae';
+// import { PluginRuleObjType } from '@herbart-editor/pae';
 import React from 'react';
-import { Editor, NodeEntry, Node } from 'slate';
+import type { Editor, NodeEntry, Node } from 'slate';
 import { Nextify } from '../type';
 import { defaultPropertyRule, DefaultRuleType } from './utils';
 

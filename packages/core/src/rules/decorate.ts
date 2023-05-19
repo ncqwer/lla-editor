@@ -1,5 +1,5 @@
-import { PluginRuleObjType } from '@herbart-editor/pae';
-import { Node, NodeEntry, Range } from 'slate';
+// import type{ PluginRuleObjType } from '@herbart-editor/pae';
+import type { Node, NodeEntry, Range } from 'slate';
 import { Nextify } from '../type';
 import { defaultPropertyRule, DefaultRuleType } from './utils';
 

@@ -1,5 +1,5 @@
 import { Editor } from 'slate';
-import { IndentContainer } from '@lla-editor/indent';
+import '@lla-editor/indent';
 import { HeadingElement } from './element';
 
 export const withEditor = (e: Editor): Editor => {

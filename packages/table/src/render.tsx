@@ -46,7 +46,7 @@ const HTable = React.memo(
       mergeCells: (v: MergeSetting[]) => MergeSetting[],
     ) => void;
   }) => {
-    const [data] = React.useState(() => _data.map((v) => [...v])); //值得注意的是，已引用的方式来修改了值。
+    const [data] = React.useState(() => _data.map((v) => [...v])); // 值得注意的是，已引用的方式来修改了值。
     const [mergeCells] = React.useState<MergeSetting[]>(() => [..._mergeCells]);
     const [HTableComponent] = useLens(['table', 'HTableComponent']);
     const hotTableComponentRef = React.useRef<any | null>(null);
@@ -68,9 +68,9 @@ const HTable = React.memo(
       ></HTableComponent>
     );
     function handleRemoveCol(_index: number, amount: number, idxs: number[]) {
-      console.log(
-        hotTableComponentRef.current?.__hotInstance?.getSettings()?.data,
-      );
+      // console.log(
+      //   hotTableComponentRef.current?.__hotInstance?.getSettings()?.data,
+      // );
       if (!hotTableComponentRef.current?.__hotInstance) return;
       const instance = hotTableComponentRef.current.__hotInstance;
       onChange &&
@@ -253,7 +253,7 @@ function applyMergeForRemoveCol(mergeCells: MergeSetting[], colIdxs: number[]) {
     width: number,
     idx: number,
   ): -1 | 0 | 1 => {
-    if (begin + width - 1 < idx) return 0; //do nothing
+    if (begin + width - 1 < idx) return 0; // do nothing
     if (begin <= idx && idx <= begin + width - 1) return -1; // width-1
     return 1; // begin-1
   };
@@ -276,7 +276,7 @@ function applyMergeForRemoveRow(mergeCells: MergeSetting[], rowIdxs: number[]) {
     width: number,
     idx: number,
   ): -1 | 0 | 1 => {
-    if (begin + width - 1 < idx) return 0; //do nothing
+    if (begin + width - 1 < idx) return 0; // do nothing
     if (begin <= idx && idx <= begin + width - 1) return -1; // width-1
     return 1; // begin-1
   };
@@ -299,7 +299,7 @@ function applyMergeForAddCol(mergeCells: MergeSetting[], colIdx: number) {
     width: number,
     idx: number,
   ): -1 | 0 | 1 => {
-    if (begin + width - 1 < idx) return 0; //do nothing
+    if (begin + width - 1 < idx) return 0; // do nothing
     if (begin <= idx && idx <= begin + width - 1) return -1; // width+1
     return 1; // begin+1
   };
@@ -317,7 +317,7 @@ function applyMergeForAddRow(mergeCells: MergeSetting[], rowIdx: number) {
     width: number,
     idx: number,
   ): -1 | 0 | 1 => {
-    if (begin + width - 1 < idx) return 0; //do nothing
+    if (begin + width - 1 < idx) return 0; // do nothing
     if (begin <= idx && idx <= begin + width - 1) return -1; // width+1
     return 1; // begin+1
   };

@@ -1,12 +1,12 @@
 import React from 'react';
-import { BaseElement, Text, Node, Editor, Range, Transforms } from 'slate';
-import { RenderLeafProps, useSelected, useSlateStatic } from 'slate-react';
+import { Text, Node, Range, Transforms } from 'slate';
+import { useSelected, useSlateStatic } from 'slate-react';
+// import type { RenderLeafProps } from 'slate-react';
 import {
   Deserialize,
   ElementJSX,
   elementPropsIs,
   elementRender,
-  ExtendRenderElementProps,
   ExtendRenderLeafProps,
   groupKeyDown,
   LeafJSX,
@@ -16,6 +16,7 @@ import {
   shotkey,
   textPropsIs,
 } from '../rules';
+// import { ExtendRenderElementProps } from '../rules';
 import { LLAElement, BaseParagraph, StyledText } from '../type';
 
 const _TYPE_ = 'paragraph';
@@ -57,10 +58,7 @@ const render = [
         children = (
           <>
             {_children}
-            <span
-              className="lla-placeholder absolute top-1"
-              contentEditable={false}
-            >
+            <span className="lla-placeholder" contentEditable={false}>
               {placeholder}
             </span>
           </>
@@ -141,12 +139,12 @@ const handleSlash: KeyDown = (next, event, editor, [node, path]) => {
   if (start.offset !== 0) return next();
   const text = Node.string(node);
   // if (text.length !== 0) return next();
-  //现在 我们在空白的paragraph上了
+  // 现在 我们在空白的paragraph上了
   const insert = editor.getOvlerLayer('insert');
   insert?.open?.([path, text.length]);
 };
 
-const handleBackspace: KeyDown = (next, event, editor, [node, path]) => {
+const handleBackspace: KeyDown = (next, event, editor, [node]) => {
   const { selection } = editor;
   if (!selection) return next();
   if (Range.isExpanded(selection)) return next();

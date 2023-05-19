@@ -21,8 +21,8 @@ export const withEditor = <T extends Editor>(editor: T) => {
     if (Element.isElement(node) && editor.isContainable(node)) {
       const firstChild = node.children[0];
       if (Element.isElement(firstChild) && IndentContainer.is(firstChild)) {
-        Transforms.unwrapNodes(editor, { at: path }); //去除当前container
-        return Transforms.unwrapNodes(editor, { at: path }); //去除IndentContainer
+        Transforms.unwrapNodes(editor, { at: path }); // 去除当前container
+        return Transforms.unwrapNodes(editor, { at: path }); // 去除IndentContainer
       }
       // return Transforms.removeNodes(editor, { at: path });
     }

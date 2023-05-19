@@ -1,7 +1,7 @@
 import type { PluginRuleObjType } from '@herbart-editor/pae';
 import { isHotkey } from 'is-hotkey';
 import { Element, Text } from 'slate';
-import { RenderElementProps, RenderLeafProps } from 'slate-react';
+import type { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { Nextify, Func, NextifParams } from '../index';
 import { TupleFirst, TupleLast } from '../type';
 import { ExtendRenderElementProps } from './renderElement';
@@ -107,7 +107,7 @@ export const mockKey = (str: string) => {
   const hasAlt = /alt/.test(str);
   return {
     status: false, // mock preventDefault
-    preventDefault: function () {
+    preventDefault: function preventDefault() {
       this.status = true;
     },
     altKey: hasAlt,

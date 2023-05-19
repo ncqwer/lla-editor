@@ -1,4 +1,4 @@
-import { Range, Node, Editor, Point, Transforms, Path } from 'slate';
+import { Node, Editor, Transforms, Path } from 'slate';
 import {
   caseMatch,
   Deserialize,
@@ -32,7 +32,7 @@ const handleSpace: OnParagraphConvert = (next, event, editor, [node, path]) => {
   }
   event.preventDefault();
   if (editor.isContainable(parentNode) && parentNode.children.length > 1) {
-    //当前为可能包含IndentContainer
+    // 当前为可能包含IndentContainer
     Editor.withoutNormalizing(editor, () => {
       Transforms.moveNodes(editor, {
         at: parentPath.concat(1),

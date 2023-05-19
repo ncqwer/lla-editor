@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TextBlock, TextBlockConfig } from './element';
+import { TextBlock } from './element';
 import {
   ElementJSX,
   elementPropsIs,
@@ -9,7 +9,8 @@ import {
   // LLAConfig,
   // SharedApi,
 } from '@lla-editor/core';
-import { RenderElementProps, useSelected } from 'slate-react';
+import { useSelected } from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
 
 import { IndentContainerContext } from '@lla-editor/indent';
 
@@ -22,6 +23,7 @@ import { IndentContainerContext } from '@lla-editor/indent';
 const TextIndentWrapper = ({
   children,
   attributes,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   element,
   ...others
 }: RenderElementProps) => {

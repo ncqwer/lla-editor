@@ -6,7 +6,7 @@
     "declarationMap": true,
     "esModuleInterop": true,
     "jsx": "react",
-    "lib": ["ES2019","DOM"],
+    "lib": ["ES2019", "DOM"],
     "module": "esnext",
     "target": "ES2019",
     "moduleResolution": "node",
@@ -15,6 +15,7 @@
     "sourceMap": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noImplicitAny": true,
+    "ignoreDeprecations": "5.0",
+    "noImplicitAny": true
   }
 }

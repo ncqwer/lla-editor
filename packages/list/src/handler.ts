@@ -5,7 +5,12 @@ import {
   shotkey,
 } from '@lla-editor/core';
 
-import { Editor, Range, Transforms, Point, Text, Path } from 'slate';
+import {
+  Editor,
+  Range,
+  Transforms,
+  // Point, Text, Path
+} from 'slate';
 import {
   BulletedListItem,
   List,
@@ -65,11 +70,11 @@ type KeyDown = OnKeyDownType<
 //   });
 // };
 
-const handleBackspace: KeyDown = (next, event, editor, [node, path]) => {
+const handleBackspace: KeyDown = (next, event, editor, [, path]) => {
   const { selection } = editor;
   if (!selection) return next();
   if (Range.isExpanded(selection)) return next();
-  if (selection.anchor.offset != 0) return next();
+  if (selection.anchor.offset !== 0) return next();
   event.preventDefault();
   return Editor.withoutNormalizing(editor, () => {
     // Transforms.wrapNodes(

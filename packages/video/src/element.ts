@@ -41,7 +41,7 @@ declare module '@lla-editor/core' {
   }
 }
 
-export const createMediaBlock: CreateMediaBlock = (next, file, editor) => {
+export const createMediaBlock: CreateMediaBlock = (next, file) => {
   if (/(?:\.mp4)/.test(file.name))
     return { ...VideoElement.create(), src: file };
   return next();

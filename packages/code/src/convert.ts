@@ -1,4 +1,4 @@
-import { Range, Node, Editor, Point, Transforms, Path } from 'slate';
+import { Node, Editor, Transforms, Path } from 'slate';
 import {
   caseMatch,
   Deserialize,
@@ -20,7 +20,7 @@ const handleSpace: OnParagraphConvert = (next, event, editor, [node, path]) => {
   if (!codeReg.test(str)) return next();
   event.preventDefault();
   if (editor.isContainable(parentNode) && parentNode.children.length > 1) {
-    //当前为可能包含IndentContainer
+    // 当前为可能包含IndentContainer
     Editor.withoutNormalizing(editor, () => {
       Transforms.moveNodes(editor, {
         at: parentPath.concat(1),
@@ -46,7 +46,7 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
 export const deserialize: Deserialize = (next, ast, editor, acc) => {
   if (ast.type === 'code') {
     const language =
-      Object.entries(availableLanguage).find(([_, { test }]) =>
+      Object.entries(availableLanguage).find(([, { test }]) =>
         test(ast.lang),
       )?.[0] || 'javascript';
     const item = {
@@ -61,7 +61,7 @@ export const deserialize: Deserialize = (next, ast, editor, acc) => {
   return next();
 };
 
-export const serialize: Serialize = (next, ele, editor) => {
+export const serialize: Serialize = (next, ele) => {
   if (Code.isCode(ele)) {
     return {
       type: 'code',

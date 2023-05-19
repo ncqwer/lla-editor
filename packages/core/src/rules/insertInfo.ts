@@ -25,7 +25,7 @@ const parse = ({ keywords, ...others }: InsertInfo) => {
             if (!str) return true;
             return k(str) ? true : acc(str);
           },
-        (v: string) => false,
+        () => false,
       ),
   };
 };

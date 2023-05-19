@@ -204,7 +204,7 @@ const LanguageSelector: React.FC<{
   const [search, setSearch] = React.useState('');
   const getSearchResult = () => {
     if (!search) return Object.entries(availableLanguage);
-    return Object.entries(availableLanguage).filter(([_, { test }]) =>
+    return Object.entries(availableLanguage).filter(([, { test }]) =>
       test(search),
     );
   };

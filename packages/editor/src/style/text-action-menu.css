@@ -63,3 +63,7 @@
 .lla-text-color-menu .lla-insert__item {
   @apply hover:bg-gray-100 active:bg-gray-200;
 }
+
+.lla-text-color .lla-text-color-menu{
+  @apply absolute -top-10;
+}

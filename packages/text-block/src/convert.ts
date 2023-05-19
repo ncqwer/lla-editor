@@ -1,5 +1,5 @@
-import { Node } from 'slate';
-import { Deserialize, Serialize } from '@lla-editor/core';
+// import { Node } from 'slate';
+import { Serialize } from '@lla-editor/core';
 import { TextBlock } from './element';
 
 // export const deserialize: Deserialize = (next, str, editor) => {

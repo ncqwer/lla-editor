@@ -1,13 +1,9 @@
 import React from 'react';
 import { ElementJSX, ExtendRenderElementProps } from '@lla-editor/core';
 import { CustomVoidElement } from './element';
-import {
-  ReactEditor,
-  RenderElementProps,
-  useSelected,
-  useSlateStatic,
-} from 'slate-react';
+import { ReactEditor, useSelected, useSlateStatic } from 'slate-react';
 import { Transforms } from 'slate';
+import type { RenderElementProps } from 'slate-react';
 
 const CustomVoidComponent: React.FC<
   ExtendRenderElementProps<CustomVoidElement> & { Comp: any }
@@ -40,7 +36,7 @@ const CustomVoidComponent: React.FC<
         <Comp
           value={value}
           onChange={React.useCallback(
-            (v) => {
+            (v: any) => {
               const path = ReactEditor.findPath(editor, element);
               Transforms.setNodes(editor, { value: v }, { at: path });
             },

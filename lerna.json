@@ -1,7 +1,6 @@
 {
   "packages": [
     "packages/*",
-    "doc",
     "playground"
   ],
   "version": "independent",

@@ -1,9 +1,10 @@
+/* eslint-disable valid-jsdoc */
 import {
   Text,
   Node,
   Element,
   Editor,
-  NodeEntry,
+  // NodeEntry,
   Path,
   Range,
   Transforms,
@@ -14,10 +15,10 @@ import {
   OnKeyDownResponseZone,
   caseMatch,
   shotkey,
-  LLAElement,
+  // LLAElement,
   OnKeyDownType,
-  Nextify,
-  NextifParams,
+  // Nextify,
+  // NextifParams,
   groupKeyDown,
   OnKeyDownAlternative,
 } from '@lla-editor/core';
@@ -60,14 +61,14 @@ const handleBackspace: keyDownType = (next, event, editor, [node, path]) => {
         child.children.length > 1 &&
         relativePath[0] === 0
       ) {
-        //当前容器包含indent-container,且删除行在首部
+        // 当前容器包含indent-container,且删除行在首部
         Transforms.unwrapNodes(editor, {
           at: path.concat(relativePath[0], 1),
         });
       }
-      //readme:这里需要想办法交给onKeyDownAlternative的同时跳开外层indentcontainer的捕获
+      // readme:这里需要想办法交给onKeyDownAlternative的同时跳开外层indentcontainer的捕获
       (function () {
-        //readme: 用来解决在IndentContainer内部遇见void块无法正确避开的问题
+        // readme: 用来解决在IndentContainer内部遇见void块无法正确避开的问题
         const start = selection.anchor;
         if (start.offset !== 0) return;
         const previousPoint = Editor.before(editor, start);
@@ -142,7 +143,7 @@ export const handleTab: OnKeyDownAlternative = (next, event, editor) => {
       },
     }) || [];
   if (!nodeEntry) return next();
-  const [_, path] = nodeEntry;
+  const [, path] = nodeEntry;
   const idx = path[path.length - 1];
   if (idx === 0) return doNothing(event);
   const previousElementPath = path.slice(0, -1).concat(idx - 1);

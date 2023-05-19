@@ -22,7 +22,7 @@ export const AudioElement = {
   },
 };
 
-export const createMediaBlock: CreateMediaBlock = (next, file, editor) => {
+export const createMediaBlock: CreateMediaBlock = (next, file) => {
   if (/(?:\.mp3|\.flac)/.test(file.name))
     return { ...AudioElement.create(), src: file };
   return next();

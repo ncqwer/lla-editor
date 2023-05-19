@@ -1,6 +1,6 @@
-import React from 'react';
 import { Text } from 'slate';
-import { DefaultLeaf, RenderLeafProps } from 'slate-react';
+import { DefaultLeaf } from 'slate-react';
+import type { RenderLeafProps } from 'slate-react';
 import { caseMatch, extractValueFromPlugin } from './utils';
 
 export type ExtendRenderLeafProps<T extends Text> = Omit<

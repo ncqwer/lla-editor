@@ -1,5 +1,5 @@
 import { Editor, Element, Node } from 'slate';
-import { BaseContainer, LLAElement, LLAConfig } from '@lla-editor/core';
+import { BaseContainer, LLAElement } from '@lla-editor/core';
 
 const _TYPE_ = 'text-block';
 

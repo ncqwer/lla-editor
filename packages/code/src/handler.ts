@@ -1,9 +1,6 @@
 import detectIntent from 'detect-indent';
 import {
-  caseMatch,
   groupKeyDown,
-  LLAElement,
-  OnKeyDownAlternative,
   OnKeyDownResponseZone,
   OnKeyDownType,
   shotkey,
@@ -65,7 +62,7 @@ const braketsStartReg = /[{([`]/;
 const matchedBraketsReg = /(?:\{\})|(?:\[\])|(?:\(\))|(?:``)/;
 const braketsEndReg = /[})\]`]/;
 
-const handleEnter: KeyDown = function (next, event, editor, [codeline, path]) {
+const handleEnter: KeyDown = function (next, event, editor, [codeline]) {
   const { selection } = editor;
   if (!selection) return next();
   // const [[startBlock]] = Code.edgeBlock(editor, selection);
@@ -231,7 +228,7 @@ const handleModShiftUp: KeyDown = function handleModShiftUp(
   next,
   event,
   editor,
-  [codeline, path],
+  [, path],
 ) {
   event.preventDefault();
   const { selection } = editor;
@@ -259,12 +256,7 @@ const handleModShiftUp: KeyDown = function handleModShiftUp(
   });
 };
 
-const handleModShiftDown: KeyDown = function (
-  next,
-  event,
-  editor,
-  [codeline, path],
-) {
+const handleModShiftDown: KeyDown = function (next, event, editor, [, path]) {
   event.preventDefault();
   const { selection } = editor;
   if (!selection) return next();

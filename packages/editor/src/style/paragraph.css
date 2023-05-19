@@ -4,7 +4,7 @@
 }
 
 .lla-placeholder {
-  @apply invisible absolute  select-none pointer-events-none;
+  @apply invisible absolute  select-none pointer-events-none top-1;
   white-space: pre-wrap;
   word-break: break-word;
   caret-color: rgb(55, 53, 47);

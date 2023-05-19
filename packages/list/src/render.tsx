@@ -2,11 +2,11 @@ import React from 'react';
 import { Transforms } from 'slate';
 import {
   ReactEditor,
-  RenderElementProps,
   useReadOnly,
   useSelected,
   useSlateStatic,
 } from 'slate-react';
+import type { RenderElementProps } from 'slate-react';
 import {
   ElementJSX,
   elementPropsIs,
@@ -23,6 +23,7 @@ import {
 } from './element';
 
 const IndentContainerWrapper = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   element,
   attributes,
   children,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Editor, NodeEntry } from 'slate';
+import type { Editor, NodeEntry } from 'slate';
 
 import { BaseParagraph, Nextify } from '../type';
 import { defaultPropertyRule, DefaultRuleType } from './utils';

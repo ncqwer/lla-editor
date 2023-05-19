@@ -2,9 +2,9 @@ import {
   groupKeyDown,
   OnKeyDownResponseZone,
   OnKeyDownType,
-  shotkey,
+  // shotkey,
 } from '@lla-editor/core';
-import { Range, Transforms, Text, Editor, Point, Path } from 'slate';
+// import { Range, Transforms, Text, Editor, Point, Path } from 'slate';
 import { TextBlock } from './element';
 
 type KeyDown = OnKeyDownType<TextBlock>;

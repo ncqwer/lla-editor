@@ -1,14 +1,6 @@
-import {
-  Text,
-  BaseElement,
-  Node,
-  BaseRange,
-  BaseText,
-  Editor,
-  Path,
-  Range,
-  Transforms,
-} from 'slate';
+import { Text, Node, Editor, Path, Range, Transforms } from 'slate';
+
+import type { BaseElement, BaseRange, BaseText } from 'slate';
 import { BaseContainer, LLAElement } from '@lla-editor/core';
 import detectIntent from 'detect-indent';
 

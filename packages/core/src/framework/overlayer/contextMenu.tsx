@@ -1,7 +1,8 @@
 import { createShared } from '@zhujianshi/use-lens';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { lens } from '@zhujianshi/lens';
 import React from 'react';
-import { NodeEntry, Element, Editor, Path, Transforms } from 'slate';
+import { Element, Editor, Path, Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 import domAlign from 'dom-align';
 

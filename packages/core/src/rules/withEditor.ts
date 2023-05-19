@@ -1,5 +1,5 @@
-import { PluginRuleObjType } from '@herbart-editor/pae';
-import { Editor, Element, Node, Range, Transforms, Path } from 'slate';
+/* eslint-disable valid-jsdoc */
+import { Editor, Element, Node, Transforms, Path } from 'slate';
 import { Paragraph } from '../builtinPlugin/paragraph';
 import { extractValueFromPlugin } from './utils';
 
@@ -77,7 +77,7 @@ const withDefault: WithEditor = (editor) => {
           children: [node],
         });
       } else {
-        //is void element
+        // is void element
         added.push(node);
       }
     });
@@ -110,7 +110,7 @@ const withDefault: WithEditor = (editor) => {
     //   ),
     // );
     if (slateNodes && slateNodes.length > 0) {
-      //不使用默认的insertData
+      // 不使用默认的insertData
       const target = Editor.above(editor, {
         at: editor.selection!.anchor.path,
         match: (n) =>
@@ -144,7 +144,7 @@ const withDefault: WithEditor = (editor) => {
             children: [node],
           });
         } else {
-          //is void element
+          // is void element
           added.push(node);
         }
       });
@@ -238,7 +238,7 @@ const getSlateNodes = (
     })();
   }
   if (!result && files.length > 0) {
-    //媒体文件和文字不支持同时粘贴
+    // 媒体文件和文字不支持同时粘贴
     try {
       result = files
         .map((file) => editor.createMediaBlock(file, editor))

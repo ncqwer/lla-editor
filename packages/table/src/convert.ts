@@ -47,7 +47,7 @@ export const deserialize: Deserialize = (next, ast, editor, acc) => {
   return next();
 };
 
-export const serialize: Serialize = (next, ele, editor) => {
+export const serialize: Serialize = (next, ele) => {
   if (Table.is(ele)) {
     return {
       type: 'table',

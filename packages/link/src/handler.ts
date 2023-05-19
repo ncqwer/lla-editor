@@ -4,7 +4,11 @@ import {
   OnKeyDownType,
   shotkey,
 } from '@lla-editor/core';
-import { Editor, Node, Path, Point, Range, Text, Transforms } from 'slate';
+import {
+  // Editor, Node, Path, Point,
+  Range,
+  // Text, Transforms
+} from 'slate';
 import { LinkElement } from './element';
 
 export const onKeyDownResponseZone: OnKeyDownResponseZone = (
@@ -17,7 +21,7 @@ export const onKeyDownResponseZone: OnKeyDownResponseZone = (
 
 type KeyDown = OnKeyDownType<LinkElement>;
 
-const handleEnter: KeyDown = (next, event, editor, [node, path]) => {
+const handleEnter: KeyDown = (next, event, editor, [node]) => {
   const { selection } = editor;
   if (!selection) return next();
   if (Range.isExpanded(selection)) return next();

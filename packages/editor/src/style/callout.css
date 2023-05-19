@@ -5,6 +5,7 @@
 
 .lla-callout__mark {
   @apply flex select-none cursor-pointer items-center justify-center h-6 w-6 rounded flex-shrink-0 self-start;
+  height: 30px;
 }
 
 .lla-callout_mark-wrapper {

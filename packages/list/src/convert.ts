@@ -1,7 +1,13 @@
-import { Range, Node, Editor, Point, Transforms } from 'slate';
+import {
+  Range,
+  Node,
+  Editor,
+  // Point,
+  Transforms,
+} from 'slate';
 import {
   caseMatch,
-  groupKeyDown,
+  // groupKeyDown,
   OnParagraphConvert,
   shotkey,
   Deserialize,
@@ -23,7 +29,7 @@ const handleSpace: OnParagraphConvert = (next, event, editor, [node, path]) => {
     const [start, end] = Range.edges(selection);
     if (start.offset !== 1) return next();
     event.preventDefault();
-    //将当前父节点转化为BulletedListItem
+    // 将当前父节点转化为BulletedListItem
     return Editor.withoutNormalizing(editor, () => {
       if (end.offset !== 0)
         Transforms.delete(editor, {
@@ -41,7 +47,7 @@ const handleSpace: OnParagraphConvert = (next, event, editor, [node, path]) => {
     if (List.isNumbered(parentNode)) return next();
     const [start, end] = Range.edges(selection);
     if (start.offset !== 2) return next();
-    //将当前父节点转化为NumberedListItem
+    // 将当前父节点转化为NumberedListItem
     event.preventDefault();
     return Editor.withoutNormalizing(editor, () => {
       if (end.offset !== 0)
@@ -76,7 +82,7 @@ const handleSquareBrackets: OnParagraphConvert = (
     const [start, end] = Range.edges(selection);
     if (start.offset !== 1) return next();
     event.preventDefault();
-    //将当前父节点转化为BulletedListItem
+    // 将当前父节点转化为BulletedListItem
     return Editor.withoutNormalizing(editor, () => {
       if (end.offset !== 0)
         Transforms.delete(editor, {

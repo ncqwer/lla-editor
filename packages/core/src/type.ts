@@ -1,15 +1,11 @@
 import React from 'react';
-import {
-  BaseElement,
-  Text,
-  Element,
-  Node,
-  BaseEditor,
-  Editor,
-  NodeEntry,
-  Path,
+import { Text, Element, Node, Editor, Path } from 'slate';
+import type {
   BaseText,
   BaseRange,
+  BaseElement,
+  BaseEditor,
+  NodeEntry,
 } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';
@@ -68,16 +64,16 @@ export interface CustomContainer {
   BaseContainer: BaseContainer;
 }
 
-export interface BaseContainer extends BaseElement {
+export interface BaseContainer {
   type: string;
-  children: Element[];
+  children: any[];
 }
 
 export interface CustomParagraph {
   BaseParagraph: BaseParagraph;
 }
 
-export interface BaseParagraph extends BaseElement {
+export interface BaseParagraph {
   children: Text[];
   type: string;
 }

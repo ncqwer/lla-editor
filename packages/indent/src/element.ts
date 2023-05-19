@@ -1,4 +1,5 @@
-import { BaseEditor, BaseElement, Element, Node } from 'slate';
+import { Element, Node } from 'slate';
+import type { BaseEditor } from 'slate';
 import { BaseContainer, LLAContainer, LLAElement } from '@lla-editor/core';
 // import { Container } from 'react-dom';
 

@@ -1,4 +1,3 @@
-import { Editor } from 'slate';
 import { QuoteElement } from './element';
 import Render from './render';
 import { withEditor } from './withEditor';

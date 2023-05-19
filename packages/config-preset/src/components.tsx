@@ -6,8 +6,14 @@ import rehype2remark from 'rehype-remark';
 import remarkParse from 'remark-parse';
 import stringify from 'remark-stringify';
 import gfm from 'remark-gfm';
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
 
 const { SharedProvider } = ConfigHelers;
+
+const DefaultPickerComponent = ({ onSelect }: any) => (
+  <Picker data={data} onEmojiSelect={onSelect} />
+);
 
 const processor = unified().use(parse).use(rehype2remark);
 const txtprocessor = unified().use(gfm).use(remarkParse);
@@ -24,6 +30,8 @@ export const SharedProviderPreset: React.FC<{
   imageConfig: any;
   audioConfig: any;
   videoConfig: any;
+  PickerComponent: any;
+  children?: React.ReactNode;
 }> = ({
   children,
   overlayerId,
@@ -31,6 +39,7 @@ export const SharedProviderPreset: React.FC<{
   imageConfig,
   audioConfig,
   videoConfig,
+  PickerComponent,
 }) => {
   const imageRef = React.useRef<HTMLInputElement>(null);
   const audioRef = React.useRef<HTMLInputElement>(null);
@@ -109,14 +118,24 @@ export const SharedProviderPreset: React.FC<{
           table: {
             HTableComponent,
           },
+          callout: {
+            PickerComponent: PickerComponent ?? DefaultPickerComponent,
+          },
         }),
-        [overlayerId, HTableComponent, imageConfig, audioConfig, videoConfig],
+        [
+          overlayerId,
+          HTableComponent,
+          imageConfig,
+          audioConfig,
+          videoConfig,
+          PickerComponent,
+        ],
       )}
     >
       {children}
       <input
         type="file"
-        className="hidden"
+        className="lla-image-input"
         ref={imageRef}
         value=""
         onChange={async (e) => {
@@ -128,7 +147,7 @@ export const SharedProviderPreset: React.FC<{
       />
       <input
         type="file"
-        className="hidden"
+        className="lla-audio-input"
         value=""
         ref={audioRef}
         onChange={async (e) => {
@@ -140,7 +159,7 @@ export const SharedProviderPreset: React.FC<{
       />
       <input
         type="file"
-        className="hidden"
+        className="lla-video-input"
         value=""
         ref={videoRef}
         onChange={async (e) => {

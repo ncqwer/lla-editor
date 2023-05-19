@@ -17,11 +17,11 @@ export const onKeyDownResponseZone: OnKeyDownResponseZone = (
 
 type KeyDown = OnKeyDownType<QuoteElement>;
 
-const handleEnter: KeyDown = (next, event, editor, [node, path]) => {
+const handleEnter: KeyDown = (next, event, editor, [, path]) => {
   const { selection } = editor;
   if (!selection) return next();
   event.preventDefault();
-  const [start, end] = Range.edges(selection);
+  const [, end] = Range.edges(selection);
   const textEnd = Editor.end(editor, path);
   // let remainStr = '';
   // let range: Range | null = null;
@@ -60,7 +60,7 @@ const handleEnter: KeyDown = (next, event, editor, [node, path]) => {
   });
 };
 
-const handleBackspace: KeyDown = (next, event, editor, [node, path]) => {
+const handleBackspace: KeyDown = (next, event, editor, [, path]) => {
   const { selection } = editor;
   if (!selection) return next();
   if (Range.isExpanded(selection)) return next();

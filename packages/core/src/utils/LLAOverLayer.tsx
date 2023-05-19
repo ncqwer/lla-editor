@@ -5,6 +5,7 @@ import { ConfigHelers } from '../framework';
 
 const { useLens } = ConfigHelers;
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @example
  *  const alignOpt = {points:['tc','bc']} //source's top center === target's bottom center
@@ -23,6 +24,7 @@ const { useLens } = ConfigHelers;
 export const LLAOverLayer: React.FC<{
   onClose: () => void;
   targetGet: () => HTMLElement | null;
+  children?: React.ReactNode;
   alignOpts: any;
 }> = ({ onClose, targetGet, children, alignOpts }) => {
   const [overlayterId] = useLens(['core', 'overlayerId']);
@@ -66,6 +68,7 @@ export const LLAModal: React.FC<{
   onClose: () => void;
   hasMask?: boolean;
   noMaskClose?: boolean;
+  children?: React.ReactNode;
 }> = ({ onClose, children, hasMask = false, noMaskClose = false }) => {
   const [overlayterId] = useLens(['core', 'overlayerId']);
   const root = React.useMemo(

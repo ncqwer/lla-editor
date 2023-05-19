@@ -1,6 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import { createEditor, Descendant } from 'slate';
+import { createEditor } from 'slate';
+import type { Descendant } from 'slate';
 import { withHistory } from 'slate-history';
 import { withReact, Slate } from 'slate-react';
 import { useEditorRuntime } from '.';
@@ -14,6 +15,7 @@ const { useLens } = ConfigHelers;
 export const Editor: React.FC<{
   value: Descendant[];
   onChange: (v: Descendant[]) => void;
+  children?: React.ReactNode;
 }> = ({ value, onChange, children }) => {
   const [html2md] = useLens(['core', 'html2md']);
   const [txt2md] = useLens(['core', 'txt2md']);
@@ -31,7 +33,7 @@ export const Editor: React.FC<{
     baseEditor.deserialize = (ele, editor, acc) =>
       deserialize(() => acc, ele, editor, acc);
     baseEditor.serialize = (str, editor) => serialize(() => '', str, editor);
-    baseEditor.createMediaBlock = (file, edtior) =>
+    baseEditor.createMediaBlock = (file, editor) =>
       createMediaBlock(() => null, file, editor);
     const editor = withEditor(withReact(withHistory(baseEditor)));
     return editor;

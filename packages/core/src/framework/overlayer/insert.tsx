@@ -2,9 +2,10 @@ import React from 'react';
 import { Path, Node, Editor, Transforms } from 'slate';
 import { ReactEditor, useSlate, useSlateStatic } from 'slate-react';
 import domAlign from 'dom-align';
+// eslint-disable-next-line import/no-named-as-default
 import useThrottle from '../../hooks/useThrottle';
 import { useEditorRuntime } from '..';
-import { LLAElement } from '../../type';
+// import { LLAElement } from '../../type';
 
 export const InsertOverLayer = () => {
   const editor = useSlateStatic();
@@ -40,7 +41,7 @@ const InsertOverLayerImpl = React.forwardRef(
     { path, emptyPath }: { path: [Path, number]; emptyPath: () => void },
     _outerRef,
   ) => {
-    const editor = useSlate(); //这里需要时刻更新值
+    const editor = useSlate(); // 这里需要时刻更新值
     const ref = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
       if (ref.current) {
@@ -394,7 +395,6 @@ const InsertPannel = React.forwardRef(
       if (totalLength === 0) return;
       if (activeIdx < bgColorStartIdx) return handleClick_i();
       if (activeIdx < txtColorItemsStartIdx) return handleClick_bg();
-      console.log('hhh');
       return handleClick_txt();
     }
 
@@ -415,7 +415,7 @@ const InsertPannel = React.forwardRef(
         parent.children.length > 1 &&
         !(editor as any).isContainable(parent)
       ) {
-        //存在包含多端paragraph的情况
+        // 存在包含多端paragraph的情况
         return Editor.withoutNormalizing(editor, () => {
           Transforms.removeNodes(editor, { at: path });
           Transforms.insertNodes(editor, create(editor), {
@@ -429,7 +429,7 @@ const InsertPannel = React.forwardRef(
       }
       const newBlock = create(editor);
       if (editor.isParagraphable(newBlock)) {
-        //将当前转换
+        // 将当前转换
         return Editor.withoutNormalizing(editor, () => {
           Transforms.delete(editor, {
             reverse: true,

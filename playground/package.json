@@ -1,5 +1,5 @@
 {
-  "name": "@lla-editor/example",
+  "name": "playground",
   "private": true,
   "version": "1.0.19",
   "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
@@ -25,27 +25,7 @@
     "prepublish": "echo 'do nothing'"
   },
   "dependencies": {
-    "@lla-editor/audio": "^0.0.14",
-    "@lla-editor/callout": "^0.0.13",
-    "@lla-editor/code": "^1.0.6",
-    "@lla-editor/config-preset": "^0.0.8",
-    "@lla-editor/core": "^0.0.13",
-    "@lla-editor/custom-void": "^0.0.10",
-    "@lla-editor/divider": "^0.0.13",
-    "@lla-editor/editor": "^0.0.17",
-    "@lla-editor/heading": "^0.0.13",
-    "@lla-editor/image": "^0.0.14",
-    "@lla-editor/indent": "^0.0.13",
-    "@lla-editor/link": "^0.0.9",
-    "@lla-editor/list": "^0.0.13",
-    "@lla-editor/quote": "^0.0.13",
-    "@lla-editor/table": "^0.0.7",
-    "@lla-editor/text-block": "^0.0.14",
-    "@lla-editor/video": "^0.0.14",
-    "@zhujianshi/use-lens": "^0.0.13",
-    "is-hotkey": "^0.2.0",
-    "slate": "^0.63.0",
-    "slate-history": "^0.62.0",
-    "slate-react": "^0.65.0"
+    "@lla-editor/config-preset": "^0.0.15",
+    "@lla-editor/editor": "^0.0.24"
   }
 }

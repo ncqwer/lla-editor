@@ -4,5 +4,6 @@ module.exports = {
   ...raw,
   rules: {
     ...raw.rules,
+    '@typescript-eslint/no-redeclare': 'off',
   },
 };

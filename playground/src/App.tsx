@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import type { Descendant } from 'slate';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useDebounce } from '@lla-editor/core';
 
 import { LLAEditor } from '@lla-editor/editor';

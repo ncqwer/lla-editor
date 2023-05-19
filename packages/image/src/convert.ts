@@ -1,8 +1,7 @@
-import { Range, Node, Editor, Point, Transforms } from 'slate';
+import { Node, Editor, Transforms } from 'slate';
 import {
   caseMatch,
   Deserialize,
-  groupKeyDown,
   OnParagraphConvert,
   Serialize,
   shotkey,
@@ -24,7 +23,7 @@ const handleSquareBrackets: OnParagraphConvert = (
   const text = Node.string(node);
   if (imageReg.test(text)) {
     event.preventDefault();
-    //将当前父节点删除并添加空白的image
+    // 将当前父节点删除并添加空白的image
     return Editor.withoutNormalizing(editor, () => {
       Transforms.removeNodes(editor, { at: parentPath });
       Transforms.insertNodes(editor, ImageElement.create(), { at: parentPath });
@@ -46,7 +45,7 @@ export const deserialize: Deserialize = (next, ast, editor, acc) => {
   return next();
 };
 
-export const serialize: Serialize = (next, ele, editor) => {
+export const serialize: Serialize = (next, ele) => {
   if (ImageElement.is(ele) && ele.src && typeof ele.src === 'string')
     return { type: 'image', url: ele.src, alt: ele.alt };
   return next();

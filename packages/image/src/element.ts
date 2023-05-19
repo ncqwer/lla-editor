@@ -26,7 +26,7 @@ export const ImageElement = {
   },
 };
 
-export const createMediaBlock: CreateMediaBlock = (next, file, editor) => {
+export const createMediaBlock: CreateMediaBlock = (next, file) => {
   if (/(?:\.png|\.jpeg|\.jpg)/.test(file.name))
     return { ...ImageElement.create(), src: file };
   return next();

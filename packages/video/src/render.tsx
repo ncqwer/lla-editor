@@ -179,7 +179,7 @@ const Resizedvideo: React.FC<
         // const offsetWidth = ref.current.offsetWidth;
         // const offsetWidth = ref.current.offsetWidth;
         // const offsetHeight = ref.current.offsetHeight;
-        const k = 1;
+        const k = 2;
         const diffX = isLeftHandler
           ? Math.round(e.pageX - srcX)
           : Math.round(srcX - e.pageX);
@@ -211,7 +211,7 @@ const Resizedvideo: React.FC<
         const pageX = e.touches[0].pageX;
         // const offsetWidth = ref.current.offsetWidth;
         // const offsetHeight = ref.current.offsetHeight;
-        const k = 1;
+        const k = 2;
         const diffX = isLeftHandler
           ? Math.round(pageX - srcX)
           : Math.round(srcX - pageX);

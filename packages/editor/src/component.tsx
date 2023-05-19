@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { Descendant } from 'slate';
+import React from 'react';
+import type { Descendant } from 'slate';
 import {
   PluginProvider,
   Environment,
@@ -7,7 +7,6 @@ import {
   Editable,
   ConfigHelers,
   ParagraphImpl,
-  LLAConfig,
 } from '@lla-editor/core';
 import ListImpl from '@lla-editor/list';
 import ImageImpl from '@lla-editor/image';
@@ -42,18 +41,21 @@ export const { SharedProvider } = ConfigHelers;
 
 export const LLAEnvironment: React.FC<{
   plugins?: { pluginName: string }[];
+  children?: React.ReactNode;
 }> = ({ children, plugins = availablePlugins }) => {
+  const P: any = PluginProvider;
+  const E: any = Environment;
   return (
-    <PluginProvider availablePlugins={plugins}>
-      <Environment
+    <P availablePlugins={plugins}>
+      <E
         activePluginNames={React.useMemo(
           () => plugins.map(({ pluginName }) => pluginName),
           [plugins],
         )}
       >
         {children}
-      </Environment>
-    </PluginProvider>
+      </E>
+    </P>
   );
 };
 
@@ -62,6 +64,7 @@ export const LLAEditor: React.FC<{
   onChange: (v: Descendant[]) => void;
   readOnly?: boolean;
   className?: string;
+  children?: React.ReactNode;
 }> = ({ value, onChange, className, readOnly, children }) => {
   return (
     <Editor value={value} onChange={onChange}>

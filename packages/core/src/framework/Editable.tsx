@@ -1,9 +1,10 @@
 import React from 'react';
-import { Editor, Transforms, Range, NodeEntry, Path } from 'slate';
+import { Editor, Transforms, Range, Path } from 'slate';
+import type { NodeEntry } from 'slate';
 import { Editable as E, ReactEditor, useSlateStatic } from 'slate-react';
 import { useEditorRuntime } from '.';
 import { nextifyFlow } from '../rules';
-import { Nextify } from '../type';
+// import type { Nextify } from '../type';
 
 export const Editable = ({
   onKeyDown,
