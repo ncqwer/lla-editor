@@ -1,11 +1,51 @@
 export const getContent = () => [
   {
+    type: 'quote',
     children: [
       {
         type: 'paragraph',
         children: [
           {
-            text: '谨以这一小段文字纪念四年来被秋绘温暖的时光：从初一到现在，不知不觉听秋绘的歌已经四年了。四年来不敢说经历了什么大风大浪，但是和朋友绝交，暗恋的人和别人在一起，还有各种考试…总有很多烦恼让我心情低落。但难过的时候也好，伤心的时候也罢，秋绘的歌声总能给我希望和力量。就如《明日夜空的哨戒班》中唱的“それてﾞもいつたﾞって君と見ていた 世界は本当に綺麗たﾞった，即使如此，一直以来与你一同凝望的世界，真是美丽啊…”。很多这样歌像《約束》《春よ、来い》都让我看到爱与光明。四年以来，在我眼里，绘总也在成长。就像她上次直播说的，第一次直播时很紧张，总担心唱破音什么的，但现在好很多了，而且能够从直播中获得正面的反馈。最初绘总的粉丝很少（也不是很少，但是没有现在多），我当时很着急地在各种QQ群微信群里推荐她希望更多人喜欢她。现在她的粉丝已经涨到30多万了。看她涨粉，比自己涨粉还高兴，好像里面也有我的功劳一样。上次直播，绘总还说，如果对秋绘还有期待的话，就来听这次的歌吧。但我想说，不用“如果”，我会一直对绘总，对Akie秋绘抱有期待！无论是上个四年，还是下个四年，还是以后许许多多的四年…',
+            text: '本项目使用',
+          },
+          {
+            url: 'https://github.com/ianstormtaylor/slate',
+            type: 'link',
+            children: [
+              {
+                text: ' Slate',
+              },
+            ],
+          },
+          {
+            text: ' 作为基础。旨在打造 React 友好的富文本编辑器。',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    children: [
+      {
+        text: '',
+      },
+    ],
+    type: 'text-block',
+  },
+  {
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '项目使用 mono repo 架构,使用',
+          },
+          {
+            text: '@lla-editor/core',
+            inlineCode: true,
+          },
+          {
+            text: '作为核心，使用插件架构，方便使用过程中的按需引入。',
           },
         ],
       },
@@ -13,54 +53,12 @@ export const getContent = () => [
     type: 'text-block',
   },
   {
-    children: [{ children: [{ text: 'cosnt ' }], type: 'codeline' }],
-    language: 'javascript',
-    type: 'codeblock',
-  },
-  {
-    children: [{ type: 'paragraph', children: [{ text: 'hello world' }] }],
-    type: 'text-block',
-  },
-  {
-    children: [{ text: '' }],
-    type: 'table',
-    mergeCells: [{ row: 1, col: 3, rowspan: 3, colspan: 3 }],
-    data: [
-      ['A1sfsadf', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1'],
-      ['A1sfsadf', 'B2', 'C2', 'D2', null, null, 'G2'],
-      ['A1sfsadf', null, 'C3', null, null, null, 'G3'],
-      ['A1sfsadf', null, 'C4', null, null, null, 'G4'],
-      ['A1sfsadf', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5'],
-      ['A6', 'B6', 'C6', 'D6', 'E6', 'F6', 'G6'],
-      ['A7', 'B7', 'C7', 'D7', 'E7', 'F7', 'G7'],
-    ],
-  },
-  {
-    children: [{ type: 'paragraph', children: [{ text: 'asdfjsakfljasldf' }] }],
-    type: 'text-block',
-  },
-  {
-    children: [{ type: 'paragraph', children: [{ text: 'asdjklfjaskldf' }] }],
-    type: 'text-block',
-  },
-  {
-    children: [{ type: 'paragraph', children: [{ text: 'asdjkfjsakdf' }] }],
-    type: 'text-block',
-  },
-  {
-    children: [{ type: 'paragraph', children: [{ text: '' }] }],
-    type: 'text-block',
-  },
-];
-
-export const getBrief = () => [
-  {
     children: [
       {
         type: 'paragraph',
         children: [
           {
-            text: '谨以这一小段文字纪念四年来被秋绘温暖的时光：从初一到现在，不知不觉听秋绘的歌已经四年了。四年来不敢说经历了什么大风大浪，但是和朋友绝交，暗恋的人和别人在一起，还有各种考试…总有很多烦恼让我心情低落。但难过的时候也好，伤心的时候也罢，秋绘的歌声总能给我希望和力量。就如《明日夜空的哨戒班》中唱的“それてﾞもいつたﾞって君と見ていた 世界は本当に綺麗たﾞった，即使如此，一直以来与你一同凝望的世界，真是美丽啊…”。很多这样歌像《約束》《春よ、来い》都让我看到爱与光明。四年以来，在我眼里，绘总也在成长。就像她上次直播说的，第一次直播时很紧张，总担心唱破音什么的，但现在好很多了，而且能够从直播中获得正面的反馈。最初绘总的粉丝很少（也不是很少，但是没有现在多），我当时很着急地在各种QQ群微信群里推荐她希望更多人喜欢她。现在她的粉丝已经涨到30多万了。看她涨粉，比自己涨粉还高兴，好像里面也有我的功劳一样。上次直播，绘总还说，如果对秋绘还有期待的话，就来听这次的歌吧。但我想说，不用“如果”，我会一直对绘总，对Akie秋绘抱有期待！无论是上个四年，还是下个四年，还是以后许许多多的四年…',
+            text: '本项目目前实现了一些较为基础的富文本块。示例如下：',
           },
         ],
       },
@@ -68,26 +66,507 @@ export const getBrief = () => [
     type: 'text-block',
   },
   {
-    children: [{ children: [{ text: 'cosnt ' }], type: 'codeline' }],
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '嵌套链表',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'bulleted_list_item',
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
+      {
+        children: [
+          {
+            type: 'bulleted_list_item',
+            children: [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    text: '',
+                  },
+                ],
+              },
+              {
+                children: [
+                  {
+                    type: 'task_list_item',
+                    checked: false,
+                    children: [
+                      {
+                        type: 'paragraph',
+                        children: [
+                          {
+                            text: '',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+                type: 'indent_container',
+              },
+            ],
+          },
+          {
+            type: 'task_list_item',
+            checked: false,
+            children: [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    text: '',
+                  },
+                ],
+              },
+              {
+                children: [
+                  {
+                    type: 'numbered_list_item',
+                    index: 1,
+                    children: [
+                      {
+                        type: 'paragraph',
+                        children: [
+                          {
+                            text: '',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    type: 'numbered_list_item',
+                    index: 2,
+                    children: [
+                      {
+                        type: 'paragraph',
+                        children: [
+                          {
+                            text: '',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+                type: 'indent_container',
+              },
+            ],
+          },
+          {
+            type: 'bulleted_list_item',
+            children: [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    text: '',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        type: 'indent_container',
+      },
+    ],
+  },
+  {
+    type: 'bulleted_list_item',
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    text: '普通文字也可以嵌套',
+                  },
+                ],
+              },
+              {
+                children: [
+                  {
+                    children: [
+                      {
+                        type: 'paragraph',
+                        children: [
+                          {
+                            text: '嵌套层级没有限制',
+                          },
+                        ],
+                      },
+                    ],
+                    type: 'text-block',
+                  },
+                ],
+                type: 'indent_container',
+              },
+            ],
+            type: 'text-block',
+          },
+        ],
+        type: 'indent_container',
+      },
+    ],
+  },
+  {
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '块间样式',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '使用红色背景和蓝色字体',
+          },
+        ],
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    text: '可以嵌套修改',
+                  },
+                ],
+              },
+            ],
+            type: 'text-block',
+            bgColor: 'bg-green-50',
+            txtColor: 'text-yellow-300',
+          },
+        ],
+        type: 'indent_container',
+      },
+    ],
+    type: 'text-block',
+    bgColor: 'bg-red-50',
+    txtColor: 'text-blue-300',
+  },
+  {
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: 'callout',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'callout',
+    emoji: '😀',
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '代码块',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    children: [
+      {
+        children: [
+          {
+            text: 'const compose = (...funcs)=>funcs.reduce(',
+          },
+        ],
+        type: 'codeline',
+      },
+      {
+        type: 'codeline',
+        children: [
+          {
+            text: '    (acc,func)=>(...args)=>acc(func(...args)));',
+          },
+        ],
+      },
+    ],
     language: 'javascript',
     type: 'codeblock',
   },
   {
-    children: [{ type: 'paragraph', children: [{ text: 'hello world' }] }],
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: 'Heading',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '图片',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    children: [
+      {
+        text: '',
+      },
+    ],
+    type: 'image',
+    width: 700,
+    height: 300,
+    src: 'https://img1.baidu.com/it/u=1919509102,1927615551&fm=253&fmt=auto&app=120&f=JPEG?w=889&h=500',
+  },
+  {
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '链接',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '',
+          },
+          {
+            url: 'https://www.baidu.com',
+            type: 'link',
+            children: [
+              {
+                text: '这里是通往百度的地址。',
+              },
+            ],
+          },
+          {
+            text: ' ',
+          },
+        ],
+      },
+    ],
     type: 'text-block',
   },
   {
-    children: [{ text: '' }],
-    type: 'table',
-    mergeCells: [{ row: 1, col: 3, rowspan: 3, colspan: 3 }],
-    data: [
-      ['A1sfsadf', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1'],
-      ['A1sfsadf', 'B2', 'C2', 'D2', null, null, 'G2'],
-      ['A1sfsadf', null, 'C3', null, null, null, 'G3'],
-      ['A1sfsadf', null, 'C4', null, null, null, 'G4'],
-      ['A1sfsadf', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5'],
-      ['A6', 'B6', 'C6', 'D6', 'E6', 'F6', 'G6'],
-      ['A7', 'B7', 'C7', 'D7', 'E7', 'F7', 'G7'],
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '视频',
+          },
+        ],
+      },
     ],
+  },
+  {
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '支持本地视频和在线视频',
+          },
+        ],
+      },
+    ],
+    type: 'text-block',
+  },
+  {
+    children: [
+      {
+        text: '',
+      },
+    ],
+    type: 'video',
+    width: 1200,
+  },
+  {
+    type: 'heading',
+    level: 3,
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '音频',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '支持本地音频和在线音频',
+          },
+        ],
+      },
+    ],
+    type: 'text-block',
+  },
+  {
+    children: [
+      {
+        text: '',
+      },
+    ],
+    type: 'audio',
+    width: 1200,
+  },
+  {
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
+    ],
+    type: 'text-block',
+  },
+  {
+    type: 'divider',
+    children: [
+      {
+        text: '',
+      },
+    ],
+  },
+  {
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '差不多了，欢迎加入',
+          },
+          {
+            text: 'lla-editor',
+            inlineCode: true,
+          },
+          {
+            text: '!!!',
+          },
+        ],
+      },
+    ],
+    type: 'text-block',
+  },
+  {
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
+    ],
+    type: 'text-block',
   },
 ];

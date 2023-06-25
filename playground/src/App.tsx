@@ -12,6 +12,7 @@ import { LLAEditor } from '@lla-editor/editor';
 import { LLAEnvironment } from '@lla-editor/editor';
 
 import { SharedProviderPreset } from '@lla-editor/config-preset';
+import { getContent } from './data/comment';
 
 const PlainTextExample = () => {
   // return <TryParent></TryParent>;
@@ -55,20 +56,28 @@ const useLocalStorage = function <T>(
 const AEditor = () => {
   const [value, setValue] = useLocalStorage<Descendant[]>(
     'lla-comment',
-    initialValue(),
+    getContent(),
   );
 
   return (
     <div className="max-w-3xl mr-auto ml-auto mt-32 lla-readonly py-4">
       <LLAEditor value={value} onChange={setValue}></LLAEditor>
+      <div
+        className="rounded-full w-16 h-16 fixed bottom-6 right-6 bg-green-300 flex items-center justify-center text-gray-500 hover:text-gray-400 cursor-pointer"
+        onClick={() => {
+          setValue(getContent());
+        }}
+      >
+        Reset
+      </div>
     </div>
   );
 };
-const initialValue: () => Descendant[] = () => [
-  {
-    children: [{ type: 'paragraph', children: [{ text: '' }] }],
-    type: 'text-block',
-  },
-];
+// const initialValue: () => Descendant[] = () => [
+//   {
+//     children: [{ type: 'paragraph', children: [{ text: '' }] }],
+//     type: 'text-block',
+//   },
+// ];
 
 export default PlainTextExample;
