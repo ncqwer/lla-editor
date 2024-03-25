@@ -68,3 +68,68 @@
   padding: unset !important;
   margin: unset !important;
 }
+
+.lla-code-block-wrap--formula{
+  @apply relative;
+}
+.lla-code-block-wrap__formula-preview {
+  text-align: center;
+  background-color: inherit;
+  padding: 0;
+  cursor: pointer;
+
+}
+.lla-code-block-wrap--formula .lla-code-block{
+  @apply hidden;
+}
+
+
+.lla-code-block-wrap--formula.lla-code-block-wrap--selected .lla-code-block{
+  @apply block;
+}
+
+.lla-code-block-wrap--formula.lla-code-block-wrap--selected .lla-code-block-wrap__formula-preview {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 10000;
+  transform: translateX(-50%);
+  padding: 0.5rem;
+  border: 1px solid grey;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.lla-code-block-wrap__formula-preview__latex-info{
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  font-size: 10px;
+  text-decoration: underline;
+  display: none;
+}
+
+.lla-code-block-wrap--formula.lla-code-block-wrap--selected .lla-code-block-wrap__formula-preview .lla-code-block-wrap__formula-preview__latex-info{
+  display: block;
+}
+
+
+.lla-code-block-wrap__formula-preview--empty,
+.lla-code-block-wrap__formula-preview--error{
+  font-size: 14px;
+  font-style: italic;
+  font-family: monospace;
+}
+
+.lla-code-block-wrap__formula-preview--empty::after{
+  content: '<Empty Mathematical Formula>';
+  /* color:red; */
+}
+
+.lla-code-block-wrap__formula-preview--error::after{
+  content: '<Invalid Mathematical Formula>';
+  color:red;
+}
+
