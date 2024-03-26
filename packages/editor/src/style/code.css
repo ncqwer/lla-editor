@@ -77,8 +77,10 @@
   background-color: inherit;
   padding: 0;
   cursor: pointer;
+  user-select: none;
 
 }
+
 .lla-code-block-wrap--formula .lla-code-block{
   @apply hidden;
 }
@@ -86,6 +88,10 @@
 
 .lla-code-block-wrap--formula.lla-code-block-wrap--selected .lla-code-block{
   @apply block;
+}
+
+.lla-editor--readonly .lla-code-block-wrap--formula.lla-code-block-wrap--selected .lla-code-block{
+  @apply hidden;
 }
 
 .lla-code-block-wrap--formula.lla-code-block-wrap--selected .lla-code-block-wrap__formula-preview {
@@ -100,6 +106,20 @@
   border: 1px solid grey;
   border-radius: 4px;
   background-color: white;
+}
+
+.lla-editor--readonly .lla-code-block-wrap--formula.lla-code-block-wrap--selected .lla-code-block-wrap__formula-preview {
+  position: unset;
+  top: unset;
+  left: unset;
+  width: auto;
+  box-sizing: inherit;
+  z-index: unset;
+  transform: unset;
+  padding: inherit;
+  border: unset;
+  border-radius: inherit;
+  background-color: inherit;
 }
 
 .lla-code-block-wrap__formula-preview__latex-info{
@@ -133,3 +153,6 @@
   color:red;
 }
 
+.lla-editor--readonly .lla-code-language,.lla-editor--readonly .lla-context-menu-trigger {
+  display: none
+}

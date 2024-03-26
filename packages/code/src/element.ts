@@ -249,6 +249,10 @@ export const Code = {
   },
 };
 
+interface CodeConfig {
+  katex: any;
+}
+
 declare module '@lla-editor/core' {
   interface CustomParagraph {
     CodeLine: CodeLine;
@@ -261,5 +265,8 @@ declare module '@lla-editor/core' {
   }
   interface CustomText {
     PrismText: PrismText;
+  }
+  interface LLAConfig {
+    code: CodeConfig;
   }
 }

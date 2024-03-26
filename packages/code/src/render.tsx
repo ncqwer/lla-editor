@@ -8,9 +8,18 @@ import {
   Decorate,
   ExtendRenderLeafProps,
   textPropsIs,
+  LLAConfig,
+  ConfigHelers,
+  SharedApi,
 } from '@lla-editor/core';
 import { Code, CodeBlock, CodeLine, PrismText } from './element';
-import { ReactEditor, useSelected, useSlateStatic } from 'slate-react';
+import {
+  ReactEditor,
+  useReadOnly,
+  useSelected,
+  useSlateSelection,
+  useSlateStatic,
+} from 'slate-react';
 import { Transforms } from 'slate';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
@@ -280,18 +289,24 @@ const LanguageSelector: React.FC<{
   }
 };
 
-const katex = { renderToString: (x) => x, ParseError: {} };
+const { useGetting } = ConfigHelers as SharedApi<LLAConfig>;
 
 const KatexPreview = ({
   element,
   onClick,
+  onElementFocused,
 }: {
   element: CodeBlock;
   onClick?: () => void;
+  onElementFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const editor = useSlateStatic();
   const ref = React.useRef(null);
   const [katexHtml, setKatexHtml] = React.useState('');
   const [validState, setValidState] = React.useState(true);
+  const isSelected = useSelected();
+  const selection = useSlateSelection();
+  const katex = useGetting(['code', 'katex']);
 
   const mathTex = React.useMemo(
     () =>
@@ -319,7 +334,28 @@ const KatexPreview = ({
         throw e;
       }
     }
-  }, [mathTex]);
+  }, [mathTex, katex]);
+
+  React.useEffect(() => {
+    if (!isSelected) {
+      onElementFocused(false);
+      return;
+    }
+    if (!selection) {
+      onElementFocused(false);
+      return;
+    }
+    const path = ReactEditor.findPath(editor, element);
+    if (Range.includes(selection, path)) {
+      // only expanded when select and only select the whole element
+      onElementFocused(
+        Path.isAncestor(path, selection.anchor.path) &&
+          Path.isAncestor(path, selection.focus.path),
+      );
+    } else {
+      onElementFocused(true);
+    }
+  });
   return (
     <div
       ref={ref}
@@ -333,7 +369,7 @@ const KatexPreview = ({
         onClick={(e) => {
           e.stopPropagation();
           // router.push('/search?title=latex');
-          window.open('www.baidu.com');
+          window.open('https://www.latexlive.com/');
         }}
       >
         LaTex公式知多少
@@ -350,15 +386,17 @@ const CodeElement: React.FC<ExtendRenderElementProps<CodeBlock>> = ({
 }) => {
   const { language } = element;
   const editor = useSlateStatic();
-  const isSelected = useSelected();
-  console.log('🚀 ~ file: render.tsx:353 ~ isSelected:', isSelected);
+  const [isFormulaFocused, setIsFormulaFocused] = React.useState(false);
   const triggerRef = React.useRef<HTMLDivElement>(null);
   const isFormula = element.language === 'latex';
+  const isReadonly = useReadOnly();
   return (
     <div
       className={`lla-code-block-wrap${
         isFormula ? ' lla-code-block-wrap--formula' : ''
-      }${isSelected ? ' lla-code-block-wrap--selected' : ''}`}
+      }${isFormulaFocused ? ' lla-code-block-wrap--selected' : ''}${
+        isReadonly ? ' lla-code-block-wrap--readonly' : ''
+      }`}
       {...attributes}
     >
       <div className={`lla-code-block lla-context-menu-target`}>
@@ -458,6 +496,7 @@ const CodeElement: React.FC<ExtendRenderElementProps<CodeBlock>> = ({
             // const newSelection = Editor.range(editor,path);
             Transforms.select(editor, path);
           }}
+          onElementFocused={setIsFormulaFocused}
         ></KatexPreview>
       )}
     </div>
