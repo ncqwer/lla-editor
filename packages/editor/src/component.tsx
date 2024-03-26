@@ -68,7 +68,12 @@ export const LLAEditor: React.FC<{
 }> = ({ value, onChange, className, readOnly, children }) => {
   return (
     <Editor value={value} onChange={onChange}>
-      <Editable className={className} readOnly={readOnly}></Editable>
+      <Editable
+        className={`${className ?? ''}${
+          readOnly ? ' lla-editor--readonly' : ''
+        }`}
+        readOnly={readOnly}
+      ></Editable>
       {children}
     </Editor>
   );

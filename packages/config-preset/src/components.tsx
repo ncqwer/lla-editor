@@ -115,6 +115,23 @@ export const SharedProviderPreset: React.FC<{
             videoRemove: async () => {},
             ...videoConfig,
           },
+          code: {
+            katex: new Proxy(
+              {
+                renderToString: (x: any) => x,
+                ParseError: class extends Error {},
+              },
+              {
+                get(target, key) {
+                  const ins = (window as any).katex;
+                  if (ins) {
+                    return ins[key];
+                  }
+                  return target[key];
+                },
+              },
+            ),
+          },
           table: {
             HTableComponent,
           },
