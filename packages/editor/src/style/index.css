@@ -18,6 +18,7 @@
 @import './text-action-menu.css';
 @import './link.css';
 @import './code.css';
+@import './excalidraw.css';
 
 @layer utilities {
   @variants focus,hover {

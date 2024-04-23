@@ -5,5 +5,6 @@ module.exports = {
   rules: {
     ...raw.rules,
     '@typescript-eslint/no-redeclare': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
   },
 };

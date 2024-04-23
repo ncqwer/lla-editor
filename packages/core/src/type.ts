@@ -143,7 +143,7 @@ export interface CustomEditor {
 }
 
 export interface BaseAtom extends BaseElement {
-  children: [];
+  children: [{ text: '' }];
   type: string;
 }
 export interface CustomAtom {

@@ -77,7 +77,13 @@ export const LLAModal: React.FC<{
   );
 
   return createPortal(
-    <div className={`w-screen h-screen z-50 bg-transparent fixed top-0 left-0`}>
+    <div
+      className={`w-screen h-screen z-50 bg-transparent fixed top-0 left-0`}
+      style={{
+        transition: 'all 10s ease',
+        overflow: 'hidden',
+      }}
+    >
       {hasMask && (
         <div
           className={`absolute inset-0 w-screen h-screen bg-gray-900 opacity-60`}

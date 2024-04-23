@@ -1,9 +1,9 @@
 import { BaseAtom, CreateMediaBlock, LLAElement } from '@lla-editor/core';
 import { Node } from 'slate';
 
-const _TYPE_ = 'image';
-export interface ImageElement extends BaseAtom {
-  type: 'image';
+export const _TYPE_ = 'excalidraw';
+export interface ExcalidrawElement extends BaseAtom {
+  type: 'excalidraw';
   src?: string | File;
   alt?: string;
   caption?: string;
@@ -11,12 +11,12 @@ export interface ImageElement extends BaseAtom {
   height: number;
 }
 
-export const ImageElement = {
-  is(node: Node): node is ImageElement {
+export const ExcalidrawElement = {
+  is(node: Node): node is ExcalidrawElement {
     const ans = LLAElement.is(node) && node.type === _TYPE_;
     return ans;
   },
-  create(): ImageElement {
+  create(): ExcalidrawElement {
     return {
       children: [{ text: '' }],
       type: _TYPE_,
@@ -28,11 +28,11 @@ export const ImageElement = {
 
 export const createMediaBlock: CreateMediaBlock = (next, file) => {
   if (/(?:\.png|\.jpeg|\.jpg)/.test(file.name))
-    return { ...ImageElement.create(), src: file };
+    return { ...ExcalidrawElement.create(), src: file };
   return next();
 };
 
-interface ImageConfig {
+interface ExcalidrawConfig {
   imgOpen: () => Promise<string | File>;
   imgRemove: (src: string) => Promise<void>;
   imgSign: (
@@ -45,9 +45,9 @@ interface ImageConfig {
 }
 declare module '@lla-editor/core' {
   interface CustomAtom {
-    ImageElement: ImageElement;
+    ExcalidrawElement: ExcalidrawElement;
   }
   interface LLAConfig {
-    image: ImageConfig;
+    Excalidraw: ExcalidrawConfig;
   }
 }

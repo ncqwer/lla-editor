@@ -19,9 +19,22 @@ module.exports = {
     {
       pattern: /font-([a-zA-Z]+)/,
     },
+    {
+      pattern: /opacity-(\d+)/,
+    },
     'line-through',
     'italic',
     'underline',
+    'visiable',
+    'left-0',
+    'top-0',
+    'bg-transparent',
+    'hidden',
+    'relative',
+    'absolute',
+    'fixed',
+    'w-screen',
+    'h-screen',
   ],
   plugins: [
     // eslint-disable-next-line import/no-extraneous-dependencies

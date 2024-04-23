@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@lla-editor/config-preset": "^0.0.17",
-    "@lla-editor/editor": "^0.0.26"
+    "@lla-editor/editor": "^0.0.26",
+    "@lla-editor/excalidraw": "^0.0.1"
   }
 }

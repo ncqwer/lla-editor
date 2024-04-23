@@ -20,6 +20,7 @@ import LinkImpl from '@lla-editor/link';
 import CodeImpl from '@lla-editor/code';
 import IndentImpl from '@lla-editor/indent';
 import TextBlockImpl from '@lla-editor/text-block';
+import ExcalidrawImpl from '@lla-editor/excalidraw';
 
 export const availablePlugins = [
   TextBlockImpl,
@@ -35,6 +36,7 @@ export const availablePlugins = [
   CalloutImpl,
   LinkImpl,
   ParagraphImpl,
+  ExcalidrawImpl,
 ];
 
 export const { SharedProvider } = ConfigHelers;

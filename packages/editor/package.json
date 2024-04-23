@@ -32,6 +32,7 @@
     "@lla-editor/code": "^1.0.15",
     "@lla-editor/core": "^0.0.21",
     "@lla-editor/divider": "^0.0.21",
+    "@lla-editor/excalidraw": "^0.0.1",
     "@lla-editor/heading": "^0.0.21",
     "@lla-editor/image": "^0.0.22",
     "@lla-editor/indent": "^0.0.21",

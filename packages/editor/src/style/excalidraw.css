@@ -1,0 +1,36 @@
+.lla-excalidraw-wrapper {
+  @apply select-none mt-1 mb-1;
+}
+
+.lla-excalidraw {
+  @apply relative max-w-full overflow-hidden;
+  min-width: 30%;
+  padding: 3px;
+  margin: 0 auto;
+  /* max-width: 80%; */
+  max-height: 50vh;
+  /* transition: width 0.001s ease-in-out; */
+}
+
+.lla-excalidraw.lla-selected {
+  @apply border border-gray-600;
+}
+
+.lla-excalidraw.lla-selected.lla-excalidraw--empty {
+  @apply border-none bg-gray-300;
+}
+
+.lla-excalidraw--empty {
+  @apply p-3 pr-9 flex items-center text-left w-full overflow-hidden bg-gray-200 hover:bg-gray-300 transition-colors cursor-pointer text-gray-600;
+  border-radius: 3px;
+}
+
+.lla-excalidraw--empty .lla-excalidraw__icon {
+  width: 25px;
+  height: 25px;
+  display: block;
+  fill: rgba(55, 53, 47, 0.4);
+  flex-shrink: 0;
+  backface-visibility: hidden;
+  margin-right: 12px;
+}
