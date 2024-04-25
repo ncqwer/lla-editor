@@ -43,6 +43,7 @@
   "dependencies": {
     "@excalidraw/excalidraw": "^0.17.6",
     "@lla-editor/core": "^0.0.21",
+    "@lla-ui/utils": "^0.0.13",
     "dom-align": "^1.12.2"
   }
 }

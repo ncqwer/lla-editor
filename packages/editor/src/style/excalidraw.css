@@ -34,3 +34,11 @@
   backface-visibility: hidden;
   margin-right: 12px;
 }
+
+.lla-excalidraw__save-button {
+  background-color: rgb(74,222,128) !important;
+}
+
+.lla-excalidraw__save-button:hover{
+  background-color: rgb(134,239,172) !important;
+}

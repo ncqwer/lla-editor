@@ -4,11 +4,10 @@ import { Node } from 'slate';
 export const _TYPE_ = 'excalidraw';
 export interface ExcalidrawElement extends BaseAtom {
   type: 'excalidraw';
-  src?: string | File;
-  alt?: string;
-  caption?: string;
-  width: number;
-  height: number;
+  info?: {
+    src: string;
+    excalidrawId: string;
+  };
 }
 
 export const ExcalidrawElement = {

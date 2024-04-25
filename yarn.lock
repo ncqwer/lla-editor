@@ -968,6 +968,11 @@
     write-pkg "4.0.0"
     yargs "16.2.0"
 
+"@lla-ui/utils@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@lla-ui/utils/-/utils-0.0.13.tgz#c79599e3e0183d994ab150ab9c39340dae896668"
+  integrity sha512-o+6xCRebFPy758oNRoZGtmc8zNfr7xUa/xVDfGzmCkSog+HeCSGAJxgqUBBN7qfQwdzwgw+mPkSVMck7aH2Ktg==
+
 "@mapbox/rehype-prism@^0.6.0":
   version "0.6.0"
   resolved "https://registry.npmjs.org/@mapbox/rehype-prism/-/rehype-prism-0.6.0.tgz#3d8a860870951d4354257d0ba908d11545bd5ed5"

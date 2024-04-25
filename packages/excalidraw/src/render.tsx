@@ -12,8 +12,8 @@ import {
   runWithCancel,
   elementRender,
   LLAOverLayer,
-  LLAModal,
 } from '@lla-editor/core';
+import { createPortal } from 'react-dom';
 
 import { ExcalidrawElement } from './element';
 import {
@@ -23,370 +23,16 @@ import {
   useSlateStatic,
 } from 'slate-react';
 
-import { Excalidraw } from '@excalidraw/excalidraw';
+import { Excalidraw, exportToBlob } from '@excalidraw/excalidraw';
+import { UseTransitionStageOptions, useTransitionStatus } from '@lla-ui/utils';
+import { GetClipPath } from './modalClippath';
+import { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
 
 const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
 
-const ResizedExcalidraw: React.FC<
-  React.HtmlHTMLAttributes<HTMLDivElement> & {
-    src: string | File;
-    alt?: string;
-    selected?: boolean;
-    width: number;
-    height: number;
-    openContextMenu: (f: () => HTMLElement | null) => void;
-    onWidthChange: (v: number) => void;
-    onHeightChange: (v: number) => void;
-    onSrcChange: (v: string) => void;
-  }
-> = ({
-  src,
-  alt,
-  selected = false,
-  width,
-  height = 300,
-  onWidthChange,
-  onHeightChange,
-  openContextMenu,
-  onSrcChange,
-  ...others
-}) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const [imgRemove] = useLens(['Excalidraw', 'imgRemove']);
-  const [loadingCover] = useLens(['Excalidraw', 'loadingCover']);
-  const [errorCover] = useLens(['Excalidraw', 'errorCover']);
-  // const [styles, api] = useSpring(() => ({ width, height }));
-  const triggerRef = React.useRef<HTMLDivElement>(null);
-  const readonly = useReadOnly();
-  const imgRef = React.useRef<HTMLImageElement>(null);
-  const srcRef = React.useRef<string | File>(src);
-  srcRef.current = src;
-  React.useEffect((): any => {
-    if (ref.current) {
-      ref.current.style.cssText = `
-      width: ${width}px;
-      height: ${height}px;
-      user-select:none;
-      max-height: fit-content;
-    `;
-    }
-    return () => {
-      typeof srcRef.current === 'string' &&
-        srcRef.current !== errorCover &&
-        srcRef.current !== loadingCover &&
-        imgRemove(srcRef.current);
-    };
-  }, []);
-  const [handleWidthChangeDebounce] = useThrottle((v: number) => {
-    onWidthChange(v);
-  }, 1000 / 60);
-  const [handleHeightChangeDebounce] = useThrottle((v: number) => {
-    onHeightChange(v);
-  }, 1000 / 60);
-  return (
-    <div
-      // style={styles}
-      className={`lla-context-menu-target lla-Excalidraw relative ${
-        selected ? 'lla-selected' : ''
-      }`}
-      ref={ref}
-      contentEditable={false}
-      {...others}
-    >
-      <LoadingExcalidraw
-        width={width}
-        height={height}
-        ref={imgRef}
-        src={src}
-        alt={alt}
-        className="lla-Excalidraw__content"
-        onSrcChange={onSrcChange}
-      />
-      {!readonly && (
-        <>
-          <div
-            className="lla-Excalidraw__resizer lla-Excalidraw__resizer--left"
-            onMouseDown={handleMouseDown(true)}
-            onTouchStart={handleTouchStart(true)}
-          >
-            <div className="lla-Excalidraw__resizer__handler"></div>
-          </div>
-          <div
-            className="lla-Excalidraw__resizer lla-Excalidraw__resizer--right"
-            onMouseDown={handleMouseDown(false)}
-            onTouchStart={handleTouchStart(false)}
-          >
-            <div className="lla-Excalidraw__resizer__handler"></div>
-          </div>
-          <div
-            className="lla-Excalidraw__resizer--bottom"
-            onMouseDown={handleMouseDown__bottom(false)}
-            onTouchStart={handleTouchStart__bottom(false)}
-          >
-            <div className="lla-Excalidraw__resizer__handler--bottom"></div>
-          </div>
-          <div
-            ref={triggerRef}
-            className="lla-context-menu-trigger "
-            onClick={(e) => {
-              e.stopPropagation();
-              openContextMenu(() => triggerRef.current);
-            }}
-          >
-            ...
-          </div>
-        </>
-      )}
-    </div>
-  );
-
-  function handleMouseDown(isLeftHandler: boolean) {
-    return (event: React.MouseEvent<HTMLDivElement>) => {
-      const srcX = event.pageX;
-      if (!ref.current) return;
-      const offsetWidth = ref.current.offsetWidth;
-      const offsetHeight = ref.current.offsetHeight;
-      const changeWidthFunc = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!ref.current) return;
-        // const offsetWidth = ref.current.offsetWidth;
-        // const offsetWidth = ref.current.offsetWidth;
-        // const offsetHeight = ref.current.offsetHeight;
-        const k = 2;
-        const diffX = isLeftHandler
-          ? Math.round(e.pageX - srcX)
-          : Math.round(srcX - e.pageX);
-        // srcX = e.pageX;
-        const width = getProperlyWidth(offsetWidth - diffX * k);
-        ref.current.style.cssText = `
-          width: ${width}px;
-          height: ${offsetHeight}px;
-          user-select:none;
-        `;
-        // api.start({ width });
-        handleWidthChangeDebounce(width);
-      };
-      document.addEventListener('mousemove', changeWidthFunc as any);
-      document.addEventListener('mouseup', () =>
-        document.removeEventListener('mousemove', changeWidthFunc as any),
-      );
-    };
-  }
-
-  function handleTouchStart(isLeftHandler: boolean) {
-    return (event: React.TouchEvent<HTMLDivElement>) => {
-      const srcX = event.touches[0].pageX;
-      if (!ref.current) return;
-      const offsetWidth = ref.current.offsetWidth;
-      const offsetHeight = ref.current.offsetHeight;
-      const changeWidthFunc = (e: React.TouchEvent<HTMLDivElement>) => {
-        if (!ref.current) return;
-        const pageX = e.touches[0].pageX;
-        // const offsetWidth = ref.current.offsetWidth;
-        // const offsetHeight = ref.current.offsetHeight;
-        const k = 2;
-        const diffX = isLeftHandler
-          ? Math.round(pageX - srcX)
-          : Math.round(srcX - pageX);
-        const width = getProperlyWidth(offsetWidth - diffX * k);
-        ref.current.style.cssText = `
-          width: ${width}px;
-          height: ${offsetHeight}px;
-          user-select:none;
-        `;
-        // console.log(width);
-        // api.start({ width });
-        handleWidthChangeDebounce(width);
-      };
-      document.addEventListener('touchmove', changeWidthFunc as any);
-      document.addEventListener('touchend', () =>
-        document.removeEventListener('touchmove', changeWidthFunc as any),
-      );
-    };
-  }
-
-  function getProperlyWidth(v: number) {
-    if (v < 0) return 0;
-    if (v > 1200) return 1200;
-    return v;
-  }
-
-  function handleMouseDown__bottom(isLeftHandler: boolean) {
-    return (event: React.MouseEvent<HTMLDivElement>) => {
-      const srcY = event.pageY;
-      if (!ref.current) return;
-      const offsetWidth = ref.current.offsetWidth;
-      const offsetHeight = ref.current.offsetHeight;
-      const changeWidthFunc = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!ref.current) return;
-        // const offsetHeight = ref.current.offsetHeight;
-        const k = 1;
-        const diffY = isLeftHandler ? e.pageY - srcY : srcY - e.pageY;
-        const height = Math.min(
-          Math.max(offsetHeight - diffY * k, 100),
-          imgRef.current?.offsetHeight || 100,
-        );
-        ref.current.style.cssText = `
-          width: ${offsetWidth}px;
-          height: ${height}px;
-          user-select:none;
-        `;
-        // api.start({ height });
-        handleHeightChangeDebounce(height);
-      };
-      document.addEventListener('mousemove', changeWidthFunc as any);
-      document.addEventListener('mouseup', () =>
-        document.removeEventListener('mousemove', changeWidthFunc as any),
-      );
-    };
-  }
-  function handleTouchStart__bottom(isLeftHandler: boolean) {
-    return (event: React.TouchEvent<HTMLDivElement>) => {
-      const srcY = event.touches[0].pageY;
-      if (!ref.current) return;
-      const offsetWidth = ref.current.offsetWidth;
-      const offsetHeight = ref.current.offsetHeight;
-      const changeWidthFunc = (e: React.TouchEvent<HTMLDivElement>) => {
-        if (!ref.current) return;
-        const pageY = e.touches[0].pageY;
-        // const offsetHeight = ref.current.offsetHeight;
-        const k = 1;
-        const diffY = isLeftHandler ? pageY - srcY : srcY - pageY;
-        const height = Math.min(
-          Math.max(offsetHeight - diffY * k, 100),
-          imgRef.current?.offsetHeight || 100,
-        );
-
-        ref.current.style.cssText = `
-        width: ${offsetWidth}px;
-        height: ${height}px;
-        user-select:none;
-      `;
-        // api.start({ height });
-        handleHeightChangeDebounce(height);
-      };
-      document.addEventListener('touchmove', changeWidthFunc as any);
-      document.addEventListener('touchend', () =>
-        document.removeEventListener('touchmove', changeWidthFunc as any),
-      );
-    };
-  }
-};
-
-const MenuItem: React.FC<{
-  value: string;
-  label: string;
-  active: boolean;
-  onAcitve: (v: string) => void;
-}> = ({ value, label, active, onAcitve }) => {
-  return (
-    <div
-      className="lla-Excalidraw__popmenu__item"
-      onClick={() => onAcitve(value)}
-    >
-      <div className="lla-Excalidraw__popmenu__item__label">{label}</div>
-      {active && (
-        <div className="lla-Excalidraw__popmenu__active-item-indicator "></div>
-      )}
-    </div>
-  );
-};
-
-const alignOpts = { points: ['tc', 'bc'] };
-const EmptyExcalidrawMenu: React.FC<{
-  onChange: (v: string | File) => void;
-  // onClose: () => void;
-  // alignMethod: (el: HTMLDivElement) => void;
-}> = ({ onChange }) => {
-  const [embedSrc, setEmbedSrc] = React.useState<string>('');
-  const [imgOpen] = useLens(['Excalidraw', 'imgOpen']);
-  const [activeItem, setActiveItem] = React.useState('upload');
-  return (
-    <div
-      className={`lla-media__popmenu`}
-      onClick={(event) => event.stopPropagation()}
-    >
-      <div className="lla-media__popmenu__item-group ">
-        <MenuItem
-          value="upload"
-          label="本地图片"
-          onAcitve={setActiveItem}
-          active={activeItem === 'upload'}
-        ></MenuItem>
-        <MenuItem
-          value="embed"
-          label="在线图片"
-          onAcitve={setActiveItem}
-          active={activeItem === 'embed'}
-        ></MenuItem>
-      </div>
-      <div
-        className={`lla-media__popmenu__content lla-media__popmenu__content--${activeItem}`}
-      >
-        {activeItem === 'upload' && renderUpload()}
-        {activeItem === 'embed' && renderEmbed()}
-      </div>
-    </div>
-  );
-
-  function renderUpload() {
-    return (
-      <>
-        <div
-          className="lla-media__open"
-          onClick={async () => {
-            try {
-              const src = await imgOpen();
-              onChange(src);
-            } catch (e) {
-              // do nothing
-            }
-          }}
-        >
-          选择文件
-        </div>
-        <div className="lla-media__open-helper-message">{`图片不能超过5MB`}</div>
-      </>
-    );
-  }
-
-  function renderEmbed() {
-    return (
-      <>
-        <div className="contents relative">
-          <input
-            autoFocus
-            value={embedSrc}
-            type="text"
-            className="lla-media__embed-input"
-            placeholder="添加图片链接"
-            onChange={(e) => setEmbedSrc(e.target.value)}
-          />
-          {embedSrc && (
-            <div
-              className="lla-media__embed-input__clear"
-              onClick={() => setEmbedSrc('')}
-            >
-              <svg viewBox="0 0 30 30">
-                <path d="M15,0C6.716,0,0,6.716,0,15s6.716,15,15,15s15-6.716,15-15S23.284,0,15,0z M22,20.6L20.6,22L15,16.4L9.4,22L8,20.6l5.6-5.6 L8,9.4L9.4,8l5.6,5.6L20.6,8L22,9.4L16.4,15L22,20.6z"></path>
-              </svg>
-            </div>
-          )}
-        </div>
-        <div
-          className="lla-media__embed-submit"
-          onClick={() => embedSrc && onChange(embedSrc)}
-        >
-          添加图片
-        </div>
-        <div className="lla-media__embed-helper-message">支持任意外链图片</div>
-      </>
-    );
-  }
-};
-
 const EmptyExcalidraw: React.FC<
   React.HtmlHTMLAttributes<HTMLDivElement> & {
-    onSrcChange: (v: string | File) => void;
+    onSrcChange: (info: { src: string; excalidrawId: string }) => void;
     selected?: boolean;
     openContextMenu: (f: () => HTMLElement | null) => void;
   }
@@ -401,9 +47,12 @@ const EmptyExcalidraw: React.FC<
           selected ? 'lla-selected' : ''
         }`}
         ref={ref}
-        onClick={() => setIsOpen(true)}
+        onClick={() => setIsOpen((prev) => !prev)}
         onTouchStart={() => setIsOpen(true)}
         contentEditable={false}
+        style={{
+          zIndex: '999999999',
+        }}
         {...others}
       >
         <svg viewBox="0 0 30 30" className="lla-excalidraw__icon">
@@ -426,14 +75,74 @@ const EmptyExcalidraw: React.FC<
           ...
         </div>
       </div>
-      {isOpen && (
-        <LLAModal onClose={() => setIsOpen(false)} hasMask>
-          <div className="test-target w-screen h-screen absolute left-0 top-0">
-            <Excalidraw></Excalidraw>
-          </div>
-        </LLAModal>
-      )}
+      <ExcalidrawModal
+        show={isOpen}
+        getInitialPosition={() => {
+          // const;
+          const el = ref.current!;
+          const { top, right, bottom, left } = el.getBoundingClientRect();
+          return [
+            top,
+            window.innerWidth - right,
+            window.innerHeight - bottom,
+            left,
+          ];
+        }}
+      >
+        <ExcalidrawImpl
+          saveFile={async (data, blob) => {
+            onSrcChange({ src: URL.createObjectURL(blob), excalidrawId: '1' });
+          }}
+        ></ExcalidrawImpl>
+      </ExcalidrawModal>
     </>
+  );
+};
+
+const ExcalidrawImpl = ({
+  saveFile,
+}: React.PropsWithChildren<{
+  saveFile: (data: any, blob: Blob) => Promise<void>;
+}>) => {
+  const instaceRef = React.useRef<ExcalidrawImperativeAPI>(null);
+  return (
+    <Excalidraw
+      excalidrawAPI={(v) => ((instaceRef.current as any) = v)}
+      renderTopRightUI={() => {
+        return (
+          <button
+            className="sidebar-trigger"
+            onClick={async () => {
+              const api = instaceRef.current!;
+              const elements = api.getSceneElements();
+              const files = api.getFiles();
+              const appState = api.getAppState();
+              const imageBlob = await exportToBlob({
+                mimeType: 'image/png',
+                elements,
+                files,
+              });
+
+              await saveFile(
+                {
+                  type: 'excalidraw',
+                  version: 2,
+                  elements,
+                  files,
+                  appState: {
+                    gridSize: appState.gridSize,
+                    viewBackgroundColor: appState.viewBackgroundColor,
+                  },
+                },
+                imageBlob,
+              );
+            }}
+          >
+            Save
+          </button>
+        );
+      }}
+    ></Excalidraw>
   );
 };
 
@@ -442,28 +151,16 @@ const ExcalidrawComponent = ({
   children,
   element,
 }: ExtendRenderElementProps<ExcalidrawElement>) => {
-  const { src, alt, width, height } = element;
+  const { info } = element;
   const selected = useSelected();
   const editor = useSlateStatic();
   const readonly = useReadOnly();
   return (
     <div className="lla-excalidraw-wrapper" {...attributes}>
-      {(src || readonly) && (
-        <ResizedExcalidraw
-          src={src || ''}
-          alt={alt}
-          selected={selected}
-          onSrcChange={handleMetaChange('src')}
-          width={width}
-          height={height}
-          onWidthChange={handleMetaChange('width')}
-          onHeightChange={handleMetaChange('height')}
-          openContextMenu={openContenxtMenu}
-        ></ResizedExcalidraw>
-      )}
-      {!src && !readonly && (
+      {info && <img src={info.src}></img>}
+      {!info && (
         <EmptyExcalidraw
-          onSrcChange={handleMetaChange('src')}
+          onSrcChange={handleMetaChange('info')}
           selected={selected}
           openContextMenu={openContenxtMenu}
         ></EmptyExcalidraw>
@@ -474,6 +171,11 @@ const ExcalidrawComponent = ({
 
   function handleMetaChange<K extends keyof ExcalidrawElement>(meta: K) {
     return (v: ExcalidrawElement[K]) => {
+      console.log(
+        '%c [ v ]-174-「render」',
+        'font-size:13px; background:pink; color:#bf2c9f;',
+        v,
+      );
       if (readonly) return;
       const path = ReactEditor.findPath(editor, element);
       return Transforms.setNodes(editor, { [meta]: v }, { at: path });
@@ -495,3 +197,86 @@ const ExcalidrawComponent = ({
 export default [
   [elementPropsIs(ExcalidrawElement.is), elementRender(ExcalidrawComponent)],
 ] as ElementJSX<ExcalidrawElement>;
+
+const ExcalidrawModal: React.FC<{
+  children?: React.ReactNode;
+  getInitialPosition?: () => [number, number, number, number];
+  show: boolean;
+}> = ({ children, show = false }) => {
+  const [overlayterId] = useLens(['core', 'overlayerId']);
+  const root = React.useMemo(
+    () => document.getElementById(overlayterId),
+    [overlayterId],
+  );
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  const status = useTransitionStatus(show, {
+    timeout: 1000,
+    onEnter: () => {
+      if (ref.current) {
+        ref.current.style.clipPath = '';
+        ref.current.style.transition = ref.current.style.filter = '';
+        ref.current.style.clipPath = GetClipPath.enter(
+          window.innerWidth / 200,
+          window.innerHeight / 200,
+        );
+      }
+    },
+    onEntering: () => {
+      if (ref.current) {
+        ref.current.style.clipPath = GetClipPath.entering(
+          window.innerWidth / 200,
+          window.innerHeight / 200,
+        );
+        ref.current.style.transition =
+          'clip-path 1000ms cubic-bezier(0.4, 0, 0.2, 1)';
+      }
+    },
+    onEntered: () => {
+      if (ref.current) {
+        ref.current.style.clipPath = '';
+        ref.current.style.transition = ref.current.style.filter = '';
+      }
+    },
+    onExit: () => {
+      if (ref.current) {
+        ref.current.style.clipPath = '';
+        ref.current.style.transition = ref.current.style.filter = '';
+        ref.current.style.clipPath = GetClipPath.exit(
+          window.innerWidth / 200,
+          window.innerHeight / 200,
+        );
+      }
+    },
+    onExiting: () => {
+      if (ref.current) {
+        ref.current.style.clipPath = GetClipPath.exiting(
+          window.innerWidth / 200,
+          window.innerHeight / 200,
+        );
+        ref.current.style.transition =
+          'clip-path 1000ms cubic-bezier(0.4, 0, 0.2, 1)';
+      }
+    },
+    onExited: () => {
+      if (ref.current) {
+        ref.current.style.clipPath =
+          ref.current.style.transition =
+          ref.current.style.filter =
+            '';
+      }
+    },
+  });
+
+  if (status === 'unmount') return null;
+
+  return createPortal(
+    <div
+      ref={ref}
+      className={`w-screen h-screen z-50 bg-transparent fixed top-0 left-0`}
+    >
+      {children}
+    </div>,
+    root as any,
+  );
+};
