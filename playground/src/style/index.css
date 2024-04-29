@@ -1,6 +1,22 @@
-@import '@lla-editor/editor/style'
-
+@import '@lla-editor/editor/style';
+/* @import "@excalidraw/excalidraw/index.css"; */
 /* support for lla commment list */
+.test{
+  top: 497.5px;
+  left: 91.5px;
+
+  height: 49px;
+  width: 768px;
+}
+
+.test .test-target {
+  top: -497.5px;
+  left: -91.5px;
+}
+
+.test-target {
+  transition: top 10s ease, left 10s ease;
+}
 /* 
 @import '../comment_list/style/index.css';
 

@@ -212,3 +212,28 @@
 .lla-image.lla-selected img{
   @apply pointer-events-none;
 }
+
+
+.lla-image__resize-image {
+  @apply w-[var(--img-width)] h-[var(--img-height)] aspect-[var(--img-aspect-ratio)] relative overflow-hidden;
+}
+
+.lla-image__resize-image__mask{
+  @apply absolute inset-0 w-full h-full filter blur-2xl z-[-1] bg-no-repeat scale-150
+}
+
+.lla-image__resize-image__error-message{
+  @apply absolute inset-0 flex items-center justify-center p-4;
+}
+
+.lla-image__resize-image__error-message svg{
+  @apply inline-block w-[1em] h-[1em] mr-[0.5em] fill-white;
+}
+
+.lla-image__resize-image__error-message > span{
+  @apply backdrop-blur-xl text-white mix-blend-difference;
+}
+
+.lla-image__resize-image__convert-message{
+  @apply p-2 absolute left-1 top-1 backdrop-blur-xl  text-white cursor-pointer mix-blend-difference;
+}

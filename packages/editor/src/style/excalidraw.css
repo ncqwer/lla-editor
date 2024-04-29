@@ -1,0 +1,96 @@
+.lla-excalidraw-wrapper {
+  @apply select-none mt-1 mb-1 relative;
+}
+
+.lla-excalidraw {
+  @apply relative max-w-full overflow-hidden;
+  min-width: 30%;
+  padding: 3px;
+  margin: 0 auto;
+  /* max-width: 80%; */
+  max-height: 50vh;
+  /* transition: width 0.001s ease-in-out; */
+}
+
+.lla-excalidraw.lla-selected {
+  @apply border border-gray-600;
+}
+
+.lla-excalidraw.lla-selected.lla-excalidraw--empty {
+  @apply border-none bg-gray-300;
+}
+
+.lla-excalidraw--empty {
+  @apply p-3 pr-9 flex items-center text-left w-full overflow-hidden bg-gray-200 hover:bg-gray-300 transition-colors cursor-pointer text-gray-600;
+  border-radius: 3px;
+}
+
+.lla-excalidraw--empty .lla-excalidraw__icon {
+  width: 25px;
+  height: 25px;
+  display: block;
+  fill: rgba(55, 53, 47, 0.4);
+  flex-shrink: 0;
+  backface-visibility: hidden;
+  margin-right: 12px;
+}
+
+.lla-excalidraw__save-button {
+  background-color: rgb(74, 222, 128) !important;
+}
+
+.lla-excalidraw__save-button:hover {
+  background-color: rgb(134, 239, 172) !important;
+}
+
+.lla-excalidraw--empty .lla-excalidraw__loading {
+  @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+  width: fit-content;
+  font-weight: bold;
+  font-family: monospace;
+  white-space: pre;
+  line-height: 1.2em;
+  height: 1.2em;
+  overflow: hidden;
+}
+
+.lla-excalidraw--empty .lla-excalidraw__loading::before {
+  content: 'Loading...\A⌰oading...\A⌰⍜ading...\A⌰⍜⏃ding...\A⌰⍜⏃⎅ing...\A⌰⍜⏃⎅⟟ng...\A⌰⍜⏃⎅⟟⋏g...\A⌰⍜⏃⎅⟟⋏☌...\A⌰⍜⏃⎅⟟⋏☌⟒..\A⌰⍜⏃⎅⟟⋏☌⟒⏁.\A⌰⍜⏃⎅⟟⋏☌⟒⏁⋔';
+  white-space: pre;
+  display: inline-block;
+  animation: lla-excalidraw__loading_animation 1s infinite steps(11) alternate;
+}
+
+@keyframes lla-excalidraw__loading_animation {
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.lla-excalidraw__edit-button {
+  @apply p-2 absolute left-1 top-1 backdrop-blur-xl  text-white cursor-pointer mix-blend-difference;
+}
+
+.lla-excalidraw__edit-button__loading-icon {
+  width: 36px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: #6b5c5c #0000;
+  animation: lla-excalidraw__edit-button_animation 1s infinite;
+}
+@keyframes lla-excalidraw__edit-button_animation {
+  to {
+    transform: rotate(0.5turn);
+  }
+}
+
+.lla-editor--readonly .lla-excalidraw__edit-button {
+  display: none;
+}
+
+.lla-editor--readonly
+  .lla-excalidraw-wrapper:hover
+  .lla-excalidraw__edit-button {
+  display: block;
+}

@@ -1,14 +1,15 @@
 import { BaseAtom, CreateMediaBlock, LLAElement } from '@lla-editor/core';
 import { Node } from 'slate';
+import { ImageInfo, ImageLoadingConfig } from './componnets/types';
 
 const _TYPE_ = 'image';
 export interface ImageElement extends BaseAtom {
   type: 'image';
-  src?: string | File;
+  src?: string | ImageInfo;
   alt?: string;
   caption?: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }
 
 export const ImageElement = {
@@ -16,12 +17,10 @@ export const ImageElement = {
     const ans = LLAElement.is(node) && node.type === _TYPE_;
     return ans;
   },
-  create() {
+  create(): ImageElement {
     return {
       children: [{ text: '' }],
       type: _TYPE_,
-      width: 700,
-      height: 300,
     };
   },
 };
@@ -32,16 +31,14 @@ export const createMediaBlock: CreateMediaBlock = (next, file) => {
   return next();
 };
 
-interface ImageConfig {
-  imgOpen: () => Promise<string | File>;
+interface ImageConfig extends Partial<ImageLoadingConfig> {
+  imgOpen: () => Promise<string | Blob>;
   imgRemove: (src: string) => Promise<void>;
   imgSign: (
     src: string,
     options?: { width: number; height: number },
   ) => Promise<string>;
-  imgUpload?: (file: File) => Promise<string>;
-  loadingCover: string;
-  errorCover: string;
+  imgUpload?: (file: Blob, breakpoints?: number[]) => Promise<string>;
 }
 declare module '@lla-editor/core' {
   interface CustomAtom {

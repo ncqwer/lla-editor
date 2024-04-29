@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 // import prismjsPlugin from 'vite-plugin-prismjs';
 import path from 'path';
 import fs from 'fs';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import type { Plugin } from 'vite';
 
 const watchWorkspaces = (rootPath: string): Plugin => {
@@ -71,36 +71,18 @@ const watchWorkspaces = (rootPath: string): Plugin => {
   }
 };
 
-export default defineConfig({
-  server: {
-    port: 3001,
-  },
-  // base: process.env.No'lla-editor',
-  base: process.env.NODE_ENV_FOR_PLAYGROUND === 'CI' ? 'lla-editor' : undefined,
-  plugins: [
-    react(),
-    watchWorkspaces('../'),
-    // prismjsPlugin({
-    //   // languages: [
-    //   //   'c',
-    //   //   'python',
-    //   //   'java',
-    //   //   'cpp',
-    //   //   'csharp',
-    //   //   'vb',
-    //   //   'jsx',
-    //   //   'tsx',
-    //   //   'php',
-    //   //   'wasm',
-    //   //   'sql',
-    //   //   'markup',
-    //   //   'html',
-    //   //   'haskell',
-    //   //   'css',
-    //   // ],
-    //   // // plugins: ["line-numbers"],
-    //   // theme: 'tomorrow',
-    //   // css: true,
-    // }),
-  ],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  return {
+    define: {
+      'process.env': env,
+    },
+    server: {
+      port: 3001,
+    },
+    // base: process.env.No'lla-editor',
+    base:
+      process.env.NODE_ENV_FOR_PLAYGROUND === 'CI' ? 'lla-editor' : undefined,
+    plugins: [react(), watchWorkspaces('../')],
+  };
 });

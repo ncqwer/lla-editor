@@ -21,6 +21,7 @@
     { "path": "../packages/link" },
     { "path": "../packages/code" },
     { "path": "../packages/table" },
-    { "path": "../packages/config-preset" }
+    { "path": "../packages/config-preset" },
+    { "path": "../packages/excalidraw" }
   ]
 }

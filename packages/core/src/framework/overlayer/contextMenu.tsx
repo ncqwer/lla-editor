@@ -55,7 +55,9 @@ const ContextMenuWrapper = () => {
   return (
     <div
       className="lla-overlay w-screen h-screen z-50 bg-transparent fixed top-0 left-0"
-      onClick={() => setInfo({} as any)}
+      onClick={() => {
+        setInfo({} as any);
+      }}
     >
       <ContextMenuImpl></ContextMenuImpl>
     </div>
