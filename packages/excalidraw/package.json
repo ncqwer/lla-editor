@@ -1,6 +1,6 @@
 {
   "name": "@lla-editor/excalidraw",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "excalidraw for lla-editor",
   "author": "ncqwer <1732031236@qq.com>",
   "homepage": "https://github.com/ncqwer/lla-editor#readme",
@@ -41,9 +41,9 @@
     "slate-react": ">=0.60.0"
   },
   "dependencies": {
-    "@lla-editor/core": "^0.0.21",
-    "@lla-editor/image": "^0.0.22",
     "@excalidraw/excalidraw": "^0.17.6",
+    "@lla-editor/core": "^0.0.22",
+    "@lla-editor/image": "^0.0.23",
     "@lla-ui/utils": "^0.0.13",
     "dom-align": "^1.12.2"
   }
