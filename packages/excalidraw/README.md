@@ -1,6 +1,6 @@
 # `@lla-editor/excalidraw`
 
-> TODO: description
+> TODO: lla plugin for excalidraw
 
 ## Usage
 

@@ -41,18 +41,18 @@ export const onParagraphConvert: OnParagraphConvert = (...args) => {
 };
 
 export const deserialize: Deserialize = (next, ast, editor, acc) => {
-  if (ast.type === _TYPE_) {
-    return acc.concat({
-      ...ExcalidrawElement.create(),
-      src: ast.url,
-      alt: ast.alt,
-    });
-  }
+  // if (ast.type === _TYPE_) {
+  //   return acc.concat({
+  //     ...ExcalidrawElement.create(),
+  //     src: ast.url,
+  //     alt: ast.alt,
+  //   });
+  // }
   return next();
 };
 
 export const serialize: Serialize = (next, ele) => {
-  if (ExcalidrawElement.is(ele) && ele.src && typeof ele.src === 'string')
-    return { type: _TYPE_, url: ele.src, alt: ele.alt };
+  // if (ExcalidrawElement.is(ele) && ele.src && typeof ele.src === 'string')
+  //   return { type: _TYPE_, url: ele.src, alt: ele.alt };
   return next();
 };

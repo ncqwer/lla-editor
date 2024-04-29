@@ -28,4 +28,5 @@ export type ImageLoadingConfig = {
   loader: (src: string, width?: number, quality?: number) => string;
   breakpoints: number[];
   devicePixelRatio: number;
+  allLazy?: boolean;
 };

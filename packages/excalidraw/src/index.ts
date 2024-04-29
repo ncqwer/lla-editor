@@ -5,7 +5,7 @@ import { onParagraphConvert, deserialize, serialize } from './convert';
 import { ExcalidrawElement, createMediaBlock } from './element';
 
 export default {
-  pluginName: 'Excalidraw',
+  pluginName: 'excalidraw',
   renderElement: render,
   onKeyDownResponseZone,
   withEditor,

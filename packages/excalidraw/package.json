@@ -30,7 +30,7 @@
   "source": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "build": "vite build && tsc --emitDeclarationOnly",
+    "build": "vite build && tsc --emitDeclarationOnly --skipLibCheck",
     "prepublish": "rm dist/tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
@@ -41,9 +41,9 @@
     "slate-react": ">=0.60.0"
   },
   "dependencies": {
-    "@excalidraw/excalidraw": "^0.17.6",
     "@lla-editor/core": "^0.0.21",
     "@lla-editor/image": "^0.0.22",
+    "@excalidraw/excalidraw": "^0.17.6",
     "@lla-ui/utils": "^0.0.13",
     "dom-align": "^1.12.2"
   }

@@ -52,12 +52,10 @@ const ContextMenuWrapper = () => {
     });
   }, [setInfo, editor]);
   if (!info.path) return null;
-  console.log('hhh');
   return (
     <div
       className="lla-overlay w-screen h-screen z-50 bg-transparent fixed top-0 left-0"
       onClick={() => {
-        console.log('hhh1');
         setInfo({} as any);
       }}
     >

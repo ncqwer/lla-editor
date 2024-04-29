@@ -71,7 +71,6 @@
   @apply p-2 absolute left-1 top-1 backdrop-blur-xl  text-white cursor-pointer mix-blend-difference;
 }
 
-/* HTML: <div class="loader"></div> */
 .lla-excalidraw__edit-button__loading-icon {
   width: 36px;
   aspect-ratio: 1;
@@ -84,4 +83,14 @@
   to {
     transform: rotate(0.5turn);
   }
+}
+
+.lla-editor--readonly .lla-excalidraw__edit-button {
+  display: none;
+}
+
+.lla-editor--readonly
+  .lla-excalidraw-wrapper:hover
+  .lla-excalidraw__edit-button {
+  display: block;
 }

@@ -84,6 +84,7 @@ export const SharedProviderPreset: React.FC<{
             },
             imgSign: async (id: any) => id,
             imgRemove: async () => {},
+            ...ImageLoaderDefaultValue,
             ...imageConfig,
           },
           audio: {
@@ -197,7 +198,7 @@ export const SharedProviderPreset: React.FC<{
 
 const Tmp: any = ConfigHelers;
 
-const defaultValue = {
+const ImageLoaderDefaultValue = {
   loader: (x: string) => {
     return x;
   },
@@ -208,9 +209,10 @@ const defaultValue = {
 const Impl = ({ children }: React.PropsWithChildren) => {
   const [
     {
-      loader = defaultValue.loader,
-      breakpoints = defaultValue.breakpoints,
-      devicePixelRatio = defaultValue.devicePixelRatio,
+      loader = ImageLoaderDefaultValue.loader,
+      breakpoints = ImageLoaderDefaultValue.breakpoints,
+      devicePixelRatio = ImageLoaderDefaultValue.devicePixelRatio,
+      allLazy,
     },
   ] = Tmp.useLens(['image']);
   return (
@@ -220,8 +222,9 @@ const Impl = ({ children }: React.PropsWithChildren) => {
           loader,
           breakpoints,
           devicePixelRatio,
+          allLazy,
         }),
-        [],
+        [loader, breakpoints, devicePixelRatio, allLazy],
       )}
     >
       {children}

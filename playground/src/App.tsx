@@ -26,28 +26,13 @@ const PlainTextExample = () => {
         excalidrawConfig={React.useMemo(() => {
           return {
             saveFile: async (id: string, data: any) => {
-              console.log(
-                '%c [ id ]-30-「App」',
-                'font-size:13px; background:pink; color:#bf2c9f;',
-                id,
-              );
-              await new Promise((res) => setTimeout(res, 1000));
+              await new Promise((res) => setTimeout(res, 100));
               setExcalidrawStore((prev: any) => ({ ...prev, [id]: data }));
             },
             preFetchFile: async (id: string) => {
-              console.log(
-                '%c [ id ]-34-「App」',
-                'font-size:13px; background:pink; color:#bf2c9f;',
-                id,
-              );
-              await new Promise((res) => setTimeout(res, 1000));
+              await new Promise((res) => setTimeout(res, 100));
             },
             getFile: async (id: string) => {
-              console.log(
-                '%c [ id ]-39-「App」',
-                'font-size:13px; background:pink; color:#bf2c9f;',
-                id,
-              );
               return ref.current[id];
             },
           };

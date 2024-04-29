@@ -58,7 +58,6 @@ export const ResizedImage: React.FC<
       width: ${width}px;
       height: ${height}px;
       user-select:none;
-      max-height: fit-content;
     `;
     }
     return () => {};
@@ -141,9 +140,9 @@ export const ResizedImage: React.FC<
               New Format
             </div>
           )}
-          {children}
         </>
       )}
+      {children}
     </div>
   );
 

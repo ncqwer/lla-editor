@@ -20,10 +20,9 @@ import {
   useSlateStatic,
 } from 'slate-react';
 
-import { Excalidraw, exportToBlob } from '@excalidraw/excalidraw';
+// import type { Excalidraw, exportToBlob } from '@excalidraw/excalidraw';
 import { useTransitionStatus } from '@lla-ui/utils';
 import { GetClipPath } from './modalClippath';
-import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
 import {
   type ImageInfo,
   LoadingImage,
@@ -33,10 +32,7 @@ import {
 
 const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
 
-let ExcalidrawImport: {
-  Excalidraw: typeof Excalidraw;
-  exportToBlob: typeof exportToBlob;
-} | null = null;
+let ExcalidrawImport: any = null;
 
 const EmptyExcalidraw: React.FC<
   React.HtmlHTMLAttributes<HTMLDivElement> & {
@@ -115,53 +111,71 @@ const EmptyExcalidraw: React.FC<
 const ExcalidrawImpl = ({
   saveFile,
   id,
+  onCancel,
+  readonly,
 }: React.PropsWithChildren<{
   saveFile: (data: any, blob: Blob) => Promise<void>;
+  onCancel: () => void;
   id?: string;
+  readonly?: boolean;
 }>) => {
-  const instaceRef = React.useRef<ExcalidrawImperativeAPI>(null);
-  if (!ExcalidrawImport) return null;
-  const { Excalidraw, exportToBlob } = ExcalidrawImport;
+  const instaceRef = React.useRef<any>(null);
   const [getFile] = useLens(['excalidraw', 'getFile']);
   const data = id ? { initialData: getFile(id) } : {};
+  if (!ExcalidrawImport) return null;
+  const { Excalidraw, exportToBlob, WelcomeScreen } = ExcalidrawImport;
   return (
     <Excalidraw
-      excalidrawAPI={(v) => ((instaceRef.current as any) = v)}
+      excalidrawAPI={(v: any) => ((instaceRef.current as any) = v)}
       {...data}
       renderTopRightUI={() => {
         return (
-          <button
-            className="sidebar-trigger"
-            onClick={async () => {
-              const api = instaceRef.current!;
-              const elements = api.getSceneElements();
-              const files = api.getFiles();
-              const appState = api.getAppState();
-              const imageBlob = await exportToBlob({
-                mimeType: 'image/png',
-                elements,
-                files,
-              });
-              await saveFile(
-                {
-                  type: 'excalidraw',
-                  version: 2,
-                  elements,
-                  files,
-                  appState: {
-                    gridSize: appState.gridSize,
-                    viewBackgroundColor: appState.viewBackgroundColor,
-                  },
-                },
-                imageBlob,
-              );
-            }}
-          >
-            Save
-          </button>
+          <>
+            <button className="sidebar-trigger" onClick={onCancel}>
+              Cancel
+            </button>
+            {!readonly && (
+              <button
+                className="sidebar-trigger"
+                onClick={async () => {
+                  const api = instaceRef.current!;
+                  const elements = api.getSceneElements();
+                  const files = api.getFiles();
+                  const appState = api.getAppState();
+                  const imageBlob = await exportToBlob({
+                    mimeType: 'image/png',
+                    elements,
+                    files,
+                  });
+                  await saveFile(
+                    {
+                      type: 'excalidraw',
+                      version: 2,
+                      elements,
+                      files,
+                      appState: {
+                        gridSize: appState.gridSize,
+                        viewBackgroundColor: appState.viewBackgroundColor,
+                        scrollX: appState.scrollX,
+                        scrollY: appState.scrollY,
+                        zoom: appState.zoom,
+                        offsetTop: appState.offsetTop,
+                        offsetLeft: appState.offsetLeft,
+                      },
+                    },
+                    imageBlob,
+                  );
+                }}
+              >
+                Save
+              </button>
+            )}
+          </>
         );
       }}
-    ></Excalidraw>
+    >
+      <WelcomeScreen></WelcomeScreen>
+    </Excalidraw>
   );
 };
 
@@ -227,10 +241,15 @@ const ExcalidrawComponent = ({
       )}
       <ExcalidrawModal show={isOpen}>
         <ExcalidrawImpl
+          readonly={readonly}
           id={info?.excalidrawId}
+          onCancel={() => {
+            setIsOpen(false);
+          }}
           saveFile={async (data, blob) => {
             let src = URL.createObjectURL(blob);
-            const uniqueId = `${crypto.randomUUID()}_${Date.now()}`;
+            const uniqueId =
+              info?.excalidrawId || `${crypto.randomUUID()}_${Date.now()}`;
             await saveFile(uniqueId, data);
             const imageInfo = await getImageInfo(src, {
               breakpoints,

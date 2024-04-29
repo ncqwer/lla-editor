@@ -9,6 +9,7 @@ export const ImageConfigContext = React.createContext<ImageLoadingConfig>({
   },
   breakpoints: [640, 768, 1024, 1280, 1536],
   devicePixelRatio: 2,
+  allLazy: false,
 } as any);
 
 export const LoadingImage = React.forwardRef<
@@ -42,7 +43,7 @@ export const LoadingImage = React.forwardRef<
       style,
       fill,
       loading,
-      lazy,
+      lazy: _lazy,
       imageStyle,
       errorMessageUnwrap,
       ...others
@@ -105,8 +106,9 @@ export const LoadingImage = React.forwardRef<
       return Object.assign(target, style);
     }, [width, height, aspectRatio, style, fill]);
 
-    const { loader, breakpoints, devicePixelRatio } =
+    const { loader, breakpoints, devicePixelRatio, allLazy } =
       React.useContext(ImageConfigContext);
+    const lazy = _lazy || allLazy;
     const imageData = React.useMemo(() => {
       return {
         src: loader(src),
