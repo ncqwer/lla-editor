@@ -47,8 +47,8 @@
     "slate-react": "^0.93.0"
   },
   "peerDependencies": {
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
   },
   "gitHead": "aba2f06e328ae389ddac542c49eed8012d219fb8"
 }

@@ -1,10 +1,10 @@
 export type ImageInfo = {
   src: string;
   breakpointLevel?: number;
-  width: number;
-  height: number;
-  placeholder: ImagePlaceholderInfo;
-  aspectRatio: [number, number];
+  width?: number;
+  height?: number;
+  placeholder?: ImagePlaceholderInfo;
+  aspectRatio?: [number, number];
 };
 
 export type ImagePlaceholderInfo =
@@ -23,3 +23,9 @@ export type ImagePlaceholderInfo =
         string
       >;
     };
+
+export type ImageLoadingConfig = {
+  loader: (src: string, width?: number, quality?: number) => string;
+  breakpoints: number[];
+  devicePixelRatio: number;
+};

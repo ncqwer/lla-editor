@@ -25,3 +25,8 @@ export default {
     },
   ],
 };
+
+export { LoadingImage, ImageConfigContext } from './componnets/LoadingImage';
+export * from './componnets/types';
+export { getImageInfo } from './componnets/getImageInfo';
+export { ResizedImage } from './render';

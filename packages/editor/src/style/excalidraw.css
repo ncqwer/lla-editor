@@ -1,5 +1,5 @@
 .lla-excalidraw-wrapper {
-  @apply select-none mt-1 mb-1;
+  @apply select-none mt-1 mb-1 relative;
 }
 
 .lla-excalidraw {
@@ -36,9 +36,52 @@
 }
 
 .lla-excalidraw__save-button {
-  background-color: rgb(74,222,128) !important;
+  background-color: rgb(74, 222, 128) !important;
 }
 
-.lla-excalidraw__save-button:hover{
-  background-color: rgb(134,239,172) !important;
+.lla-excalidraw__save-button:hover {
+  background-color: rgb(134, 239, 172) !important;
+}
+
+.lla-excalidraw--empty .lla-excalidraw__loading {
+  @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+  width: fit-content;
+  font-weight: bold;
+  font-family: monospace;
+  white-space: pre;
+  line-height: 1.2em;
+  height: 1.2em;
+  overflow: hidden;
+}
+
+.lla-excalidraw--empty .lla-excalidraw__loading::before {
+  content: 'Loading...\A⌰oading...\A⌰⍜ading...\A⌰⍜⏃ding...\A⌰⍜⏃⎅ing...\A⌰⍜⏃⎅⟟ng...\A⌰⍜⏃⎅⟟⋏g...\A⌰⍜⏃⎅⟟⋏☌...\A⌰⍜⏃⎅⟟⋏☌⟒..\A⌰⍜⏃⎅⟟⋏☌⟒⏁.\A⌰⍜⏃⎅⟟⋏☌⟒⏁⋔';
+  white-space: pre;
+  display: inline-block;
+  animation: lla-excalidraw__loading_animation 1s infinite steps(11) alternate;
+}
+
+@keyframes lla-excalidraw__loading_animation {
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.lla-excalidraw__edit-button {
+  @apply p-2 absolute left-1 top-1 backdrop-blur-xl  text-white cursor-pointer mix-blend-difference;
+}
+
+/* HTML: <div class="loader"></div> */
+.lla-excalidraw__edit-button__loading-icon {
+  width: 36px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: #6b5c5c #0000;
+  animation: lla-excalidraw__edit-button_animation 1s infinite;
+}
+@keyframes lla-excalidraw__edit-button_animation {
+  to {
+    transform: rotate(0.5turn);
+  }
 }

@@ -9,7 +9,6 @@ import {
   LLAConfig,
   SharedApi,
   ConfigHelers,
-  runWithCancel,
   elementRender,
   LLAOverLayer,
 } from '@lla-editor/core';
@@ -21,43 +20,38 @@ import {
   useSelected,
   useSlateStatic,
 } from 'slate-react';
+import { ImageConfigContext, LoadingImage } from './componnets/LoadingImage';
+import { ImageInfo } from './componnets/types';
+import { getImageInfo } from './componnets/getImageInfo';
 
 const { useLens } = ConfigHelers as SharedApi<LLAConfig>;
 
-const ResizedImage: React.FC<
+export const ResizedImage: React.FC<
   React.HtmlHTMLAttributes<HTMLDivElement> & {
-    src: string | File;
-    alt?: string;
+    src: string | ImageInfo;
     selected?: boolean;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
     openContextMenu: (f: () => HTMLElement | null) => void;
     onWidthChange: (v: number) => void;
     onHeightChange: (v: number) => void;
-    onSrcChange: (v: string) => void;
+    onSrcChange?: (v: string | ImageInfo) => void;
   }
 > = ({
   src,
-  alt,
   selected = false,
   width,
-  height = 300,
+  height,
   onWidthChange,
   onHeightChange,
   openContextMenu,
   onSrcChange,
+  children,
   ...others
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
-  const [imgRemove] = useLens(['image', 'imgRemove']);
-  const [loadingCover] = useLens(['image', 'loadingCover']);
-  const [errorCover] = useLens(['image', 'errorCover']);
-  // const [styles, api] = useSpring(() => ({ width, height }));
   const triggerRef = React.useRef<HTMLDivElement>(null);
   const readonly = useReadOnly();
-  const imgRef = React.useRef<HTMLImageElement>(null);
-  const srcRef = React.useRef<string | File>(src);
-  srcRef.current = src;
   React.useEffect((): any => {
     if (ref.current) {
       ref.current.style.cssText = `
@@ -67,12 +61,7 @@ const ResizedImage: React.FC<
       max-height: fit-content;
     `;
     }
-    return () => {
-      typeof srcRef.current === 'string' &&
-        srcRef.current !== errorCover &&
-        srcRef.current !== loadingCover &&
-        imgRemove(srcRef.current);
-    };
+    return () => {};
   }, []);
   const [handleWidthChangeDebounce] = useThrottle((v: number) => {
     onWidthChange(v);
@@ -80,9 +69,18 @@ const ResizedImage: React.FC<
   const [handleHeightChangeDebounce] = useThrottle((v: number) => {
     onHeightChange(v);
   }, 1000 / 60);
+  const imgRef = React.useRef<{
+    offsetHeight: number;
+    getImageInfo: (
+      options?: Parameters<typeof getImageInfo>[1],
+    ) => Promise<ImageInfo>;
+  }>(null);
+  const imageInfo = React.useMemo(() => {
+    if (typeof src === 'string') return { src };
+    return src;
+  }, [src]);
   return (
     <div
-      // style={styles}
       className={`lla-context-menu-target lla-image relative ${
         selected ? 'lla-selected' : ''
       }`}
@@ -91,13 +89,12 @@ const ResizedImage: React.FC<
       {...others}
     >
       <LoadingImage
-        width={width}
-        height={height}
         ref={imgRef}
-        src={src}
-        alt={alt}
+        alt=""
+        fill="aspect"
         className="lla-image__content"
-        onSrcChange={onSrcChange}
+        errorMessageUnwrap
+        {...imageInfo}
       />
       {!readonly && (
         <>
@@ -132,6 +129,19 @@ const ResizedImage: React.FC<
           >
             ...
           </div>
+          {typeof src === 'string' && onSrcChange && (
+            <div
+              className="lla-image__resize-image__convert-message"
+              onClick={async () => {
+                if (imgRef.current) {
+                  onSrcChange(await imgRef.current.getImageInfo());
+                }
+              }}
+            >
+              New Format
+            </div>
+          )}
+          {children}
         </>
       )}
     </div>
@@ -145,22 +155,23 @@ const ResizedImage: React.FC<
       const offsetHeight = ref.current.offsetHeight;
       const changeWidthFunc = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return;
-        // const offsetWidth = ref.current.offsetWidth;
-        // const offsetWidth = ref.current.offsetWidth;
-        // const offsetHeight = ref.current.offsetHeight;
         const k = 2;
         const diffX = isLeftHandler
           ? Math.round(e.pageX - srcX)
           : Math.round(srcX - e.pageX);
-        // srcX = e.pageX;
         const width = getProperlyWidth(offsetWidth - diffX * k);
+        const height = Math.min(
+          offsetHeight,
+          imgRef.current?.offsetHeight || 100,
+        );
+
         ref.current.style.cssText = `
           width: ${width}px;
-          height: ${offsetHeight}px;
+          height: ${height}px;
           user-select:none;
         `;
-        // api.start({ width });
         handleWidthChangeDebounce(width);
+        handleHeightChangeDebounce(height);
       };
       document.addEventListener('mousemove', changeWidthFunc as any);
       document.addEventListener('mouseup', () =>
@@ -178,21 +189,24 @@ const ResizedImage: React.FC<
       const changeWidthFunc = (e: React.TouchEvent<HTMLDivElement>) => {
         if (!ref.current) return;
         const pageX = e.touches[0].pageX;
-        // const offsetWidth = ref.current.offsetWidth;
-        // const offsetHeight = ref.current.offsetHeight;
         const k = 2;
         const diffX = isLeftHandler
           ? Math.round(pageX - srcX)
           : Math.round(srcX - pageX);
         const width = getProperlyWidth(offsetWidth - diffX * k);
+        const height = Math.min(
+          offsetHeight,
+          imgRef.current?.offsetHeight || 100,
+        );
+
         ref.current.style.cssText = `
           width: ${width}px;
-          height: ${offsetHeight}px;
+          height: ${height}px;
           user-select:none;
         `;
-        // console.log(width);
-        // api.start({ width });
+
         handleWidthChangeDebounce(width);
+        handleHeightChangeDebounce(height);
       };
       document.addEventListener('touchmove', changeWidthFunc as any);
       document.addEventListener('touchend', () =>
@@ -215,7 +229,6 @@ const ResizedImage: React.FC<
       const offsetHeight = ref.current.offsetHeight;
       const changeWidthFunc = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return;
-        // const offsetHeight = ref.current.offsetHeight;
         const k = 1;
         const diffY = isLeftHandler ? e.pageY - srcY : srcY - e.pageY;
         const height = Math.min(
@@ -227,7 +240,6 @@ const ResizedImage: React.FC<
           height: ${height}px;
           user-select:none;
         `;
-        // api.start({ height });
         handleHeightChangeDebounce(height);
       };
       document.addEventListener('mousemove', changeWidthFunc as any);
@@ -245,26 +257,18 @@ const ResizedImage: React.FC<
       const changeWidthFunc = (e: React.TouchEvent<HTMLDivElement>) => {
         if (!ref.current) return;
         const pageY = e.touches[0].pageY;
-        // const offsetHeight = ref.current.offsetHeight;
         const k = 1;
         const diffY = isLeftHandler ? pageY - srcY : srcY - pageY;
         const height = Math.min(
           Math.max(offsetHeight - diffY * k, 100),
           imgRef.current?.offsetHeight || 100,
         );
-        // console.log(pageY);
-        // console.log(offsetHeight - diffY * k);
-        // console.log(height);
-        //   ref.current.style.cssText = `
-        //   width: ${width}px;
-        //   user-select:none;
-        // `;
+
         ref.current.style.cssText = `
         width: ${offsetWidth}px;
         height: ${height}px;
         user-select:none;
       `;
-        // api.start({ height });
         handleHeightChangeDebounce(height);
       };
       document.addEventListener('touchmove', changeWidthFunc as any);
@@ -274,72 +278,6 @@ const ResizedImage: React.FC<
     };
   }
 };
-
-const LoadingImage = React.forwardRef(
-  (
-    {
-      src,
-      alt,
-      className,
-      width,
-      height,
-      onSrcChange,
-    }: {
-      src: string | File;
-      alt?: string;
-      width: number;
-      height: number;
-      className?: string;
-      onSrcChange: (v: string) => void;
-    },
-    ref: any,
-  ) => {
-    const [loadingCover] = useLens(['image', 'loadingCover']);
-    const [errorCover] = useLens(['image', 'errorCover']);
-    const [imgSign] = useLens(['image', 'imgSign']);
-    const [imgUpload] = useLens(['image', 'imgUpload']);
-    const [imgSrc, setImgSrc] = React.useState(loadingCover);
-    // const [loading, setIsLoading] = React.useState(false);
-    React.useEffect(() => {
-      const task = runWithCancel(function* () {
-        try {
-          // setIsLoading(true);
-          if (typeof src !== 'string') {
-            const reader = new FileReader();
-            new Promise((res) => {
-              reader.onload = (event) => {
-                if (event.target) return res(event.target.result);
-                return res(null);
-              };
-            }).then((dataURL: any) => dataURL && setImgSrc(dataURL));
-            reader.readAsDataURL(src);
-            if (imgUpload) {
-              yield new Promise((res) => setTimeout(res, 1000));
-              const uploadSrc = yield imgUpload(src);
-              onSrcChange(uploadSrc);
-            }
-          } else {
-            if (src === '') return setImgSrc(errorCover);
-            const image = new Image();
-            const tmp = yield imgSign(src, { width, height });
-            image.src = tmp;
-            yield new Promise((res) => {
-              image.onload = res;
-            }).catch(() => setImgSrc(errorCover));
-            setImgSrc(tmp);
-          }
-        } catch (e) {
-          setImgSrc(errorCover);
-        } finally {
-          // setIsLoading(false);
-        }
-      });
-      return task.cancel;
-    }, [imgSign, imgUpload, src, errorCover, loadingCover]);
-
-    return <img src={imgSrc} alt={alt} className={className} ref={ref} />;
-  },
-);
 
 const MenuItem: React.FC<{
   value: string;
@@ -359,13 +297,15 @@ const MenuItem: React.FC<{
 
 const alignOpts = { points: ['tc', 'bc'] };
 const EmptyImageMenu: React.FC<{
-  onChange: (v: string | File) => void;
+  onChange: (v: ImageInfo) => void;
   // onClose: () => void;
   // alignMethod: (el: HTMLDivElement) => void;
 }> = ({ onChange }) => {
   const [embedSrc, setEmbedSrc] = React.useState<string>('');
   const [imgOpen] = useLens(['image', 'imgOpen']);
+  const [imgUpload] = useLens(['image', 'imgUpload']);
   const [activeItem, setActiveItem] = React.useState('upload');
+  const { breakpoints } = React.useContext(ImageConfigContext);
   return (
     <div
       className={`lla-media__popmenu`}
@@ -401,8 +341,21 @@ const EmptyImageMenu: React.FC<{
           className="lla-media__open"
           onClick={async () => {
             try {
-              const src = await imgOpen();
-              onChange(src);
+              const _src = await imgOpen();
+              let src = _src;
+              if (src instanceof Blob) src = URL.createObjectURL(src);
+              const imageInfo = await getImageInfo(src, { breakpoints });
+              onChange(imageInfo);
+              if (_src instanceof Blob && imgUpload) {
+                const uploadedSrc = await imgUpload(
+                  _src,
+                  breakpoints.slice(0, imageInfo.breakpointLevel!),
+                );
+                onChange({
+                  ...imageInfo,
+                  src: uploadedSrc,
+                });
+              }
             } catch (e) {
               // do nothing
             }
@@ -440,7 +393,12 @@ const EmptyImageMenu: React.FC<{
         </div>
         <div
           className="lla-media__embed-submit"
-          onClick={() => embedSrc && onChange(embedSrc)}
+          onClick={async () => {
+            if (embedSrc) {
+              const a = await getImageInfo(embedSrc);
+              onChange(a);
+            }
+          }}
         >
           添加图片
         </div>
@@ -452,7 +410,7 @@ const EmptyImageMenu: React.FC<{
 
 const EmptyImage: React.FC<
   React.HtmlHTMLAttributes<HTMLDivElement> & {
-    onSrcChange: (v: string | File) => void;
+    onSrcChange: (v: ImageInfo) => void;
     selected?: boolean;
     openContextMenu: (f: () => HTMLElement | null) => void;
   }
@@ -503,10 +461,6 @@ const EmptyImage: React.FC<
       )}
     </>
   );
-
-  // function handleAlign(source: HTMLDivElement) {
-  //   if (ref.current) domAlign(source, ref.current);
-  // }
 };
 
 const ImageComponent = ({
@@ -514,7 +468,7 @@ const ImageComponent = ({
   children,
   element,
 }: ExtendRenderElementProps<ImageElement>) => {
-  const { src, alt, width, height } = element;
+  const { src, width, height } = element;
   const selected = useSelected();
   const editor = useSlateStatic();
   const readonly = useReadOnly();
@@ -523,7 +477,6 @@ const ImageComponent = ({
       {(src || readonly) && (
         <ResizedImage
           src={src || ''}
-          alt={alt}
           selected={selected}
           onSrcChange={handleMetaChange('src')}
           width={width}
@@ -532,7 +485,6 @@ const ImageComponent = ({
           onHeightChange={handleMetaChange('height')}
           openContextMenu={openContenxtMenu}
           // onMouseOver={() =>
-          //   console.log(ReactEditor.toDOMNode(editor, element))
           // }
         ></ResizedImage>
       )}
@@ -542,7 +494,6 @@ const ImageComponent = ({
           selected={selected}
           openContextMenu={openContenxtMenu}
           // onMouseOver={() =>
-          //   console.log(ReactEditor.toDOMNode(editor, element))
           // }
         ></EmptyImage>
       )}

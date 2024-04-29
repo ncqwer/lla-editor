@@ -1,14 +1,5 @@
 import { ImageInfo, ImagePlaceholderInfo } from './types';
 
-export const parseBase64ToBuffer = (base64String: string) => {
-  const bstring = window.atob(base64String);
-  const array = new Uint8ClampedArray(bstring.length);
-  for (let i = 0; i < bstring.length; ++i) {
-    array[i] = bstring.charCodeAt(i);
-  }
-  return array;
-};
-
 export const parseBufferToCss = (
   pixels: Uint8ClampedArray,
   width: number,
@@ -61,6 +52,7 @@ export const getImageInfo = async (
     resizeQuality = 'high',
     placeholderZip = true,
     keepAspectRatio = true,
+    breakpoints,
   }: {
     resizeHeight?: number;
     resizeWidth?: number;
@@ -68,6 +60,7 @@ export const getImageInfo = async (
     preferStyle?: boolean;
     placeholderZip?: boolean;
     keepAspectRatio?: boolean;
+    breakpoints?: number[];
   } = {},
 ): Promise<ImageInfo> => {
   const image = await new Promise<HTMLImageElement>((res, rej) => {
@@ -76,6 +69,7 @@ export const getImageInfo = async (
       res(img);
     };
     img.onerror = rej;
+    img.setAttribute('crossOrigin', ''); // try to fetch cross image
     img.src = sourceURI;
   });
   const { naturalWidth, naturalHeight } = image;
@@ -97,10 +91,13 @@ export const getImageInfo = async (
   });
 
   const canvas = new OffscreenCanvas(resizeWidth, resizeHeight);
+  // const canvas = document.createElement('canvas');
+  // canvas.width = resizeWidth;
+  // canvas.height = resizeHeight;
   const ctx = canvas.getContext('2d')!;
   ctx.drawImage(imageBitmap, 0, 0);
   const temp = ctx.getImageData(0, 0, resizeWidth, resizeHeight);
-  // const h = await new Promise(async (res) => {
+  // const base64 = await new Promise(async (res) => {
   //   const fileReader = new FileReader();
   //   fileReader.onload = () => {
   //     res(fileReader.result);
@@ -141,11 +138,19 @@ export const getImageInfo = async (
       },
     };
   }
+  let breakpointLevelObj = {};
+  if (breakpoints) {
+    const idx = breakpoints.findIndex((v) => v > naturalWidth);
+    breakpointLevelObj = {
+      breakpointLevel: !~idx ? breakpoints.length : idx,
+    };
+  }
   return {
     src: sourceURI,
     width: naturalWidth,
     height: naturalHeight,
     placeholder,
     aspectRatio,
+    ...breakpointLevelObj,
   };
 };

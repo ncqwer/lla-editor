@@ -8,6 +8,7 @@ import stringify from 'remark-stringify';
 import gfm from 'remark-gfm';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
+import { ImageConfigContext } from '@lla-editor/image';
 
 const { SharedProvider } = ConfigHelers;
 
@@ -30,6 +31,7 @@ export const SharedProviderPreset: React.FC<{
   imageConfig: any;
   audioConfig: any;
   videoConfig: any;
+  excalidrawConfig: any;
   PickerComponent: any;
   children?: React.ReactNode;
 }> = ({
@@ -38,6 +40,7 @@ export const SharedProviderPreset: React.FC<{
   HTableComponent,
   imageConfig,
   audioConfig,
+  excalidrawConfig,
   videoConfig,
   PickerComponent,
 }) => {
@@ -138,6 +141,7 @@ export const SharedProviderPreset: React.FC<{
           callout: {
             PickerComponent: PickerComponent ?? DefaultPickerComponent,
           },
+          excalidraw: excalidrawConfig,
         }),
         [
           overlayerId,
@@ -146,10 +150,11 @@ export const SharedProviderPreset: React.FC<{
           audioConfig,
           videoConfig,
           PickerComponent,
+          excalidrawConfig,
         ],
       )}
     >
-      {children}
+      <Impl>{children}</Impl>
       <input
         type="file"
         className="lla-image-input"
@@ -160,7 +165,7 @@ export const SharedProviderPreset: React.FC<{
           if (!file) return;
           promiseRef.current && promiseRef.current[0](file);
         }}
-        accept=".jpeg,.jpg,.png"
+        accept=".jpeg,.jpg,.png,.webp"
       />
       <input
         type="file"
@@ -187,5 +192,39 @@ export const SharedProviderPreset: React.FC<{
         accept=".mp4"
       />
     </SharedProvider>
+  );
+};
+
+const Tmp: any = ConfigHelers;
+
+const defaultValue = {
+  loader: (x: string) => {
+    return x;
+  },
+  breakpoints: [640, 768, 1024, 1280, 1536],
+  devicePixelRatio: 2,
+};
+
+const Impl = ({ children }: React.PropsWithChildren) => {
+  const [
+    {
+      loader = defaultValue.loader,
+      breakpoints = defaultValue.breakpoints,
+      devicePixelRatio = defaultValue.devicePixelRatio,
+    },
+  ] = Tmp.useLens(['image']);
+  return (
+    <ImageConfigContext.Provider
+      value={React.useMemo(
+        () => ({
+          loader,
+          breakpoints,
+          devicePixelRatio,
+        }),
+        [],
+      )}
+    >
+      {children}
+    </ImageConfigContext.Provider>
   );
 };

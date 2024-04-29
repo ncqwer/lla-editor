@@ -15,10 +15,44 @@ import { SharedProviderPreset } from '@lla-editor/config-preset';
 import { getContent } from './data/comment';
 
 const PlainTextExample = () => {
-  // return <TryParent></TryParent>;
+  const [excalidrawStore, setExcalidrawStore, ref] = useLocalStorage<any>(
+    'lla_excalidraw',
+    {},
+  );
   return (
     <LLAEnvironment>
-      <SharedProviderPreset overlayerId="root">
+      <SharedProviderPreset
+        overlayerId="root"
+        excalidrawConfig={React.useMemo(() => {
+          return {
+            saveFile: async (id: string, data: any) => {
+              console.log(
+                '%c [ id ]-30-「App」',
+                'font-size:13px; background:pink; color:#bf2c9f;',
+                id,
+              );
+              await new Promise((res) => setTimeout(res, 1000));
+              setExcalidrawStore((prev: any) => ({ ...prev, [id]: data }));
+            },
+            preFetchFile: async (id: string) => {
+              console.log(
+                '%c [ id ]-34-「App」',
+                'font-size:13px; background:pink; color:#bf2c9f;',
+                id,
+              );
+              await new Promise((res) => setTimeout(res, 1000));
+            },
+            getFile: async (id: string) => {
+              console.log(
+                '%c [ id ]-39-「App」',
+                'font-size:13px; background:pink; color:#bf2c9f;',
+                id,
+              );
+              return ref.current[id];
+            },
+          };
+        }, [setExcalidrawStore])}
+      >
         <AEditor></AEditor>
       </SharedProviderPreset>
     </LLAEnvironment>
@@ -50,7 +84,22 @@ const useLocalStorage = function <T>(
       syncToLocalStorage(value);
     }
   });
-  return [value, setValue] as const;
+  const currentRef = React.useRef<any>(value);
+  return [
+    value,
+    React.useCallback((v: any) => {
+      setValue((prev) => {
+        let nV = v;
+        if (typeof v === 'function') {
+          nV = v(prev);
+        }
+        if (nV === prev) return nV;
+        currentRef.current = nV;
+        return nV;
+      });
+    }, []),
+    currentRef,
+  ] as const;
 };
 
 const AEditor = () => {
