@@ -306,10 +306,6 @@ const ExcalidrawModal: React.FC<{
   show: boolean;
 }> = ({ children, show = false }) => {
   const [overlayterId] = useLens(['core', 'overlayerId']);
-  const root = React.useMemo(
-    () => document.getElementById(overlayterId),
-    [overlayterId],
-  );
   const ref = React.useRef<HTMLDivElement>(null);
 
   const status = useTransitionStatus(show, {
@@ -370,7 +366,7 @@ const ExcalidrawModal: React.FC<{
     },
   });
 
-  if (status === 'unmount') return null;
+  if (status === 'unmount' || typeof document === 'undefined') return null;
 
   return createPortal(
     <div
@@ -379,6 +375,6 @@ const ExcalidrawModal: React.FC<{
     >
       {children}
     </div>,
-    root as any,
+    document.getElementById(overlayterId)!,
   );
 };
