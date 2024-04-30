@@ -1,7 +1,7 @@
 {
   "name": "playground",
   "private": true,
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "Now I’m the model of a modern major general / The venerated Virginian veteran whose men are all / Lining up, to put me up on a pedestal / Writin’ letters to relatives / Embellishin’ my elegance and eloquence / But the elephant is in the room / The truth is in ya face when ya hear the British cannons go / BOOM",
   "keywords": [],
   "author": "“ncqwer” <“18694039767@163.com”>",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@lla-editor/config-preset": "^0.0.18",
-    "@lla-editor/editor": "^0.0.27",
-    "@lla-editor/excalidraw": "^0.0.2"
+    "@lla-editor/editor": "^0.0.28",
+    "@lla-editor/excalidraw": "^0.0.3"
   }
 }
