@@ -116,7 +116,12 @@ export const LoadingImage = React.forwardRef<
           .slice(0, breakpointLevel || 0)
           .concat(width || 0) // raw width
           .filter(Boolean)
-          .map((w) => `${loader(src, w)} ${w}w`)
+          .map(
+            (w, idx, curr) =>
+              `${loader(src, w, idx === curr.length - 1)} ${
+                w * devicePixelRatio
+              }w`,
+          )
           .join(', '),
         // sizes: breakpoints
         //   .slice(0, breakpointLevel)
@@ -130,6 +135,7 @@ export const LoadingImage = React.forwardRef<
       };
     }, [src, loader, breakpointLevel, breakpoints, devicePixelRatio]);
 
+    const imageRef = React.useRef<HTMLImageElement>(null);
     React.useImperativeHandle(ref, () => {
       return {
         getImageInfo: (options) => getImageInfo(src, options),
@@ -171,6 +177,20 @@ export const LoadingImage = React.forwardRef<
     const [imageStatus, setImageStatus] = React.useState<
       'loading' | 'success' | 'error'
     >('loading');
+    React.useEffect(() => {
+      if (imageRef.current) {
+        const id = setTimeout(() => {
+          if (imageRef.current) {
+            const img = imageRef.current;
+            if (!img) return;
+            if (img.naturalWidth > 0) {
+              setImageStatus('success');
+            }
+          }
+        }, 0);
+        return () => clearTimeout(id);
+      }
+    }, []);
     return (
       <>
         <div
@@ -207,6 +227,7 @@ export const LoadingImage = React.forwardRef<
           {needShow && (
             <img
               {...others}
+              ref={imageRef}
               className={`w-full h-full ${
                 imageStatus !== 'success' ? 'hidden' : ''
               } ${className ? className : ''}`}

@@ -25,7 +25,7 @@ export type ImagePlaceholderInfo =
     };
 
 export type ImageLoadingConfig = {
-  loader: (src: string, width?: number, quality?: number) => string;
+  loader: (src: string, width?: number, isLast?: boolean) => string;
   breakpoints: number[];
   devicePixelRatio: number;
   allLazy?: boolean;
